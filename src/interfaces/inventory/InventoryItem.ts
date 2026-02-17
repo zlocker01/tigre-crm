@@ -2,7 +2,7 @@ export type InventoryItemType =
   | 'consumable'
   | 'instrument'
   | 'equipment'
-  | 'medication';
+  | 'apparel';
 
 export type InventoryItemStatus =
   | 'available'

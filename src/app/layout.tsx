@@ -27,7 +27,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: 'El Callejon Barbershop',
+  title: 'JSBJJ MX',
   description: 'Servicios odontológicos profesionales',
   manifest: '/manifest.json',
   icons: {

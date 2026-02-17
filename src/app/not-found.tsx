@@ -47,7 +47,7 @@ export default function NotFound() {
                 <Compass className="h-full w-full text-primary" />
               </div>
               <h1 className="text-2xl font-bold tracking-tight">
-                El Callejon Barbershop - Página no encontrada
+                JSBJJ MX - Página no encontrada
               </h1>
             </div>
           </div>

@@ -6,7 +6,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const aboutImages = [
   {
-    src: '/landing-page/about.jpg',
+    src: '/landing-page/about.webp',
     alt: 'servicios de barbería Tlaxcala'
  },
   {

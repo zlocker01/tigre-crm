@@ -9,7 +9,7 @@ export default function PoliticaDeUsoYPrivacidad() {
           <div className="bg-blue-50 rounded-lg p-6 border border-blue-100">
             <h2 className="text-xl font-semibold text-gold">1. Introducción</h2>
             <p className="text-gray-700">
-              Bienvenido a <span className="font-semibold">El Callejon Barbershop App</span>. Al utilizar nuestra aplicación, aceptas cumplir con los términos y condiciones establecidos en esta política.
+              Bienvenido a <span className="font-semibold">JSBJJ MX App</span>. Al utilizar nuestra aplicación, aceptas cumplir con los términos y condiciones establecidos en esta política.
             </p>
           </div>
           <div className="bg-blue-50 rounded-lg p-6 border border-blue-100">

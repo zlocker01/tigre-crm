@@ -54,10 +54,10 @@ type InventoryFormState = {
   category: string;
   item_type: InventoryItemType | '';
   quantity: number;
-  unit: string;
-  minimum_stock: number;
-  expiration_date: string;
-  location: string;
+  unit?: string;
+  minimum_stock?: number;
+  expiration_date?: string;
+  location?: string;
   status: InventoryItemStatus;
 };
 
@@ -65,7 +65,7 @@ const itemTypeLabels: Record<InventoryItemType, string> = {
   consumable: 'Consumible',
   instrument: 'Herramienta',
   equipment: 'Equipo',
-  medication: 'Producto estético',
+  apparel: 'Indumentaria',
 };
 
 const itemStatusLabels: Record<InventoryItemStatus, string> = {
@@ -77,11 +77,17 @@ const itemStatusLabels: Record<InventoryItemStatus, string> = {
 };
 
 const inventorySchema = z.object({
+  id: z.number().optional(),
   name: z.string().min(1, 'El nombre es obligatorio'),
   category: z.string().min(1, 'La categoría es obligatoria'),
-  item_type: z.enum(['consumable', 'instrument', 'equipment', 'medication'], {
-    message: 'Selecciona un tipo de producto válido',
-  }),
+  item_type: z
+    .union([
+      z.enum(['consumable', 'instrument', 'equipment', 'apparel']),
+      z.literal(''),
+    ])
+    .refine((v) => v !== '', {
+      message: 'Selecciona un tipo de producto válido',
+    }),
   quantity: z
     .number()
     .min(0, 'La cantidad no puede ser negativa')
@@ -222,7 +228,7 @@ export default function InventoryPage() {
           title: 'Error al guardar producto',
           description:
             json.error ||
-            (form.id
+            (values.id
               ? 'No se pudo actualizar el producto.'
               : 'No se pudo crear el producto.'),
           variant: 'destructive',
@@ -488,8 +494,8 @@ export default function InventoryPage() {
                               Herramienta
                             </SelectItem>
                             <SelectItem value="equipment">Equipo</SelectItem>
-                            <SelectItem value="medication">
-                              Producto estético
+                            <SelectItem value="apparel">
+                              Indumentaria
                             </SelectItem>
                           </SelectContent>
                         </Select>
@@ -642,7 +648,7 @@ export default function InventoryPage() {
         <DialogContent className="w-full max-w-[480px] sm:max-w-[640px] md:max-w-[720px] max-h-[85vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-lg font-semibold text-primary">
-              Cómo usar el inventario
+              Cómo usar el inventario de la academia
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-4 text-sm text-muted-foreground">
@@ -651,7 +657,7 @@ export default function InventoryPage() {
               <span className="mx-1 font-semibold text-primary">
                 registrar y controlar
               </span>
-              los productos, materiales y productos de la barberia.
+              el material y equipo de JSBJJ MX.
             </p>
             <div className="space-y-1 rounded-md border border-primary/20 bg-primary/5 px-3 py-2">
               <p className="font-semibold text-primary">
@@ -669,15 +675,15 @@ export default function InventoryPage() {
                 </span>
                 agrupa por tipo de producto, por ejemplo:
                 <span className="mx-1 font-medium text-secondary">
-                  Talco → Consumible, Navajas → Consumible, Tijeras →
-                  Herramienta, Máquina de cortar → Equipo, Pomada / shampoo →
-                  Producto cosmético
+                  Kimonos → Indumentaria, Rashguards → Indumentaria, Cintas →
+                  Consumible, Tatami → Equipo, Escudos / paos → Equipo
                 </span>
                 .
               </p>
               <p>
                 <span className="font-semibold text-primary">Tipo</span> indica
-                si es Consumible, Herramienta, Equipo o Producto cosmético.
+                si es Consumible, Equipo o Indumentaria según cómo lo uses en tu
+                academia.
               </p>
             </div>
             <div className="space-y-1 rounded-md border border-primary/20 bg-primary/5 px-3 py-2">
@@ -710,8 +716,8 @@ export default function InventoryPage() {
                 <span className="font-semibold text-destructive">
                   Fecha de caducidad
                 </span>
-                es importante sobre todo para productos cosméticos y materiales
-                estériles.
+                es importante sobre todo para suplementos, productos de limpieza
+                o materiales estériles.
               </p>
               <p>
                 En
@@ -720,7 +726,7 @@ export default function InventoryPage() {
                 </span>
                 puedes poner dónde se guarda:
                 <span className="mx-1 font-medium text-secondary">
-                  gabinete, almacén, esterilización
+                  tatami principal, bodega, recepción, área de limpieza
                 </span>
                 , etc.
               </p>

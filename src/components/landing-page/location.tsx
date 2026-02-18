@@ -1,7 +1,7 @@
 import { useId } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { MapPin, Phone, Clock, Mail, Instagram, Facebook } from 'lucide-react';
+import { MapPin, Phone, Mail, Instagram, Facebook } from 'lucide-react';
 import type { ContactSection } from '@/interfaces/contactSections/ContactSection';
 import type { Schedule } from '@/interfaces/schedule/Schedule';
 import { format } from 'date-fns';
@@ -65,132 +65,6 @@ export default function Location({ data, schedules }: LocationProps) {
                     {data.phone}
                   </a>
                 </p>
-              </div>
-
-              <div className="bg-background p-6 rounded-xl shadow-sm">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                    <Clock className="h-5 w-5 text-primary" />
-                  </div>
-                  <h3 className="font-medium text-lg">Horario de Atención</h3>
-                </div>
-                <div className="space-y-2">
-                  {(() => {
-                    if (!schedules?.length) return null;
-
-                    const formatTime = (
-                      timeString: string | null | undefined
-                    ): string => {
-                      if (!timeString) return '';
-                      const [hours, minutes] = timeString.split(':');
-                      const date = new Date();
-                      date.setHours(parseInt(hours, 10), parseInt(minutes, 10));
-                      return format(date, 'h:mma', {
-                        locale: es,
-                      }).toLowerCase();
-                    };
-
-                    const normalizeDay = (day: string): string => {
-                      const d = day.toLowerCase().trim();
-                      const map: Record<string, string> = {
-                        lunes: 'monday',
-                        martes: 'tuesday',
-                        miércoles: 'wednesday',
-                        miercoles: 'wednesday',
-                        jueves: 'thursday',
-                        viernes: 'friday',
-                        sábado: 'saturday',
-                        sabado: 'saturday',
-                        domingo: 'sunday',
-                        monday: 'monday',
-                        tuesday: 'tuesday',
-                        wednesday: 'wednesday',
-                        thursday: 'thursday',
-                        friday: 'friday',
-                        saturday: 'saturday',
-                        sunday: 'sunday',
-                      };
-                      return map[d] || d;
-                    };
-
-                    const dayMap: Record<string, number> = {
-                      monday: 1,
-                      tuesday: 2,
-                      wednesday: 3,
-                      thursday: 4,
-                      friday: 5,
-                      saturday: 6,
-                      sunday: 0,
-                    };
-
-                    // Agrupar horarios por día
-                    const grouped = schedules.reduce((acc, curr) => {
-                      const day = normalizeDay(curr.day_of_week);
-                      if (!acc[day]) acc[day] = [];
-                      acc[day].push(curr);
-                      return acc;
-                    }, {} as Record<string, typeof schedules>);
-
-                    return Object.entries(grouped)
-                      .map(([dayKey, daySchedules]) => {
-                        const dayNumber = dayMap[dayKey] ?? 8;
-                        // Ordenar lunes(1) a domingo(7)
-                        const sortOrder =
-                          dayMap[dayKey] === 0 ? 7 : dayMap[dayKey];
-
-                        const dayName = new Intl.DateTimeFormat('es-ES', {
-                          weekday: 'long',
-                        })
-                          .format(new Date(2023, 0, dayNumber + 1))
-                          .replace(/^\w/, (c) => c.toUpperCase());
-
-                        return {
-                          dayKey,
-                          dayName,
-                          sortOrder,
-                          schedules: daySchedules,
-                        };
-                      })
-                      .sort((a, b) => a.sortOrder - b.sortOrder)
-                      .map(({ dayKey, dayName, schedules }) => {
-                        const workingSchedules = schedules.filter(
-                          (s) => s.is_working_day
-                        );
-
-                        let timeContent;
-                        if (workingSchedules.length > 0) {
-                          // Ordenar por hora de inicio
-                          workingSchedules.sort((a, b) =>
-                            (a.start_time || '').localeCompare(
-                              b.start_time || ''
-                            )
-                          );
-
-                          timeContent = workingSchedules.map((s, index) => (
-                            <span key={index}>
-                              {index > 0 && ', '}
-                              {formatTime(s.start_time)} -{' '}
-                              {formatTime(s.end_time)}
-                            </span>
-                          ));
-                        } else {
-                          timeContent = 'Cerrado';
-                        }
-
-                        return (
-                          <div
-                            key={dayKey}
-                            className="flex justify-between items-start"
-                          >
-                            <span className="font-medium">{dayName}</span>
-                            <span className="text-foreground text-right">
-                              {timeContent}
-                            </span>
-                          </div>
-                        );
-                      });
-                  })()}
-                </div>
               </div>
 
               <div className="bg-background p-6 rounded-xl shadow-sm">

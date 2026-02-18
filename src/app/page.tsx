@@ -20,7 +20,6 @@ import { getContactSections } from '@/data/contactSections/getContactSections';
 import { getFaqItems } from '@/data/faqItems/getFaqItems';
 import { getJobBannerSections } from '@/data/jobBannerSections/getJobBannerSections';
 import { getEmployees } from '@/data/employees/getEmployees';
-import { getSchedules } from '@/data/schedule/getSchedules';
 import { LandingPage } from '@/interfaces/landingPages/LandingPage';
 import CookiesModal from '@/components/landing-page/cookiesModal';
 
@@ -42,7 +41,6 @@ export default async function Home() {
     faqs,
     { data: jobBanner, error: jobBannerError },
     employees,
-    schedules,
   ] = await Promise.all([
     getHeroSection(landingId),
     getAboutSection(landingId),
@@ -50,7 +48,6 @@ export default async function Home() {
     getFaqItems(landingId),
     getJobBannerSections(landingId),
     getEmployees(),
-    getSchedules(),
   ]);
 
   // Obtener ítems de galería (devuelve solo los datos)
@@ -79,9 +76,7 @@ export default async function Home() {
         <Gallery data={galleryItems ?? []} />
         <Promotions landingId={landingId} />
         <Booking landingId={landingId} />
-        {contactSection && (
-          <Location data={contactSection[0]} schedules={schedules} />
-        )}
+        {contactSection && <Location data={contactSection[0]} />}
         {faqs && faqs.length > 0 && <Faq data={faqs} />}
         {/* {jobBanner && <JobBanner data={jobBanner[0]} />} */}
         <WhatsAppButton />

@@ -3,6 +3,7 @@ import { Team } from '@/components/landing-page/team';
 import Booking from '@/components/landing-page/booking';
 import Faq from '@/components/landing-page/faq';
 import Gallery from '@/components/landing-page/gallery';
+import Packages from '@/components/landing-page/packages';
 import Hero from '@/components/landing-page/hero';
 import JobBanner from '@/components/landing-page/job-banner';
 import Promotions from '@/components/landing-page/promotions';
@@ -73,6 +74,7 @@ export default async function Home() {
         <Services landingId={landingId} />
         {aboutSection && <About data={aboutSection[0]} />}
         <Team data={employees ?? []} />
+        <Packages landingId={landingId} />
         <Gallery data={galleryItems ?? []} />
         <Promotions landingId={landingId} />
         <Booking landingId={landingId} />

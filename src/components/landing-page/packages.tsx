@@ -191,7 +191,7 @@ export default function Packages({ landingId }: { landingId: string }) {
                         className="flex items-center justify-center gap-2"
                       >
                         <Layers className="h-4 w-4" />
-                        <span>Elegir paquete</span>
+                        <span>Agendar Clase Gratis</span>
                       </Link>
                     </Button>
                   </CardFooter>

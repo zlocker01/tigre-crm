@@ -7,19 +7,21 @@ import GraduationCarousel from './graduationCarousel';
 export default function Hero({ data }: { data: HeroSection }) {
   const heroId = useId();
   return (
-    <section id={heroId} className="relative overflow-hidden mt-24 md:mt-20">
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/30 via-blue-50/40 to-secondary/30 dark:from-blue-700/40 dark:via-transparent dark:to-white/50 -z-10" />
-      <div className="container mx-auto px-4 py-12 md:py-24">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div className="space-y-6 text-center lg:text-left">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
+    <section
+      id={heroId}
+      className="relative overflow-hidden mt-24 md:mt-20 bg-background"
+    >
+      <div className="container mx-auto px-4 py-10 md:py-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+          <div className="space-y-4 text-center lg:text-left">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight">
               <span className="block text-primary">{data.title}</span>
               <span className="block mt-2">{data.subtitle}</span>
             </h1>
-            <p className="text-lg md:text-xl text-muted-foreground max-w-xl mx-auto lg:mx-0">
+            <p className="text-base md:text-lg text-muted-foreground max-w-xl mx-auto lg:mx-0">
               {data.text}
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+            <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
               {/* promotions button for graduation session
               <Button size="lg" asChild>
                 <Link href="#promotions">Ver Promociones de Graduación
@@ -36,11 +38,11 @@ export default function Hero({ data }: { data: HeroSection }) {
               </Button>
             </div>
           </div>
-          <div className="relative w-full max-w-sm mx-auto lg:max-w-md lg:ml-auto h-72 md:h-80 lg:h-[380px] rounded-2xl overflow-hidden">
+          <div className="relative w-full max-w-sm mx-auto lg:max-w-md lg:ml-auto h-72 md:h-80 lg:h-[380px] rounded-2xl overflow-hidden flex items-center justify-center bg-background">
             <img
               src={data.image}
               alt={data.title}
-              className="w-full h-full object-cover object-center"
+              className="max-h-full w-auto object-contain"
             />
             {/* <GraduationCarousel /> */}
           </div>

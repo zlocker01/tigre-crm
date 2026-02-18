@@ -46,11 +46,6 @@ export default function Gallery({ data }: { data: GalleryItem[] }) {
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
             Nuestra Galería
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Explora algunos de nuestros mejores trabajos odontológicos. Cada
-            imagen refleja nuestro compromiso con la salud bucal, la estética y
-            la satisfacción de nuestros pacientes.
-          </p>
         </div>
 
         <Tabs

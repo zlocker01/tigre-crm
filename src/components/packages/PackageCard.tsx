@@ -28,9 +28,43 @@ export function PackageCard({
   const router = useRouter();
 
   const handlePackageDeleted = (deletedPackageId: number) => {
-    // La notificación ya se muestra en el botón de borrar
     router.refresh();
   };
+
+  const normalizeList = (value: unknown): string[] => {
+    if (Array.isArray(value)) {
+      return value
+        .map((v) => String(v).trim())
+        .filter((v) => v.length > 0);
+    }
+    if (typeof value === 'string') {
+      const raw = value.trim();
+      try {
+        if (
+          (raw.startsWith('"') && raw.endsWith('"')) ||
+          (raw.startsWith('[') && raw.endsWith(']'))
+        ) {
+          const parsed = JSON.parse(raw);
+          if (typeof parsed === 'string') {
+            return [parsed];
+          }
+          if (Array.isArray(parsed)) {
+            return parsed
+              .map((v) => String(v).trim())
+              .filter((v) => v.length > 0);
+          }
+        }
+      } catch {}
+      return raw
+        .split(',')
+        .map((s) => s.trim())
+        .filter((s) => s.length > 0);
+    }
+    return [];
+  };
+
+  const benefits = normalizeList(pkg.benefits);
+  const restrictions = normalizeList(pkg.restrictions);
 
   return (
     <Card className="w-full max-w-sm overflow-hidden transition-shadow hover:shadow-lg flex flex-col h-full border-t-4 border-t-primaryColor">
@@ -68,13 +102,13 @@ export function PackageCard({
 
       <CardContent className="flex-grow pt-4">
         <div className="space-y-4">
-          {pkg.benefits && pkg.benefits.length > 0 && (
+          {benefits.length > 0 && (
             <div>
               <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
                 Beneficios:
               </p>
               <ul className="space-y-2">
-                {pkg.benefits.map((benefit, index) => (
+                {benefits.map((benefit, index) => (
                   <li key={index} className="text-sm flex items-start gap-2">
                     <Check className="h-4 w-4 text-green-500 mt-0.5 shrink-0" />
                     <span>{benefit}</span>
@@ -84,13 +118,13 @@ export function PackageCard({
             </div>
           )}
 
-          {pkg.restrictions && pkg.restrictions.length > 0 && (
+          {restrictions.length > 0 && (
             <div>
               <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 text-amber-600/80">
                 Restricciones:
               </p>
               <ul className="space-y-2">
-                {pkg.restrictions.map((restriction, index) => (
+                {restrictions.map((restriction, index) => (
                   <li
                     key={index}
                     className="text-sm flex items-start gap-2 text-muted-foreground"

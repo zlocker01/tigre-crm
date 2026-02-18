@@ -94,6 +94,38 @@ export default function Services({ landingId }: { landingId: string }) {
     fetcher,
   );
 
+  const normalizeBenefits = (benefits: unknown): string[] => {
+    if (Array.isArray(benefits)) {
+      return benefits
+        .map((b) => String(b).trim())
+        .filter((b) => b.length > 0);
+    }
+    if (typeof benefits === 'string') {
+      const raw = benefits.trim();
+      try {
+        if (
+          (raw.startsWith('"') && raw.endsWith('"')) ||
+          (raw.startsWith('[') && raw.endsWith(']'))
+        ) {
+          const parsed = JSON.parse(raw);
+          if (typeof parsed === 'string') {
+            return [parsed];
+          }
+          if (Array.isArray(parsed)) {
+            return parsed
+              .map((b) => String(b).trim())
+              .filter((b) => b.length > 0);
+          }
+        }
+      } catch {}
+      return raw
+        .split(',')
+        .map((s) => s.trim())
+        .filter((s) => s.length > 0);
+    }
+    return [];
+  };
+
   const filteredServices =
     level === 'all'
       ? data?.services || []
@@ -176,6 +208,7 @@ export default function Services({ landingId }: { landingId: string }) {
               >
                 <CarouselContent>
                   {filteredServices.map((service) => {
+                    const benefitsArray = normalizeBenefits(service.benefits);
                     return (
                       <CarouselItem
                         key={service.id}
@@ -188,7 +221,7 @@ export default function Services({ landingId }: { landingId: string }) {
                                 <img
                                   src={service.image || '/placeholder.svg'}
                                   alt={service.title}
-                                  className="h-52 w-full object-cover"
+                                  className="h-52 w-full object-cover object-center"
                                   loading="lazy"
                                 />
                                 <div className="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-background/90 via-background/40 to-transparent" />
@@ -206,22 +239,19 @@ export default function Services({ landingId }: { landingId: string }) {
                                   </CardDescription>
                                 </CardHeader>
                                 <CardContent className="flex-1 p-0">
-                                  {service.benefits &&
-                                    service.benefits.length > 0 && (
-                                      <ul className="mt-3 space-y-2 text-sm text-foreground">
-                                        {service.benefits.map(
-                                          (benefit, i) => (
-                                            <li
-                                              key={i}
-                                              className="flex items-start gap-2"
-                                            >
-                                              <CheckCircle2 className="mt-0.5 h-4 w-4 text-accent" />
-                                              <span>{benefit}</span>
-                                            </li>
-                                          ),
-                                        )}
-                                      </ul>
-                                    )}
+                                  {benefitsArray.length > 0 && (
+                                    <ul className="mt-3 space-y-2 text-sm text-foreground">
+                                      {benefitsArray.map((benefit, i) => (
+                                        <li
+                                          key={i}
+                                          className="flex items-start gap-2"
+                                        >
+                                          <CheckCircle2 className="mt-0.5 h-4 w-4 text-accent" />
+                                          <span>{benefit}</span>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  )}
                                 </CardContent>
                                 <CardFooter className="mt-5 p-0">
                                   <Button

@@ -15,7 +15,7 @@ export default async function Footer() {
     ]);
 
   const contactInfo = contactSections?.[0];
-  const heroTitle = heroSections?.[0]?.title || 'Bella Estética';
+  const heroTitle = heroSections?.[0]?.title || 'JS BJJ Academy';
   // Tomar solo los primeros 6 servicios
   const displayedServices = services?.slice(0, 6) || [];
 
@@ -27,9 +27,9 @@ export default async function Footer() {
           <div className="space-y-4">
             <h3 className="text-lg font-bold">{heroTitle}</h3>
             <p className="text-muted-foreground">
-              Tu destino de belleza en Tlaxcala Centro. Ofrecemos servicios
-              profesionales de estética, barbería y uñas con los más altos
-              estándares de calidad en Tlaxcala Capital, México.
+              Academia de Jiu Jitsu Brasileño en Apizaco, Tlaxcala, México.
+              Entrena BJJ y MMA en un ambiente seguro, profesional y enfocado
+              en el progreso real de cada alumno.
             </p>
             <div className="flex space-x-4">
               {contactInfo?.instagram && (

@@ -11,13 +11,13 @@ import {
 } from "recharts";
 import { Skeleton } from "@/components/ui/skeleton";
 
-// Datos de ejemplo para el gráfico
+// Datos de ejemplo para el gráfico (adaptados a Jiu Jitsu)
 const data = [
-  { name: "Corte de cabello", value: 5000, color: "#8884d8" },
-  { name: "Manicura", value: 3000, color: "#82ca9d" },
-  { name: "Tratamiento facial", value: 4500, color: "#ffc658" },
-  { name: "Masaje", value: 3800, color: "#ff8042" },
-  { name: "Tinte", value: 2500, color: "#0088fe" },
+  { name: "Clase Principiantes", value: 5000, color: "#8884d8" },
+  { name: "Clase Avanzados", value: 3000, color: "#82ca9d" },
+  { name: "Clase Infantil", value: 4500, color: "#ffc658" },
+  { name: "Clase Mujeres", value: 3800, color: "#ff8042" },
+  { name: "Clase Competidores", value: 2500, color: "#0088fe" },
 ];
 
 export function ServiceRevenueChart() {

@@ -58,17 +58,22 @@ export async function POST(req: Request) {
       user_id: user.id,
     };
 
-    const id = await createPackage(packageData);
-    if (!id) {
+    const result = await createPackage(packageData);
+
+    if (!result.id) {
       return NextResponse.json(
-        { error: 'No se pudo crear el paquete.' },
+        {
+          error:
+            result.error ||
+            'No se pudo crear el paquete. Revisa los datos enviados.',
+        },
         { status: 500 },
       );
     }
 
     return NextResponse.json({
       message: 'Paquete creado correctamente.',
-      id,
+      id: result.id,
     });
   } catch (error) {
     console.error('Error in POST /api/packages:', error);

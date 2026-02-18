@@ -32,15 +32,15 @@ export default function Hero({ data }: { data: HeroSection }) {
                 <Link href="/citas">Agenda tu cita</Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <Link href="#services">Ver servicios</Link>
+                <Link href="#services">Ver clases</Link>
               </Button>
             </div>
           </div>
-          <div className="relative md:h-[800px] md:h-[900px] rounded-2xl overflow-hidden  -my-16 md:-m-40">
+          <div className="relative w-full max-w-sm mx-auto lg:max-w-md lg:ml-auto h-72 md:h-80 lg:h-[380px] rounded-2xl overflow-hidden">
             <img
               src={data.image}
               alt={data.title}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover object-center"
             />
             {/* <GraduationCarousel /> */}
           </div>

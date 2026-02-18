@@ -23,10 +23,10 @@ import type { GalleryItem } from '@/interfaces/galleryItems/GalleryItem';
 
 const categories = [
   { id: 'all', label: 'Todos' },
-  { id: 'Corte', label: 'Corte' },
-  { id: 'Barba', label: 'Barba' },
-  { id: 'Tratamiento', label: 'Tratamiento' },
-  { id: 'Paquete', label: 'Paquete' },
+  { id: 'Clases', label: 'Clases' },
+  { id: 'Competencias', label: 'Competencias' },
+  { id: 'Graduaciones', label: 'Graduaciones' },
+  { id: 'Seminarios', label: 'Seminarios' },
   { id: 'Instalaciones', label: 'Instalaciones' },
 ];
 
@@ -92,26 +92,27 @@ export default function Gallery({ data }: { data: GalleryItem[] }) {
                         <Dialog>
                           <DialogTrigger asChild>
                             <Card className="overflow-hidden cursor-pointer hover:shadow-lg transition-all">
-                              <div className="relative h-64 w-full">
+                              <div className="relative h-64 w-full bg-muted">
                                 <img
                                   src={item.image || '/placeholder.svg'}
                                   alt={item.title || 'Imagen de galería'}
-                                  className="absolute inset-0 h-full w-full object-cover"
+                                  className="absolute inset-0 h-full w-full object-contain object-center"
                                 />
-                                {item.is_before_after && (
-                                  <Badge className="absolute top-2 right-2 bg-primary">
-                                    Antes/Después
-                                  </Badge>
-                                )}
                               </div>
-                              <CardContent className="p-4">
-                                <h3 className="font-medium">{item.title}</h3>
-                                {item.description && (
-                                  <p className="text-sm text-muted-foreground">
-                                    {item.description}
-                                  </p>
-                                )}
-                              </CardContent>
+                              {(item.title || item.description) && (
+                                <CardContent className="p-4">
+                                  {item.title && (
+                                    <h3 className="font-medium">
+                                      {item.title}
+                                    </h3>
+                                  )}
+                                  {item.description && (
+                                    <p className="text-sm text-muted-foreground">
+                                      {item.description}
+                                    </p>
+                                  )}
+                                </CardContent>
+                              )}
                             </Card>
                           </DialogTrigger>
                           <DialogContent className="max-w-3xl">

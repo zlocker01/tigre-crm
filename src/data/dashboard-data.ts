@@ -169,11 +169,11 @@ export function getAppointmentsByHourData(): AppointmentByHourData[] {
 
 export function getAppointmentsByServiceData(): AppointmentByServiceData[] {
   return [
-    { name: "Corte de cabello", value: 35, color: "#8884d8" },
-    { name: "Manicura", value: 20, color: "#82ca9d" },
-    { name: "Tratamiento facial", value: 15, color: "#ffc658" },
-    { name: "Masaje", value: 18, color: "#ff8042" },
-    { name: "Tinte", value: 12, color: "#0088fe" },
+    { name: "Clase Principiantes", value: 35, color: "#8884d8" },
+    { name: "Clase Avanzados", value: 20, color: "#82ca9d" },
+    { name: "Clase Infantil", value: 15, color: "#ffc658" },
+    { name: "Clase Mujeres", value: 18, color: "#ff8042" },
+    { name: "Clase Competidores", value: 12, color: "#0088fe" },
   ];
 }
 
@@ -235,31 +235,31 @@ export function getHeatmapData(): HeatmapData[] {
 export function getPopularServicesData(): PopularServiceData[] {
   return [
     {
-      service: "Corte de cabello",
+      service: "Clase Principiantes",
       appointments: 145,
       growth: "+12%",
       avgDuration: "45 min",
     },
     {
-      service: "Manicura",
+      service: "Clase Avanzados",
       appointments: 98,
       growth: "+8%",
       avgDuration: "60 min",
     },
     {
-      service: "Tratamiento facial",
+      service: "Clase Infantil",
       appointments: 76,
       growth: "+15%",
       avgDuration: "75 min",
     },
     {
-      service: "Masaje",
+      service: "Clase Mujeres",
       appointments: 65,
       growth: "+5%",
       avgDuration: "90 min",
     },
     {
-      service: "Tinte",
+      service: "Clase Competidores",
       appointments: 54,
       growth: "+3%",
       avgDuration: "120 min",
@@ -270,11 +270,11 @@ export function getPopularServicesData(): PopularServiceData[] {
 // Datos de servicios
 export function getServiceRevenueData(): ServiceRevenueData[] {
   return [
-    { name: "Corte de cabello", value: 5000, color: "#8884d8" },
-    { name: "Manicura", value: 3000, color: "#82ca9d" },
-    { name: "Tratamiento facial", value: 4500, color: "#ffc658" },
-    { name: "Masaje", value: 3800, color: "#ff8042" },
-    { name: "Tinte", value: 2500, color: "#0088fe" },
+    { name: "Clase Principiantes", value: 5000, color: "#8884d8" },
+    { name: "Clase Avanzados", value: 3000, color: "#82ca9d" },
+    { name: "Clase Infantil", value: 4500, color: "#ffc658" },
+    { name: "Clase Mujeres", value: 3800, color: "#ff8042" },
+    { name: "Clase Competidores", value: 2500, color: "#0088fe" },
   ];
 }
 

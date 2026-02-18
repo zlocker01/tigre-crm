@@ -25,8 +25,8 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   const body = await req.json();
-  const success = await createGalleryItem(body);
-  if (!success) {
+  const id = await createGalleryItem(body);
+  if (!id) {
     return NextResponse.json(
       { error: "No se pudo crear el item de la galería." },
       { status: 500 },
@@ -34,5 +34,6 @@ export async function POST(req: Request) {
   }
   return NextResponse.json({
     message: "Item de galería creado correctamente.",
+    id,
   });
 }

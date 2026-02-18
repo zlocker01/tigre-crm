@@ -24,10 +24,10 @@ import { galleryItemFormSchema } from '@/schemas/gallerySchemas/galleryItemSchem
 import type { GalleryFormData } from '@/interfaces/galleryItems/GalleryFormData';
 
 const categories: Category[] = [
-  'Corte',
-  'Barba',
-  'Tratamiento',
-  'Paquete',
+  'Clases',
+  'Competencias',
+  'Graduaciones',
+  'Seminarios',
   'Instalaciones',
 ];
 
@@ -57,7 +57,6 @@ export default function AddGalleryItemModal({
       description: '',
       image: '',
       category: categories[0],
-      is_before_after: false,
       landing_page_id: landingId,
     },
   });
@@ -182,7 +181,7 @@ export default function AddGalleryItemModal({
               htmlFor="title"
               className="block text-sm font-medium text-gray-700"
             >
-              Título
+              Título (opcional)
             </label>
             <Input id="title" {...register('title')} className="mt-1" />
             {errors.title && (
@@ -197,7 +196,7 @@ export default function AddGalleryItemModal({
               htmlFor="description"
               className="block text-sm font-medium text-gray-700"
             >
-              Descripción
+              Descripción (opcional)
             </label>
             <Textarea
               id="description"
@@ -303,21 +302,6 @@ export default function AddGalleryItemModal({
                 {errors.category.message}
               </p>
             )}
-          </div>
-
-          <div className="flex items-center">
-            <input
-              id="is_before_after"
-              type="checkbox"
-              {...register('is_before_after')}
-              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-            />
-            <label
-              htmlFor="is_before_after"
-              className="ml-2 block text-sm text-gray-700"
-            >
-              ¿Es un antes/después?
-            </label>
           </div>
 
           <div className="flex justify-end space-x-2 pt-4">

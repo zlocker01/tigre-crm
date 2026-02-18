@@ -17,6 +17,10 @@ const config = {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ['var(--font-sans)'],
+        serif: ['var(--font-serif)'],
+      },
       spacing: {
         '8': '2rem', // Añadimos explícitamente el spacing-8
       },

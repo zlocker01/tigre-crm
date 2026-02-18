@@ -1,10 +1,10 @@
 import { z } from 'zod';
 
 export const serviceCategories = [
-  'Corte',
-  'Barba',
-  'Tratamiento',
-  'Paquete',
+  'Clases',
+  'Competencias',
+  'Graduaciones',
+  'Seminarios',
 ] as const;
 
 export const promotionItemSchema = z.object({

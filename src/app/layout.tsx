@@ -2,27 +2,20 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { Toaster } from '@/components/ui/toaster';
 import { ThemeProvider } from '@/components/theme/theme-provider';
-import { Montserrat, Oswald, Poppins } from 'next/font/google';
+import { Cinzel, Poppins } from 'next/font/google';
 import { cn } from '@/lib/utils';
-
-const montserrat = Montserrat({
-  weight: ['300', '400', '500', '600', '700'],
-  subsets: ['latin'],
-  variable: '--font-montserrat',
-  display: 'swap',
-});
-
-const oswald = Oswald({
-  weight: ['400', '500', '600', '700'],
-  subsets: ['latin'],
-  variable: '--font-oswald',
-  display: 'swap',
-});
 
 const poppins = Poppins({
   weight: ['300', '400', '500', '600', '700'],
   subsets: ['latin'],
   variable: '--font-poppins',
+  display: 'swap',
+});
+
+const cinzel = Cinzel({
+  weight: ['400', '500', '600', '700', '800', '900'],
+  subsets: ['latin'],
+  variable: '--font-cinzel',
   display: 'swap',
 });
 
@@ -47,9 +40,8 @@ export default function RootLayout({
       <body
         suppressHydrationWarning
         className={cn(
-          montserrat.variable,
-          oswald.variable,
           poppins.variable,
+          cinzel.variable,
           'min-h-screen bg-background antialiased font-sans',
         )}
       >

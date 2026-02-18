@@ -73,7 +73,7 @@ export default function LandingPromotionEditor({
       title: 'Nueva Promoción',
       description: 'Descripción de la nueva promoción',
       image: '',
-      category: 'Corte', // Default category
+      category: 'Clases',
       price: 0,
       discount_price: 0,
       valid_until: new Date().toISOString().split('T')[0], // Today's date

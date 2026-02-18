@@ -21,10 +21,10 @@ import type { GalleryItem } from '@/interfaces/galleryItems/GalleryItem';
 import { useEffect, useState } from 'react';
 
 const categories: Category[] = [
-  'Corte',
-  'Barba',
-  'Tratamiento',
-  'Paquete',
+  'Clases',
+  'Competencias',
+  'Graduaciones',
+  'Seminarios',
   'Instalaciones',
 ];
 
@@ -56,7 +56,6 @@ export default function EditGalleryItemModal({
       title: item.title,
       description: item.description || '',
       category: item.category as Category,
-      is_before_after: item.is_before_after || false,
     },
   });
 
@@ -67,7 +66,6 @@ export default function EditGalleryItemModal({
       title: item.title,
       description: item.description || '',
       category: item.category as Category,
-      is_before_after: item.is_before_after,
     });
   }, [item, reset]);
 
@@ -82,19 +80,15 @@ export default function EditGalleryItemModal({
           title: data.title,
           description: data.description,
           category: data.category,
-          is_before_after: data.is_before_after,
         }),
       });
 
       const responseData = await response.json().catch(() => ({}));
 
       if (!response.ok) {
-        // Si el error es 14 pero la actualización fue exitosa, lo manejamos como éxito
-        if (responseData.error) {
-          console.log(
-            'Advertencia: Se recibió el código de error 14, pero la actualización fue exitosa',
-          );
-        }
+        throw new Error(
+          responseData.error || 'Error al actualizar el ítem',
+        );
       }
 
       toast({
@@ -108,22 +102,14 @@ export default function EditGalleryItemModal({
       router.refresh();
     } catch (error) {
       console.error('Error al actualizar el ítem:', error);
-      // Solo mostrar el toast si el error no es el código 14 o 15
-      if (
-        !(
-          error instanceof Error &&
-          (error.message.includes('14') || error.message.includes('15'))
-        )
-      ) {
-        toast({
-          title: 'Error',
-          description:
-            error instanceof Error
-              ? error.message
-              : 'Ocurrió un error al actualizar el ítem',
-          variant: 'destructive',
-        });
-      }
+      toast({
+        title: 'Error',
+        description:
+          error instanceof Error
+            ? error.message
+            : 'Ocurrió un error al actualizar el ítem',
+        variant: 'destructive',
+      });
     }
   };
 
@@ -143,7 +129,7 @@ export default function EditGalleryItemModal({
               htmlFor="title"
               className="block text-sm font-medium text-gray-700"
             >
-              Título
+              Título (opcional)
             </label>
             <Input
               id="title"
@@ -192,21 +178,6 @@ export default function EditGalleryItemModal({
                 </option>
               ))}
             </select>
-          </div>
-
-          <div className="flex items-center">
-            <input
-              type="checkbox"
-              id="is_before_after"
-              {...register('is_before_after')}
-              className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-            />
-            <label
-              htmlFor="is_before_after"
-              className="ml-2 block text-sm text-gray-700"
-            >
-              Mostrar como antes/después
-            </label>
           </div>
 
           <div className="flex justify-end space-x-3 pt-4">

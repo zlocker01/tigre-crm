@@ -147,15 +147,6 @@ export function LandingGalleryEditor({
                 )}
               </div>
 
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id={`items[${index}].is_before_after`}
-                  {...register(`items.${index}.is_before_after` as const)}
-                />
-                <Label htmlFor={`items[${index}].is_before_after`}>
-                  ¿Es una imagen de antes y después?
-                </Label>
-              </div>
             </div>
           ))}
 

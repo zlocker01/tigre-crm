@@ -129,9 +129,9 @@ export function AppointmentsAnalysis(props: AppointmentsAnalysisProps) {
     <div className="space-y-4">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h2 className="text-2xl font-bold">Análisis de Citas</h2>
+          <h2 className="text-2xl font-bold">Análisis de Clases</h2>
           <p className="text-muted-foreground">
-            Información detallada sobre las citas en tu negocio
+            Información detallada sobre las clases en tu academia
           </p>
         </div>
         <Select value={timeRange} onValueChange={setTimeRange}>
@@ -197,9 +197,9 @@ export function AppointmentsAnalysis(props: AppointmentsAnalysisProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Card>
               <CardHeader>
-                <CardTitle>Citas por Día de la Semana</CardTitle>
+                <CardTitle>Clases por Día de la Semana</CardTitle>
                 <CardDescription>
-                  Distribución de citas a lo largo de la semana
+                  Distribución de clases a lo largo de la semana
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -210,9 +210,9 @@ export function AppointmentsAnalysis(props: AppointmentsAnalysisProps) {
             </Card>
             <Card>
               <CardHeader>
-                <CardTitle>Citas por Hora</CardTitle>
+                <CardTitle>Clases por Hora</CardTitle>
                 <CardDescription>
-                  Distribución de citas a lo largo del día
+                  Distribución de clases a lo largo del día
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -227,7 +227,7 @@ export function AppointmentsAnalysis(props: AppointmentsAnalysisProps) {
         <TabsContent value="heatmap" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Mapa de Calor de Citas</CardTitle>
+              <CardTitle>Mapa de Calor de Clases</CardTitle>
               <CardDescription>
                 Visualización de las horas más ocupadas por día de la semana
               </CardDescription>
@@ -244,9 +244,9 @@ export function AppointmentsAnalysis(props: AppointmentsAnalysisProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Card>
               <CardHeader>
-                <CardTitle>Citas por Servicio</CardTitle>
+                <CardTitle>Clases por Servicio</CardTitle>
                 <CardDescription>
-                  Distribución de citas por tipo de servicio
+                  Distribución de clases por tipo de servicio
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -261,7 +261,7 @@ export function AppointmentsAnalysis(props: AppointmentsAnalysisProps) {
               <CardHeader>
                 <CardTitle>Servicios Más Populares</CardTitle>
                 <CardDescription>
-                  Ranking de servicios por número de citas
+                  Ranking de servicios por número de clases
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -269,7 +269,7 @@ export function AppointmentsAnalysis(props: AppointmentsAnalysisProps) {
                   <TableHeader>
                     <TableRow>
                       <TableHead>Servicio</TableHead>
-                      <TableHead className="text-right">Citas</TableHead>
+                      <TableHead className="text-right">Clases</TableHead>
                       <TableHead className="text-right">Crecimiento</TableHead>
                       <TableHead className="text-right">Duración</TableHead>
                     </TableRow>

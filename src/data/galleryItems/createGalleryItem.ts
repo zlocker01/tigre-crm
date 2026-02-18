@@ -1,8 +1,16 @@
-import { createClient } from "@/utils/supabase/server";
-import { getUserId } from "@/data/getUserIdServer";
+import { createClient } from '@/utils/supabase/server';
+import { getUserId } from '@/data/getUserIdServer';
+
+interface CreateGalleryItemInput {
+  title?: string;
+  description?: string;
+  image?: string;
+  category?: string;
+  landing_page_id?: string;
+}
 
 export async function createGalleryItem(
-  item: any,
+  item: CreateGalleryItemInput,
 ): Promise<string | undefined> {
   try {
     const supabase = await createClient();
@@ -13,24 +21,28 @@ export async function createGalleryItem(
     }
 
     const { data, error } = await supabase
-      .from("gallery_items")
+      .from('gallery_items')
       .insert([
         {
-          ...item,
+          title: item.title ?? null,
+          description: item.description ?? null,
+          image: item.image ?? null,
+          category: item.category ?? 'Clases',
+          landing_page_id: item.landing_page_id ?? null,
           user_id: userId,
         },
       ])
-      .select("id")
+      .select('id')
       .single();
 
     if (error) {
-      console.error("Error creating gallery item:", error);
+      console.error('Error creating gallery item:', error);
       return undefined;
     }
 
     return data.id;
   } catch (error) {
-    console.error("Unexpected error:", error);
+    console.error('Unexpected error:', error);
     return undefined;
   }
 }

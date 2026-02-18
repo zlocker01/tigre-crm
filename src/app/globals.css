@@ -5,36 +5,32 @@
 @layer base {
   :root {
     --font-sans:
-      var(--font-montserrat), 'Montserrat', ui-sans-serif, system-ui,
-      -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
-      Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+      var(--font-poppins), 'Poppins', ui-sans-serif, system-ui, -apple-system,
+      BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+      'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
       'Segoe UI Symbol', 'Noto Color Emoji';
     --font-serif:
-      var(--font-oswald), 'Oswald', 'Impact', ui-sans-serif, system-ui,
-      sans-serif; /* Usamos Oswald para títulos */
+      var(--font-cinzel), 'Cinzel', 'Georgia', 'Times New Roman', serif;
 
-    /* Light Mode - Clean, Modern, Vibrant */
-    --background: 210 40% 98%; /* Slate 50 - Suave, no blanco puro */
-    --foreground: 222.2 84% 4.9%; /* Slate 950 - Azul muy oscuro */
+    --background: 0 0% 98%;
+    --foreground: 222.2 47.4% 11.2%;
 
-    --card: 0 0% 100%; /* Blanco puro para tarjetas */
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 47.4% 11.2%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 222.2 47.4% 11.2%;
 
-    /* Primary: Gold #EAA200 */
-    --primary: 42 100% 46%;
-    --primary-foreground: 222.2 84% 4.9%; /* Dark text for contrast */
+    --primary: 348 84% 38%;
+    --primary-foreground: 210 40% 98%;
 
-    /* Secondary: Red #EC4339 */
-    --secondary: 3 82% 58%;
+    --secondary: 220 16% 12%;
     --secondary-foreground: 210 40% 98%;
 
     --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted-foreground: 215 20.2% 34.1%;
 
-    --accent: 3 82% 58%; /* Match Secondary */
+    --accent: 348 84% 38%;
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 84.2% 60.2%;
@@ -42,34 +38,31 @@
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 42 100% 46%; /* Match primary */
+    --ring: 348 84% 38%;
 
-    --radius: 0.75rem; /* Rounder corners for modern feel */
+    --radius: 0.75rem;
   }
 
   .dark {
-    /* Dark Mode - Deep, Rich, Glowing */
-    --background: 224 71% 4%; /* Slate 950+ - Casi negro azulado */
+    --background: 220 40% 5%;
     --foreground: 210 40% 98%;
 
-    --card: 222.2 47.4% 11.2%; /* Slate 900 - Elevación sutil */
+    --card: 220 30% 10%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 222.2 47.4% 11.2%;
+    --popover: 220 30% 10%;
     --popover-foreground: 210 40% 98%;
 
-    /* Primary: Gold #EAA200 */
-    --primary: 42 100% 46%;
+    --primary: 348 84% 45%;
     --primary-foreground: 222.2 47.4% 11.2%;
 
-    /* Secondary: Red #EC4339 */
-    --secondary: 3 82% 58%;
+    --secondary: 0 0% 0%;
     --secondary-foreground: 210 40% 98%;
 
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
 
-    --accent: 42 30% 20%; /* Warm dark background for accents */
+    --accent: 348 84% 38%;
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 62.8% 30.6%;
@@ -85,7 +78,6 @@
   html {
     font-family: var(--font-sans);
   }
-
   h1,
   h2,
   h3,

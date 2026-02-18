@@ -4,73 +4,66 @@
 
 @layer base {
   :root {
-    /* Light Mode - Clean, Modern, Vibrant (Synced with main globals) */
-    --background: 210 40% 98%; /* Slate 50 */
-    --foreground: 222.2 84% 4.9%; /* Slate 950 */
-    
+    --background: 0 0% 98%;
+    --foreground: 222.2 47.4% 11.2%;
+
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    
+    --card-foreground: 222.2 47.4% 11.2%;
+
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    
-    /* Primary: Gold #EAA200 */
-    --primary: 42 100% 46%;
-    --primary-foreground: 222.2 84% 4.9%;
-    
-    /* Secondary: Red #EC4339 */
-    --secondary: 3 82% 58%;
+    --popover-foreground: 222.2 47.4% 11.2%;
+
+    --primary: 348 84% 38%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 220 16% 12%;
     --secondary-foreground: 210 40% 98%;
-    
+
     --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    
-    --accent: 3 82% 58%; /* Match Secondary */
+    --muted-foreground: 215 20.2% 34.1%;
+
+    --accent: 348 84% 38%;
     --accent-foreground: 210 40% 98%;
-    
+
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-    
+
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 42 100% 46%;
-    
+    --ring: 348 84% 38%;
+
     --radius: 0.75rem;
 
-    /* Sidebar variables - Updated to match new palette */
-    --sidebar-background: 0 0% 100%; /* White sidebar for contrast against Slate-50 BG */
-    --sidebar-foreground: 222.2 84% 4.9%;
-    --sidebar-primary: 42 100% 46%;
-    --sidebar-primary-foreground: 222.2 84% 4.9%;
-    --sidebar-accent: 210 40% 96.1%; /* Subtle hover for sidebar items - keep as is (slate-50/100) or warm tint? Keep neutral for safety */
-    --sidebar-accent-foreground: 42 100% 46%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 222.2 47.4% 11.2%;
+    --sidebar-primary: 348 84% 38%;
+    --sidebar-primary-foreground: 210 40% 98%;
+    --sidebar-accent: 210 40% 96.1%;
+    --sidebar-accent-foreground: 348 84% 38%;
     --sidebar-border: 214.3 31.8% 91.4%;
-    --sidebar-ring: 42 100% 46%;
+    --sidebar-ring: 348 84% 38%;
   }
 
   .dark {
-    /* Dark Mode - Deep, Rich, Glowing */
-    --background: 224 71% 4%; /* Slate 950+ */
+    --background: 220 40% 5%;
     --foreground: 210 40% 98%;
     
-    --card: 222.2 47.4% 11.2%; /* Slate 900 */
+    --card: 220 30% 10%;
     --card-foreground: 210 40% 98%;
     
-    --popover: 222.2 47.4% 11.2%;
+    --popover: 220 30% 10%;
     --popover-foreground: 210 40% 98%;
     
-    /* Primary: Gold #EAA200 */
-    --primary: 42 100% 46%;
+    --primary: 348 84% 45%;
     --primary-foreground: 222.2 47.4% 11.2%;
     
-    /* Secondary: Red #EC4339 */
-    --secondary: 3 82% 58%;
+    --secondary: 0 0% 0%;
     --secondary-foreground: 210 40% 98%;
     
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
     
-    --accent: 42 30% 20%;
+    --accent: 348 84% 38%;
     --accent-foreground: 210 40% 98%;
     
     --destructive: 0 62.8% 30.6%;
@@ -80,15 +73,14 @@
     --input: 217.2 32.6% 17.5%;
     --ring: 42 100% 46%;
 
-    /* Sidebar variables - Modo oscuro */
-    --sidebar-background: 222.2 47.4% 11.2%; /* Match card/popover for unified sidebar */
+    --sidebar-background: 222.2 47.4% 11.2%;
     --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 42 100% 46%;
+    --sidebar-primary: 348 84% 45%;
     --sidebar-primary-foreground: 222.2 47.4% 11.2%;
     --sidebar-accent: 217.2 32.6% 17.5%;
     --sidebar-accent-foreground: 210 40% 98%;
     --sidebar-border: 217.2 32.6% 17.5%;
-    --sidebar-ring: 42 100% 46%;
+    --sidebar-ring: 348 84% 45%;
   }
 }
 

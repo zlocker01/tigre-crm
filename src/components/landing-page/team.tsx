@@ -40,19 +40,24 @@ export function Team({ data }: { data: Employee[] }) {
               }
             }
 
+            const hasImage =
+              typeof member.image === 'string' &&
+              member.image.trim().length > 0;
+
             return (
-              <div>
-                <Card
-                  key={member.id}
-                  className="overflow-hidden flex flex-col h-full w-full max-w-sm mx-auto"
-                >
+              <div key={member.id}>
+                <Card className="overflow-hidden flex flex-col h-full w-full max-w-sm mx-auto">
                   <div className="relative w-full aspect-[4/3] overflow-hidden">
-                    <img
-                      src={member.image}
-                      alt={member.name}
-                      className="w-full h-full"
-                      loading="lazy"
-                    />
+                    {hasImage ? (
+                      <img
+                        src={member.image}
+                        alt={member.name}
+                        className="w-full h-full"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-muted" />
+                    )}
                   </div>
                   <CardHeader>
                     <CardTitle>{member.name}</CardTitle>

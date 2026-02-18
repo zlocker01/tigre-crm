@@ -1,10 +1,9 @@
-import { createClient } from "@/utils/supabase/server";
+import { createClient } from '@/utils/supabase/server';
 
 interface UpdateGalleryItemData {
-  title: string;
+  title?: string;
   description?: string;
   category: string;
-  is_before_after: boolean;
 }
 
 export async function updateGalleryItem(
@@ -14,17 +13,13 @@ export async function updateGalleryItem(
   try {
     // Validar que el ID sea un número válido
     if (!id || isNaN(Number(id))) {
-      console.error("ID de ítem no válido:", id);
-      return "ID de ítem no válido";
+      console.error('ID de ítem no válido:', id);
+      return 'ID de ítem no válido';
     }
 
     // Validar campos requeridos
-    if (!item.title?.trim()) {
-      return "El título es requerido";
-    }
-
     if (!item.category) {
-      return "La categoría es requerida";
+      return 'La categoría es requerida';
     }
 
     const supabase = await createClient();
@@ -37,34 +32,35 @@ export async function updateGalleryItem(
 
     if (authError || !user) {
       console.error(
-        "Error de autenticación:",
-        authError?.message || "Usuario no autenticado",
+        'Error de autenticación:',
+        authError?.message || 'Usuario no autenticado',
       );
-      return "No autorizado para actualizar el ítem";
+      return 'No autorizado para actualizar el ítem';
     }
 
     const { data, error } = await supabase
-      .from("gallery_items")
+      .from('gallery_items')
       .update({
         title: item.title,
         description: item.description || null,
         category: item.category,
-        is_before_after: item.is_before_after || false,
       })
-      .eq("id", id)
-      .select("id")
+      .eq('id', id)
+      .select('id')
       .single();
 
     if (error) {
+      console.error('Error al actualizar el ítem:', error.message);
       return `Error al actualizar el ítem: ${error.message}`;
     }
 
     if (!data) {
-      return "No se encontró el ítem o no se pudo actualizar";
+      return 'No se encontró el ítem o no se pudo actualizar';
     }
 
-    return data.id.toString();
+    return null;
   } catch (error) {
-    return "Error al actualizar el ítem";
+    console.error('Error inesperado al actualizar el ítem:', error);
+    return 'Error al actualizar el ítem';
   }
 }

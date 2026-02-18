@@ -72,11 +72,11 @@ const appointmentsByHourData = [
 ];
 
 const appointmentsByServiceData = [
-  { name: "Corte de cabello", value: 35, color: "#8884d8" },
-  { name: "Manicura", value: 20, color: "#82ca9d" },
-  { name: "Tratamiento facial", value: 15, color: "#ffc658" },
-  { name: "Masaje", value: 18, color: "#ff8042" },
-  { name: "Tinte", value: 12, color: "#0088fe" },
+  { name: "Clase Principiantes", value: 35, color: "#8884d8" },
+  { name: "Clase Avanzados", value: 20, color: "#82ca9d" },
+  { name: "Clase Infantil", value: 15, color: "#ffc658" },
+  { name: "Clase Mujeres", value: 18, color: "#ff8042" },
+  { name: "Clase Competidores", value: 12, color: "#0088fe" },
 ];
 
 const appointmentStatusData = [
@@ -139,25 +139,35 @@ const heatmapData = [
 // Datos para la tabla de servicios más populares
 const popularServicesData = [
   {
-    service: "Corte de cabello",
+    service: "Clase Principiantes",
     appointments: 145,
     growth: "+12%",
     avgDuration: "45 min",
   },
   {
-    service: "Manicura",
+    service: "Clase Avanzados",
     appointments: 98,
     growth: "+8%",
     avgDuration: "60 min",
   },
   {
-    service: "Tratamiento facial",
+    service: "Clase Infantil",
     appointments: 76,
     growth: "+15%",
     avgDuration: "75 min",
   },
-  { service: "Masaje", appointments: 65, growth: "+5%", avgDuration: "90 min" },
-  { service: "Tinte", appointments: 54, growth: "+3%", avgDuration: "120 min" },
+  {
+    service: "Clase Mujeres",
+    appointments: 65,
+    growth: "+5%",
+    avgDuration: "90 min",
+  },
+  {
+    service: "Clase Competidores",
+    appointments: 54,
+    growth: "+3%",
+    avgDuration: "120 min",
+  },
 ];
 
 export function AppointmentsAnalysis() {
@@ -180,9 +190,9 @@ export function AppointmentsAnalysis() {
     <div className="space-y-4">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h2 className="text-2xl font-bold">Análisis de Citas</h2>
+          <h2 className="text-2xl font-bold">Análisis de Clases</h2>
           <p className="text-muted-foreground">
-            Información detallada sobre las citas en tu negocio
+            Información detallada sobre las clases en tu academia
           </p>
         </div>
         <Select value={timeRange} onValueChange={setTimeRange}>
@@ -201,7 +211,7 @@ export function AppointmentsAnalysis() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-lg">Total de Citas</CardTitle>
+            <CardTitle className="text-lg">Total de Clases</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold">438</div>
@@ -270,9 +280,9 @@ export function AppointmentsAnalysis() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Card>
               <CardHeader>
-                <CardTitle>Citas por Día de la Semana</CardTitle>
+                <CardTitle>Clases por Día de la Semana</CardTitle>
                 <CardDescription>
-                  Distribución de citas a lo largo de la semana
+                  Distribución de clases a lo largo de la semana
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -296,14 +306,14 @@ export function AppointmentsAnalysis() {
                           color: "var(--foreground)",
                           padding: "8px 12px",
                         }}
-                        formatter={(value) => [`${value} citas`, ""]}
+                        formatter={(value) => [`${value} clases`, ""]}
                         itemStyle={{ padding: "2px 0" }}
                         labelStyle={{ fontWeight: "bold", marginBottom: "4px" }}
                       />
                       <Legend />
                       <Bar
                         dataKey="citas"
-                        name="Número de citas"
+                        name="Número de clases"
                         fill="#8884d8"
                       />
                     </BarChart>
@@ -313,9 +323,9 @@ export function AppointmentsAnalysis() {
             </Card>
             <Card>
               <CardHeader>
-                <CardTitle>Citas por Hora</CardTitle>
+                <CardTitle>Clases por Hora</CardTitle>
                 <CardDescription>
-                  Distribución de citas a lo largo del día
+                  Distribución de clases a lo largo del día
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -339,14 +349,14 @@ export function AppointmentsAnalysis() {
                           color: "var(--foreground)",
                           padding: "8px 12px",
                         }}
-                        formatter={(value) => [`${value} citas`, ""]}
+                        formatter={(value) => [`${value} clases`, ""]}
                         itemStyle={{ padding: "2px 0" }}
                         labelStyle={{ fontWeight: "bold", marginBottom: "4px" }}
                       />
                       <Legend />
                       <Bar
                         dataKey="citas"
-                        name="Número de citas"
+                        name="Número de clases"
                         fill="#82ca9d"
                       />
                     </BarChart>
@@ -360,7 +370,7 @@ export function AppointmentsAnalysis() {
         <TabsContent value="heatmap" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Mapa de Calor de Citas</CardTitle>
+              <CardTitle>Mapa de Calor de Clases</CardTitle>
               <CardDescription>
                 Visualización de las horas más ocupadas por día de la semana
               </CardDescription>
@@ -384,7 +394,7 @@ export function AppointmentsAnalysis() {
                       name="Hora"
                       allowDuplicatedCategory={false}
                     />
-                    <ZAxis dataKey="value" range={[100, 1000]} name="Citas" />
+                    <ZAxis dataKey="value" range={[100, 1000]} name="Clases" />
                     <Tooltip
                       cursor={{ strokeDasharray: "3 3" }}
                       contentStyle={{
@@ -397,7 +407,7 @@ export function AppointmentsAnalysis() {
                         color: "var(--foreground)",
                         padding: "8px 12px",
                       }}
-                      formatter={(value) => [`${value} citas`, "Cantidad"]}
+                      formatter={(value) => [`${value} clases`, "Cantidad"]}
                       itemStyle={{ padding: "2px 0" }}
                       labelStyle={{ fontWeight: "bold", marginBottom: "4px" }}
                     />
@@ -406,7 +416,7 @@ export function AppointmentsAnalysis() {
                 </ResponsiveContainer>
               </div>
               <div className="text-sm text-muted-foreground text-center mt-2">
-                El tamaño de cada círculo representa el número de citas en ese
+                El tamaño de cada círculo representa el número de clases en ese
                 horario
               </div>
             </CardContent>
@@ -417,9 +427,9 @@ export function AppointmentsAnalysis() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Card>
               <CardHeader>
-                <CardTitle>Citas por Servicio</CardTitle>
+                <CardTitle>Clases por Servicio</CardTitle>
                 <CardDescription>
-                  Distribución de citas por tipo de servicio
+                  Distribución de clases por tipo de servicio
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -453,7 +463,7 @@ export function AppointmentsAnalysis() {
                           color: "var(--foreground)",
                           padding: "8px 12px",
                         }}
-                        formatter={(value) => [`${value} citas`, ""]}
+                        formatter={(value) => [`${value} clases`, ""]}
                         itemStyle={{ padding: "2px 0" }}
                         labelStyle={{ fontWeight: "bold", marginBottom: "4px" }}
                       />
@@ -466,7 +476,7 @@ export function AppointmentsAnalysis() {
               <CardHeader>
                 <CardTitle>Servicios Más Populares</CardTitle>
                 <CardDescription>
-                  Ranking de servicios por número de citas
+                  Ranking de servicios por número de clases
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -474,7 +484,7 @@ export function AppointmentsAnalysis() {
                   <TableHeader>
                     <TableRow>
                       <TableHead>Servicio</TableHead>
-                      <TableHead className="text-right">Citas</TableHead>
+                      <TableHead className="text-right">Clases</TableHead>
                       <TableHead className="text-right">Crecimiento</TableHead>
                       <TableHead className="text-right">Duración</TableHead>
                     </TableRow>
@@ -515,9 +525,9 @@ export function AppointmentsAnalysis() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Card>
               <CardHeader>
-                <CardTitle>Estado de las Citas</CardTitle>
+                <CardTitle>Estado de las Clases</CardTitle>
                 <CardDescription>
-                  Distribución de citas por estado
+                  Distribución de clases por estado
                 </CardDescription>
               </CardHeader>
               <CardContent>

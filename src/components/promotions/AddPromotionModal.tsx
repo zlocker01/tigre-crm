@@ -96,7 +96,7 @@ export function AddPromotionModal({
           price: 0,
           discount_price: 0,
           duration_minutes: 30,
-          category: 'Corte', // Default category
+          category: 'Clases',
           valid_until: new Date().toISOString(),
           image: '',
         },
@@ -266,7 +266,7 @@ export function AddPromotionModal({
         price: 0,
         discount_price: 0,
         duration_minutes: 30,
-        category: 'Corte',
+        category: 'Clases',
         valid_until: new Date().toISOString(),
         image: '',
       });
@@ -304,7 +304,7 @@ export function AddPromotionModal({
         price: 0,
         discount_price: 0,
         duration_minutes: 30,
-        category: 'Corte',
+        category: 'Clases',
         valid_until: new Date().toISOString(),
         image: '',
       });

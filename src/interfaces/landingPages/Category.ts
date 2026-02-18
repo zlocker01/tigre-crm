@@ -1,6 +1,6 @@
 export type Category =
-  | 'Corte'
-  | 'Barba'
-  | 'Tratamiento'
-  | 'Paquete'
+  | 'Clases'
+  | 'Competencias'
+  | 'Graduaciones'
+  | 'Seminarios'
   | 'Instalaciones';

@@ -24,7 +24,6 @@ import {
   Sparkles,
   Droplet,
   Brush,
-  CalendarPlus,
   Clock,
   Loader2,
   AlertCircle,
@@ -38,6 +37,7 @@ import {
   Siren,
   Stethoscope,
   Smile,
+  CheckCircle2,
 } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
@@ -183,57 +183,60 @@ export default function Services({ landingId }: { landingId: string }) {
                       >
                         <div className="p-1 h-full">
                           <div className="p-1 min-h-96">
-                            <Card className="overflow-hidden transition-all hover:shadow-lg flex flex-col relative h-[500px] gap-3">
-                              {/* Imagen de fondo */}
-                              <img
-                                src={service.image || '/placeholder.svg'}
-                                alt={service.title}
-                                className="object-cover absolute inset-0 z-0 w-full h-full"
-                                loading="lazy"
-                              />
-                              {/* Overlay de gradiente para legibilidad */}
-                              <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/35 to-transparent z-10" />
-
-                              {/* Level Badge */}
-                              <div className="absolute top-4 right-4 z-20">
-                                <LevelBadge level={service.level} />
-                              </div>
-
-                              {/* Contenido encima de la imagen */}
-                              <div className="relative z-20 flex flex-col h-full justify-end p-6">
-                                <div className="space-y-2">
-                                  <CardHeader className="p-0">
-                                    <CardTitle className="text-white drop-shadow-lg font-bold text-lg md:text-xl lg:text-2xl">
-                                      {service.title}
-                                    </CardTitle>
-                                    <CardDescription className="text-white/90 drop-shadow-md mb-2">
-                                      {service.description}
-                                    </CardDescription>
-                                  </CardHeader>
-                                  <CardContent className="space-y-2 p-0">
-                                    {service.benefits &&
-                                      service.benefits.length > 0 && (
-                                        <ul className="list-disc list-inside text-sm text-white/90 drop-shadow-sm">
-                                          {service.benefits.map(
-                                            (benefit, i) => (
-                                              <li key={i}>{benefit}</li>
-                                            ),
-                                          )}
-                                        </ul>
-                                      )}
-                                  </CardContent>
-                                  <CardFooter className="p-0 pt-4">
-                                    <Button asChild className="w-full">
-                                      <Link
-                                        href="/citas"
-                                        className="flex items-center gap-2"
-                                      >
-                                        <CalendarPlus className="h-4 w-4" />
-                                        <span>Agendar Cita</span>
-                                      </Link>
-                                    </Button>
-                                  </CardFooter>
+                            <Card className="flex h-full flex-col overflow-hidden rounded-3xl border border-border/40 bg-background shadow-sm transition-all hover:shadow-lg">
+                              <div className="relative overflow-hidden">
+                                <img
+                                  src={service.image || '/placeholder.svg'}
+                                  alt={service.title}
+                                  className="h-52 w-full object-cover"
+                                  loading="lazy"
+                                />
+                                <div className="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-background/90 via-background/40 to-transparent" />
+                                <div className="absolute right-4 top-4">
+                                  <LevelBadge level={service.level} />
                                 </div>
+                              </div>
+                              <div className="flex flex-1 flex-col px-6 pb-6 pt-5">
+                                <CardHeader className="mb-3 p-0">
+                                  <CardTitle className="text-xl font-bold text-foreground">
+                                    {service.title}
+                                  </CardTitle>
+                                  <CardDescription className="mt-1 text-sm text-muted-foreground">
+                                    {service.description}
+                                  </CardDescription>
+                                </CardHeader>
+                                <CardContent className="flex-1 p-0">
+                                  {service.benefits &&
+                                    service.benefits.length > 0 && (
+                                      <ul className="mt-3 space-y-2 text-sm text-foreground">
+                                        {service.benefits.map(
+                                          (benefit, i) => (
+                                            <li
+                                              key={i}
+                                              className="flex items-start gap-2"
+                                            >
+                                              <CheckCircle2 className="mt-0.5 h-4 w-4 text-accent" />
+                                              <span>{benefit}</span>
+                                            </li>
+                                          ),
+                                        )}
+                                      </ul>
+                                    )}
+                                </CardContent>
+                                <CardFooter className="mt-5 p-0">
+                                  <Button
+                                    asChild
+                                    className="w-full rounded-full bg-accent text-accent-foreground hover:bg-accent/90"
+                                  >
+                                    <Link
+                                      href="/citas"
+                                      className="flex items-center justify-center gap-2"
+                                    >
+                                      <Layers className="h-4 w-4" />
+                                      <span>Ver paquetes</span>
+                                    </Link>
+                                  </Button>
+                                </CardFooter>
                               </div>
                             </Card>
                           </div>

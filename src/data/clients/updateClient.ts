@@ -7,58 +7,57 @@ export const updateClient = async (
 ): Promise<string | undefined> => {
   const supabase = await createClient();
 
-  // Extract appointments to avoid sending them to DB (relation)
-  // Ensure we are not sending is_active if it still exists in the type somehow
-  const { appointments, ...cleanData } = clientData as any;
+  const { appointments, ...rest } = clientData as any;
 
-  // Explicitly remove is_active if present in the data object to avoid DB conflicts if column was removed
-  delete cleanData.is_active;
+  const payload: Record<string, unknown> = {};
 
-  // Convert empty strings to null for UUID fields to avoid syntax errors
-  if (cleanData.package_id === '') {
-    cleanData.package_id = null;
+  if (rest.name !== undefined) {
+    payload.name = rest.name;
+  }
+  if (rest.email !== undefined) {
+    payload.email = rest.email || null;
+  }
+  if (rest.phone !== undefined) {
+    payload.phone = rest.phone || null;
+  }
+  if (rest.registration_date !== undefined) {
+    payload.registration_date = rest.registration_date;
+  }
+  if (rest.birthday !== undefined) {
+    payload.birthday = rest.birthday || null;
+  }
+  if (rest.notes !== undefined) {
+    payload.notes = rest.notes || null;
   }
 
-  console.log('--- START UPDATE CLIENT ---');
-  console.log('Target ID:', id);
-  console.log('Payload keys:', Object.keys(cleanData));
-  if ('status' in cleanData) {
-    console.log('Status update value:', cleanData.status);
-  } else {
-    console.warn(
-      '⚠️ WARNING: "status" field is MISSING in the update payload!',
-    );
+  if (rest.status !== undefined) {
+    payload.is_active =
+      rest.status === 'active' || rest.status === 'trial' ? true : false;
   }
 
-  const { data, error } = await supabase
+  if (rest.package_id !== undefined) {
+    if (rest.package_id === '') {
+      payload.package_id = null;
+    } else {
+      const numericPid =
+        typeof rest.package_id === 'string'
+          ? Number(rest.package_id)
+          : rest.package_id;
+      if (!Number.isNaN(numericPid) && Number.isFinite(numericPid)) {
+        (payload as any).package_id = numericPid;
+      }
+    }
+  }
+
+  const { error } = await supabase
     .from('clients')
-    .update(cleanData)
-    .eq('id', id)
-    .select();
+    .update(payload)
+    .eq('id', id);
 
   if (error) {
-    console.error('❌ updateClient DB Error:', error.message);
-    console.error('Error details:', error);
+    console.error('❌ updateClient DB Error:', error);
     return error.message;
   }
-
-  console.log('✅ Update success. Rows affected:', data?.length);
-  if (data && data.length > 0) {
-    const updatedRecord = data[0];
-    console.log('Updated record status:', updatedRecord.status);
-
-    // CRITICAL CHECK: Did the status actually change?
-    if (cleanData.status && updatedRecord.status !== cleanData.status) {
-      const msg = `CRITICAL: Status update failed silently. Requested '${cleanData.status}', but DB returned '${updatedRecord.status}'. This usually means the 'status' column does not exist in the database or is read-only.`;
-      console.error(msg);
-      return "Error: La base de datos no tiene la columna 'status'. Ejecuta la migración SQL.";
-    }
-  } else {
-    console.warn(
-      '⚠️ Update returned success but NO rows were returned (Record not found or RLS policy?)',
-    );
-  }
-  console.log('--- END UPDATE CLIENT ---');
 
   return;
 };

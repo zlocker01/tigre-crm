@@ -88,9 +88,11 @@ export function ClientDetails({
       fetch('/api/packages')
         .then((res) => res.json())
         .then((data) => {
-          const pkg = data.packages?.find(
-            (p: any) => p.id === client.package_id,
-          );
+          const targetId =
+            typeof client.package_id === 'string'
+              ? Number(client.package_id)
+              : client.package_id;
+          const pkg = data.packages?.find((p: any) => p.id === targetId);
           if (pkg) setPackageName(pkg.name);
           else setPackageName('Plan no encontrado');
         })

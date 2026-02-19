@@ -51,7 +51,9 @@ export function ClientsTable({
 
   const getPackageName = (packageId?: string) => {
     if (!packageId || !packagesData) return '-';
-    const pkg = packagesData.find((p: any) => p.id === packageId);
+    const targetId =
+      typeof packageId === 'string' ? Number(packageId) : packageId;
+    const pkg = packagesData.find((p: any) => p.id === targetId);
     return pkg ? pkg.name : '-';
   };
 

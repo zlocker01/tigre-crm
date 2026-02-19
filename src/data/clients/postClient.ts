@@ -1,37 +1,60 @@
 import { createClient } from '@/utils/supabase/server';
 import { getUserId } from '@/data/getUserIdServer';
-import type { Client } from '@/interfaces/client/Client';
 import { getUserRole } from '@/data/getUserRole';
 
-export const postClient = async (
-  clientData: Omit<Client, 'id' | 'user_id' | 'client_source'>,
-): Promise<boolean> => {
+export const postClient = async (clientData: any): Promise<boolean> => {
   const supabase = await createClient();
   const userId = await getUserId();
   const userRole = await getUserRole();
 
-  const { appointments, ...cleanData } = clientData as any;
-  
-  // Explicitly remove is_active if present
-  delete cleanData.is_active;
+  const {
+    name,
+    email,
+    phone,
+    registration_date,
+    birthday,
+    notes,
+    status,
+    package_id,
+  } = clientData || {};
 
-  // Convert empty strings to null for UUID fields to avoid syntax errors
-  if (cleanData.package_id === '') {
-    cleanData.package_id = null;
+  if (!name || typeof name !== 'string') {
+    console.error('postClient error: name is required');
+    return false;
   }
 
-  const { error } = await supabase.from("clients").insert([
-    {
-      ...cleanData,
-      user_id: userId,
-      registration_date:
-        clientData.registration_date || new Date().toISOString(),
-      client_source: userRole || 'empleado',
-    },
-  ]);
+  const isActive =
+    typeof status === 'string'
+      ? status === 'active' || status === 'trial'
+      : false;
+
+  const payload: Record<string, unknown> = {
+    name,
+    email: email || null,
+    phone: phone || null,
+    registration_date: registration_date || new Date().toISOString(),
+    birthday: birthday || null,
+    notes: notes || null,
+    is_active: isActive,
+    client_source: userRole || 'empleado',
+  };
+
+  if (package_id !== undefined && package_id !== '') {
+    const numericPid =
+      typeof package_id === 'string' ? Number(package_id) : package_id;
+    if (!Number.isNaN(numericPid) && Number.isFinite(numericPid)) {
+      (payload as any).package_id = numericPid;
+    }
+  }
+
+  if (userId) {
+    payload.user_id = userId;
+  }
+
+  const { error } = await supabase.from('clients').insert([payload]);
 
   if (error) {
-    console.error('🚀 ~ postClient error:', error.message);
+    console.error('🚀 ~ postClient error:', error);
     return false;
   }
 

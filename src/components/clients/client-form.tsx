@@ -257,7 +257,7 @@ export function ClientForm({
                 </FormControl>
                 <SelectContent>
                   {packages.map((pkg) => (
-                    <SelectItem key={pkg.id} value={pkg.id}>
+                    <SelectItem key={pkg.id} value={String(pkg.id)}>
                       {pkg.name}
                     </SelectItem>
                   ))}

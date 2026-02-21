@@ -8,16 +8,24 @@ import {
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  const items = await getInventoryItems();
+  const result = await getInventoryItems();
 
-  if (items === null) {
+  if (!result.data) {
+    const status =
+      result.code === "42501" || /permission denied/i.test(result.error || "")
+        ? 403
+        : 500;
     return NextResponse.json(
-      { success: false, error: "Error al obtener inventario" },
-      { status: 500 },
+      {
+        success: false,
+        error: result.error || "Error al obtener inventario",
+        code: result.code,
+      },
+      { status },
     );
   }
 
-  return NextResponse.json({ success: true, data: items });
+  return NextResponse.json({ success: true, data: result.data });
 }
 
 export async function POST(request: NextRequest) {
@@ -53,16 +61,22 @@ export async function POST(request: NextRequest) {
       status: body.status ?? "available",
     };
 
-    const created = await createInventoryItem(payload);
+    const { data, error, code } = await createInventoryItem(payload);
 
-    if (!created) {
+    if (!data) {
+      const status =
+        code === "42501" || /permission denied/i.test(error || "") ? 403 : 500;
       return NextResponse.json(
-        { success: false, error: "No se pudo crear el producto" },
-        { status: 500 },
+        {
+          success: false,
+          error: error || "No se pudo crear el producto",
+          code,
+        },
+        { status },
       );
     }
 
-    return NextResponse.json({ success: true, data: created });
+    return NextResponse.json({ success: true, data });
   } catch (error) {
     console.error("Error en POST /api/inventory:", error);
     return NextResponse.json(

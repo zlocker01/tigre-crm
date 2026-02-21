@@ -20,16 +20,23 @@ export async function PUT(
   try {
     const body = (await request.json()) as Partial<InventoryItem>;
 
-    const updated = await updateInventoryItem(numericId, body);
+    const { data, error, code } = await updateInventoryItem(numericId, body);
 
-    if (!updated) {
+    if (!data) {
+      const status =
+        code === '42501' || /permission denied/i.test(error || '') ? 403 : 500;
+
       return NextResponse.json(
-        { success: false, error: 'No se pudo actualizar el producto' },
-        { status: 500 }
+        {
+          success: false,
+          error: error || 'No se pudo actualizar el producto',
+          code,
+        },
+        { status },
       );
     }
 
-    return NextResponse.json({ success: true, data: updated });
+    return NextResponse.json({ success: true, data });
   } catch (error) {
     console.error('Error en PUT /api/inventory/[id]:', error);
     return NextResponse.json(

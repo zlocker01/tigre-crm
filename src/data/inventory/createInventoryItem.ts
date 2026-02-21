@@ -1,29 +1,29 @@
-import { createClient } from "@/utils/supabase/server";
-import type { InventoryItem } from "@/interfaces/inventory/InventoryItem";
+import { createClient } from '@/utils/supabase/server';
+import type { InventoryItem } from '@/interfaces/inventory/InventoryItem';
 
 export type CreateInventoryItemInput = Omit<
   InventoryItem,
-  "id" | "created_at" | "updated_at"
+  'id' | 'created_at' | 'updated_at'
 >;
 
 export const createInventoryItem = async (
   payload: CreateInventoryItemInput,
-): Promise<InventoryItem | null> => {
+): Promise<{ data: InventoryItem | null; error?: string; code?: string }> => {
   const supabase = await createClient();
 
   const { data, error } = await supabase
-    .from("inventory")
+    .from('inventory')
     .insert({
       ...payload,
+      item_name: payload.name,
     })
-    .select("*")
+    .select('*')
     .single();
 
   if (error) {
-    console.error("Error creating inventory item:", error.message);
-    return null;
+    console.error('Error creating inventory item:', error.message);
+    return { data: null, error: error.message, code: (error as any).code };
   }
 
-  return data as InventoryItem;
+  return { data: data as InventoryItem };
 };
-

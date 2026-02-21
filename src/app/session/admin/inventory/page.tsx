@@ -63,9 +63,9 @@ type InventoryFormState = {
 
 const itemTypeLabels: Record<InventoryItemType, string> = {
   consumable: 'Consumible',
-  instrument: 'Herramienta',
   equipment: 'Equipo',
   apparel: 'Indumentaria',
+  supplement: 'Suplemento',
 };
 
 const itemStatusLabels: Record<InventoryItemStatus, string> = {
@@ -81,10 +81,7 @@ const inventorySchema = z.object({
   name: z.string().min(1, 'El nombre es obligatorio'),
   category: z.string().min(1, 'La categoría es obligatoria'),
   item_type: z
-    .union([
-      z.enum(['consumable', 'instrument', 'equipment', 'apparel']),
-      z.literal(''),
-    ])
+    .union([z.enum(['consumable', 'equipment', 'apparel', 'supplement']), z.literal('')])
     .refine((v) => v !== '', {
       message: 'Selecciona un tipo de producto válido',
     }),
@@ -487,16 +484,10 @@ export default function InventoryPage() {
                             <SelectValue placeholder="Selecciona tipo" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="consumable">
-                              Consumible
-                            </SelectItem>
-                            <SelectItem value="instrument">
-                              Herramienta
-                            </SelectItem>
+                            <SelectItem value="consumable">Consumible</SelectItem>
                             <SelectItem value="equipment">Equipo</SelectItem>
-                            <SelectItem value="apparel">
-                              Indumentaria
-                            </SelectItem>
+                            <SelectItem value="apparel">Indumentaria</SelectItem>
+                            <SelectItem value="supplement">Suplemento</SelectItem>
                           </SelectContent>
                         </Select>
                       </FormControl>

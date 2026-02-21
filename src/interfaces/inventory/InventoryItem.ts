@@ -1,8 +1,8 @@
 export type InventoryItemType =
   | 'consumable'
-  | 'instrument'
   | 'equipment'
-  | 'apparel';
+  | 'apparel'
+  | 'supplement';
 
 export type InventoryItemStatus =
   | 'available'

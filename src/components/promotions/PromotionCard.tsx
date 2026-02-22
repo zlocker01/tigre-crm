@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { Tag, Clock, Layers, Users } from 'lucide-react';
 import {
   Card,
   CardContent,
@@ -82,7 +81,7 @@ export function PromotionCard({
             />
             <TogglePromotionButton
               promotionId={promotion.id}
-              isActive={promotion.active !== false} // Default to true if undefined
+              isActive={promotion.active !== false}
               onPromotionToggled={() => onPromotionUpdated()}
             />
             <DeletePromotionButton
@@ -91,12 +90,6 @@ export function PromotionCard({
             />
           </div>
         </div>
-        {promotion.duration_minutes && (
-          <div className="flex items-center text-sm text-gray-300 mt-1">
-            <Clock className="h-4 w-4 mr-1" />
-            {promotion.duration_minutes} minutos
-          </div>
-        )}
       </CardHeader>
       <CardContent>
         <p className="text-gray-300 mb-4">{promotion.description}</p>

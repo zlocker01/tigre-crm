@@ -24,14 +24,14 @@ export async function POST(request: NextRequest) {
     if (!date || !time || !name || !email || !phone) {
       return NextResponse.json(
         { success: false, error: 'Faltan campos obligatorios' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     if (!service && !promotion) {
       return NextResponse.json(
         { success: false, error: 'Debe seleccionar un servicio o promoción' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
         .select('id')
         .eq('id', serviceId)
         .single();
-      
+
       if (serviceData) {
         // Clases tienen duración por defecto de 60 minutos y precio 0 (o según lógica de negocio futura)
         durationMinutes = 60;
@@ -58,13 +58,14 @@ export async function POST(request: NextRequest) {
     } else if (promotion) {
       promotionId = parseInt(promotion);
       const { data: promoData } = await supabase
-        .from('promotions')
-        .select('duration_minutes, discount_price')
+
+
+      .from('promotions')
+        .select('discount_price')
         .eq('id', promotionId)
         .single();
-      
+
       if (promoData) {
-        durationMinutes = promoData.duration_minutes || 30;
         priceCharged = promoData.discount_price || 0;
       }
     }
@@ -73,11 +74,11 @@ export async function POST(request: NextRequest) {
     // date viene como "2026-01-15T06:00:00.000Z" (ISO) o similar
     // time viene como "17:00"
     // Necesitamos combinar la fecha con la hora correcta
-    
+
     // Parsear fecha base
     const baseDate = new Date(date);
     const [hours, minutes] = time.split(':').map(Number);
-    
+
     // Crear fecha de inicio en UTC/Local según corresponda
     // Asumimos que la fecha enviada ya es correcta o la ajustamos
     // Opción segura: crear fecha con año, mes, día de baseDate y hora de time
@@ -122,23 +123,24 @@ export async function POST(request: NextRequest) {
     }
 
     // 5. Crear Cita
-    const { data: newAppointment, error: createAppointmentError } = await supabase
-      .from('appointments')
-      .insert({
-        client_id: clientId,
-        service_id: serviceId,
-        promotion_id: promotionId,
-        start_datetime: startDateTime.toISOString(),
-        end_datetime: endDateTime.toISOString(),
-        status: 'Confirmada', // O 'Pendiente' según flujo
-        notes: notes,
-        price_charged: priceCharged,
-        actual_duration_minutes: durationMinutes,
-        appointment_source: 'web',
-        // user_id: null // Se deja nulo ya que es una reserva pública
-      })
-      .select('*')
-      .single();
+    const { data: newAppointment, error: createAppointmentError } =
+      await supabase
+        .from('appointments')
+        .insert({
+          client_id: clientId,
+          service_id: serviceId,
+          promotion_id: promotionId,
+          start_datetime: startDateTime.toISOString(),
+          end_datetime: endDateTime.toISOString(),
+          status: 'Confirmada', // O 'Pendiente' según flujo
+          notes: notes,
+          price_charged: priceCharged,
+          actual_duration_minutes: durationMinutes,
+          appointment_source: 'web',
+          // user_id: null // Se deja nulo ya que es una reserva pública
+        })
+        .select('*')
+        .single();
 
     if (createAppointmentError) {
       throw new Error(`Error creando cita: ${createAppointmentError.message}`);
@@ -148,19 +150,18 @@ export async function POST(request: NextRequest) {
       success: true,
       data: {
         appointment: newAppointment,
-        clientId
-      }
+        clientId,
+      },
     });
-
   } catch (error: any) {
     console.error('Error en POST /api/booking:', error);
     return NextResponse.json(
       {
         success: false,
         error: 'Error procesando la reserva',
-        details: error.message
+        details: error.message,
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

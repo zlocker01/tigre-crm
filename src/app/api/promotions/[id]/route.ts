@@ -73,8 +73,6 @@ export async function PUT(req: Request, props: { params: Promise<{ id: string }>
       if (body.discount_price !== undefined) updateData.discount_price = body.discount_price;
       if (body.valid_until !== undefined) updateData.valid_until = body.valid_until;
       if (body.image !== undefined) updateData.image = body.image;
-      if (body.category !== undefined) updateData.category = body.category;
-      if (body.duration_minutes !== undefined) updateData.duration_minutes = body.duration_minutes;
       if (body.active !== undefined) updateData.active = body.active;
     }
 

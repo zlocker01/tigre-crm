@@ -26,7 +26,6 @@ import {
 } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 import { es } from 'date-fns/locale';
-import { serviceCategories } from '@/schemas/promotionSchemas/promotionSchema';
 import {
   Form,
   FormControl,
@@ -35,28 +34,14 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 
 export const promotionFormSchema = z.object({
   title: z.string().min(1, 'El título es requerido'),
   description: z.string().optional(),
-  category: z
-    .string()
-    .max(50, 'La categoría no puede exceder los 50 caracteres')
-    .optional(),
   price: z.coerce.number().min(0, 'El precio debe ser mayor o igual a 0'),
   discount_price: z.coerce
     .number()
     .min(0, 'El precio con descuento debe ser mayor o igual a 0'),
-  duration_minutes: z.coerce
-    .number()
-    .min(0, 'La duración no puede ser negativa'),
   valid_until: z.date({
     required_error: 'La fecha de vencimiento es requerida',
   }),
@@ -87,8 +72,6 @@ export function EditPromotionModal({
       description: promotion.description || '',
       price: promotion.price,
       discount_price: promotion.discount_price,
-      duration_minutes: promotion.duration_minutes,
-      category: promotion.category,
       valid_until: new Date(promotion.valid_until),
     },
   });
@@ -104,8 +87,6 @@ export function EditPromotionModal({
       description: promotion.description || '',
       price: promotion.price,
       discount_price: promotion.discount_price,
-      duration_minutes: promotion.duration_minutes,
-      category: promotion.category,
       valid_until: new Date(promotion.valid_until),
     });
   }, [promotion, form]);
@@ -254,62 +235,6 @@ export function EditPromotionModal({
                         {Math.round(((price - discountPrice) / price) * 100)}%
                       </p>
                     )}
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="duration_minutes"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Duración (minutos)</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        min="0"
-                        {...field}
-                        className={
-                          form.formState.errors.duration_minutes
-                            ? 'border-red-500'
-                            : ''
-                        }
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="category"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Categoría</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      value={field.value || ''}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecciona una categoría">
-                            {field.value || ''}
-                          </SelectValue>
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {serviceCategories.map((category) => (
-                          <SelectItem key={category} value={category}>
-                            {category}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
                   </FormItem>
                 )}
               />

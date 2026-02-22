@@ -1,12 +1,5 @@
 import { z } from 'zod';
 
-export const serviceCategories = [
-  'Clases',
-  'Competencias',
-  'Graduaciones',
-  'Seminarios',
-] as const;
-
 export const promotionItemSchema = z.object({
   id: z.string().optional(),
   title: z
@@ -23,15 +16,6 @@ export const promotionItemSchema = z.object({
     .number()
     .positive('El precio de descuento debe ser un número positivo'),
   valid_until: z.string().min(1, 'La fecha de vencimiento es requerida'),
-  category: z.enum(serviceCategories, {
-    required_error: 'Por favor selecciona una categoría',
-  }),
-  duration_minutes: z
-    .number()
-    .min(10, 'La duración debe ser de al menos 10 minutos')
-    .max(1440, 'La duración no puede ser mayor a 24 horas')
-    .optional()
-    .nullable(),
 });
 
 export const PromotionFormSchema = z.object({

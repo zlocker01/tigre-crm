@@ -91,11 +91,6 @@ export function PromotionCard({
             />
           </div>
         </div>
-        {promotion.category && (
-          <span className="inline-block bg-amber-100 text-amber-800 text-xs px-2 py-1 rounded-full">
-            {promotion.category}
-          </span>
-        )}
         {promotion.duration_minutes && (
           <div className="flex items-center text-sm text-gray-300 mt-1">
             <Clock className="h-4 w-4 mr-1" />

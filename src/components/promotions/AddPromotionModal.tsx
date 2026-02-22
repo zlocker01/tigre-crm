@@ -13,13 +13,6 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 
 import {
   Popover,
@@ -32,10 +25,7 @@ import { createClient } from '@/utils/supabase/client';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import {
-  promotionItemSchema,
-  serviceCategories,
-} from '@/schemas/promotionSchemas/promotionSchema';
+import { promotionItemSchema } from '@/schemas/promotionSchemas/promotionSchema';
 import type { Promotion } from '@/interfaces/promotions/Promotion';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
@@ -85,8 +75,6 @@ export function AddPromotionModal({
           description: promotion.description,
           price: promotion.price,
           discount_price: promotion.discount_price,
-          duration_minutes: promotion.duration_minutes,
-          category: promotion.category as any,
           valid_until: new Date(promotion.valid_until).toISOString(),
           image: promotion.image,
         }
@@ -95,8 +83,6 @@ export function AddPromotionModal({
           description: '',
           price: 0,
           discount_price: 0,
-          duration_minutes: 30,
-          category: 'Clases',
           valid_until: new Date().toISOString(),
           image: '',
         },
@@ -205,8 +191,6 @@ export function AddPromotionModal({
         description: data.description,
         price: Number(data.price),
         discount_price: Number(data.discount_price),
-        duration_minutes: Number(data.duration_minutes),
-        category: data.category,
         valid_until: new Date(data.valid_until).toISOString(),
         image: data.image,
         landing_page_id: landingId,
@@ -265,8 +249,6 @@ export function AddPromotionModal({
         description: '',
         price: 0,
         discount_price: 0,
-        duration_minutes: 30,
-        category: 'Clases',
         valid_until: new Date().toISOString(),
         image: '',
       });
@@ -291,8 +273,6 @@ export function AddPromotionModal({
         description: promotion.description,
         price: promotion.price,
         discount_price: promotion.discount_price,
-        duration_minutes: promotion.duration_minutes,
-        category: promotion.category as any,
         valid_until: new Date(promotion.valid_until).toISOString(),
         image: promotion.image,
       });
@@ -303,8 +283,6 @@ export function AddPromotionModal({
         description: '',
         price: 0,
         discount_price: 0,
-        duration_minutes: 30,
-        category: 'Clases',
         valid_until: new Date().toISOString(),
         image: '',
       });
@@ -420,60 +398,6 @@ export function AddPromotionModal({
                             %
                           </p>
                         )}
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <FormField
-                  control={form.control}
-                  name="duration_minutes"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Duración (minutos)</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          min="0"
-                          step="15"
-                          placeholder="30"
-                          {...field}
-                          onChange={(e) =>
-                            field.onChange(parseInt(e.target.value, 10) || null)
-                          }
-                          value={field.value ?? ''}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="category"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Categoría</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                        value={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Selecciona una categoría" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {serviceCategories.map((category) => (
-                            <SelectItem key={category} value={category}>
-                              {category}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
                     </FormItem>
                   )}
                 />

@@ -38,25 +38,6 @@ export function useCategoryConflictChecker({
 
     let selectedCategory: string | null = null;
 
-    if (serviceId) {
-      const service = services.find((s) => s.id === serviceId);
-      if (service) {
-        selectedCategory = service.category;
-      }
-    } else if (promotionId) {
-      const promo = promotions.find((p) => p.id === promotionId);
-      if (promo) {
-        const promoService = promotions.find((s) => s.id === promotionId);
-        if (promoService) {
-          selectedCategory = promoService.category;
-        }
-      }
-    }
-
-    if (!selectedCategory) {
-      return;
-    }
-
     const hasConflict = appointments.some((app) => {
       if (app.id === currentAppointmentId) {
         return false;
@@ -64,20 +45,14 @@ export function useCategoryConflictChecker({
       const appStart = new Date(app.start_datetime);
       const appEnd = new Date(app.end_datetime);
 
-      const overlapping = start < appEnd && end > appStart; // se solapan
-
-      const sameCategory = (() => {
-        const appService = services.find((s) => s.id === app.service_id);
-        return appService?.category === selectedCategory;
-      })();
-
-      return overlapping && sameCategory;
+      const overlapping = start < appEnd && end > appStart;
+      return overlapping;
     });
 
     if (hasConflict) {
       form.setError("start_datetime", {
         type: "manual",
-        message: `Ya hay una cita de la categoría "${selectedCategory}" en este horario.`,
+        message: "Ya hay una cita en este horario.",
       });
     } else {
       form.clearErrors("start_datetime");

@@ -42,8 +42,6 @@ export async function updatePromotion(
     if (promotionData.price !== undefined) updateObject.price = Number(promotionData.price);
     if (promotionData.discount_price !== undefined) updateObject.discount_price = Number(promotionData.discount_price);
     if (promotionData.valid_until !== undefined) updateObject.valid_until = promotionData.valid_until;
-    if (promotionData.category !== undefined) updateObject.category = promotionData.category;
-    if (promotionData.duration_minutes !== undefined) updateObject.duration_minutes = promotionData.duration_minutes;
     if (promotionData.active !== undefined) updateObject.active = promotionData.active;
     
     // Check if we have any fields to update

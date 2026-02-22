@@ -43,8 +43,6 @@ export async function POST(req: Request) {
       valid_until: body.valid_until,
       image: body.image,
       landing_page_id: body.landing_page_id,
-      category: body.category,
-      duration_minutes: body.duration_minutes,
     });
 
     if (!success) {

@@ -8,7 +8,5 @@ export interface Promotion {
   discount_price: number;
   valid_until: string;
   landing_page_id?: string;
-  duration_minutes: number;
-  category: string;
   active?: boolean;
 }

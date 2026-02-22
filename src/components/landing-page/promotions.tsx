@@ -120,7 +120,6 @@ export default function Promotions({ landingId }: { landingId: string }) {
                       {/* Overlay de gradiente para legibilidad */}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-10" />
 
-                      {/* Badges Container */}
                       <div className="absolute top-4 right-4 z-20 flex flex-col gap-2 items-end">
                         <Badge
                           variant="destructive"
@@ -134,14 +133,6 @@ export default function Promotions({ landingId }: { landingId: string }) {
                           )}
                           % OFF
                         </Badge>
-                        {promo.category && (
-                          <Badge
-                            variant="secondary"
-                            className="text-sm px-3 py-1 bg-primary/90 text-primary-foreground hover:bg-primary/100 border-none"
-                          >
-                            {promo.category}
-                          </Badge>
-                        )}
                       </div>
 
                       {/* Contenido encima de la imagen */}

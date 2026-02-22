@@ -73,11 +73,9 @@ export default function LandingPromotionEditor({
       title: 'Nueva Promoción',
       description: 'Descripción de la nueva promoción',
       image: '',
-      category: 'Clases',
       price: 0,
       discount_price: 0,
-      valid_until: new Date().toISOString().split('T')[0], // Today's date
-      duration_minutes: 60,
+      valid_until: new Date().toISOString().split('T')[0],
     };
     append(newItem);
   };
@@ -168,7 +166,6 @@ export default function LandingPromotionEditor({
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {/* Title */}
                   <div>
                     <Label htmlFor={`${baseId}-${field.id}-title`}>
                       Título
@@ -185,27 +182,6 @@ export default function LandingPromotionEditor({
                     {errors.items?.[index]?.title && (
                       <p className="text-sm font-medium text-red-600 dark:text-red-400">
                         {errors.items[index]?.title?.message}
-                      </p>
-                    )}
-                  </div>
-
-                  {/* Category */}
-                  <div>
-                    <Label htmlFor={`${baseId}-${field.id}-category`}>
-                      Categoría
-                    </Label>
-                    <Input
-                      id={`${baseId}-${field.id}-category`}
-                      {...register(`items.${index}.category`)}
-                      className={`rounded-md border ${
-                        errors.items?.[index]?.category
-                          ? 'border-red-500'
-                          : 'border-gray-300'
-                      } focus:border-purple-500 focus:ring focus:ring-purple-200 focus:ring-opacity-50 dark:bg-gray-800 dark:text-gray-200`}
-                    />
-                    {errors.items?.[index]?.category && (
-                      <p className="text-sm font-medium text-red-600 dark:text-red-400">
-                        {errors.items[index]?.category?.message}
                       </p>
                     )}
                   </div>
@@ -279,7 +255,6 @@ export default function LandingPromotionEditor({
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {/* Valid Until */}
                   <div>
                     <Label htmlFor={`${baseId}-${field.id}-valid_until`}>
                       Válido Hasta
@@ -297,28 +272,6 @@ export default function LandingPromotionEditor({
                     {errors.items?.[index]?.valid_until && (
                       <p className="text-sm font-medium text-red-600 dark:text-red-400">
                         {errors.items[index]?.valid_until?.message}
-                      </p>
-                    )}
-                  </div>
-
-                  {/* Duration */}
-                  <div>
-                    <Label htmlFor={`${baseId}-${field.id}-duration_minutes`}>
-                      Duración (minutos)
-                    </Label>
-                    <Input
-                      id={`${baseId}-${field.id}-duration_minutes`}
-                      type="number"
-                      {...register(`items.${index}.duration_minutes`)}
-                      className={`rounded-md border ${
-                        errors.items?.[index]?.duration_minutes
-                          ? 'border-red-500'
-                          : 'border-gray-300'
-                      } focus:border-purple-500 focus:ring focus:ring-purple-200 focus:ring-opacity-50 dark:bg-gray-800 dark:text-gray-200`}
-                    />
-                    {errors.items?.[index]?.duration_minutes && (
-                      <p className="text-sm font-medium text-red-600 dark:text-red-400">
-                        {errors.items[index]?.duration_minutes?.message}
                       </p>
                     )}
                   </div>

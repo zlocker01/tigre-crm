@@ -15,12 +15,17 @@ export async function GET() {
 
 export async function POST(req: Request) {
   const body = await req.json();
-  const success = await postClient(body);
-  if (!success) {
+  const result = await postClient(body);
+  
+  if (!result.success) {
     return NextResponse.json(
       { error: "No se pudo crear el cliente." },
       { status: 500 },
     );
   }
-  return NextResponse.json({ message: "Cliente creado correctamente." });
+  
+  return NextResponse.json({ 
+    message: "Cliente creado correctamente.",
+    client: result.client 
+  });
 }

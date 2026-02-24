@@ -2,7 +2,9 @@ import { createClient } from '@/utils/supabase/server';
 import { getUserId } from '@/data/getUserIdServer';
 import { getUserRole } from '@/data/getUserRole';
 
-export const postClient = async (clientData: any): Promise<boolean> => {
+export const postClient = async (
+  clientData: any
+): Promise<{ success: boolean; client?: any }> => {
   const supabase = await createClient();
   const userId = await getUserId();
   const userRole = await getUserRole();
@@ -20,12 +22,15 @@ export const postClient = async (clientData: any): Promise<boolean> => {
 
   if (!name || typeof name !== 'string') {
     console.error('postClient error: name is required');
-    return false;
+    return { success: false };
   }
 
+  // Si no se especifica status, usar 'trial' por defecto para nuevos registros desde landing
+  const clientStatus = status || 'trial';
+  
   const isActive =
-    typeof status === 'string'
-      ? status === 'active' || status === 'trial'
+    typeof clientStatus === 'string'
+      ? clientStatus === 'active' || clientStatus === 'trial'
       : false;
 
   const payload: Record<string, unknown> = {
@@ -35,8 +40,8 @@ export const postClient = async (clientData: any): Promise<boolean> => {
     registration_date: registration_date || new Date().toISOString(),
     birthday: birthday || null,
     notes: notes || null,
-    is_active: isActive,
-    client_source: userRole || 'empleado',
+    status: clientStatus,
+    client_source: userRole || 'landing_page', // Indicar que viene de landing si no hay rol
   };
 
   if (package_id !== undefined && package_id !== '') {
@@ -51,12 +56,16 @@ export const postClient = async (clientData: any): Promise<boolean> => {
     payload.user_id = userId;
   }
 
-  const { error } = await supabase.from('clients').insert([payload]);
+  const { data, error } = await supabase
+    .from('clients')
+    .insert([payload])
+    .select()
+    .single();
 
   if (error) {
     console.error('🚀 ~ postClient error:', error);
-    return false;
+    return { success: false };
   }
 
-  return true;
+  return { success: true, client: data };
 };

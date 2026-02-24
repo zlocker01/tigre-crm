@@ -24,9 +24,11 @@ interface AppointmentDetailsProps {
   appointment: ClassSession | null;
   clients: Client[];
   services: Service[];
-  onEdit: (appointment: ClassSession) => void;
+  onEdit?: (appointment: ClassSession) => void;
   onClose: () => void;
   onAppointmentCancelled?: () => void;
+  readOnly?: boolean;
+  customAction?: React.ReactNode;
 }
 
 export function AppointmentDetails({
@@ -36,6 +38,8 @@ export function AppointmentDetails({
   onEdit,
   onClose,
   onAppointmentCancelled,
+  readOnly = false,
+  customAction,
 }: AppointmentDetailsProps) {
   const { toast } = useToast();
   const [showCancelDialog, setShowCancelDialog] = useState(false);
@@ -143,7 +147,7 @@ export function AppointmentDetails({
       </div>
 
       <div className="space-y-4">
-        {appointment?.client_id && (
+        {appointment?.client_id && !readOnly && (
           <div className="flex items-center space-x-2">
             <User className="h-5 w-5 text-muted-foreground" />
             <div>
@@ -223,30 +227,35 @@ export function AppointmentDetails({
       </div>
 
       <div className="flex justify-end space-x-2 pt-4">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => setShowDeleteDialog(true)}
-          className="text-red-600 hover:text-red-700 hover:bg-red-50"
-          title="Eliminar registro"
-        >
-          <Trash2 className="h-4 w-4" />
-        </Button>
-        <Button
-          variant="destructive"
-          size="sm"
-          onClick={() => setShowCancelDialog(true)}
-          disabled={appointment.status === 'Cancelada'}
-        >
-          Cancelar clase
-        </Button>
-        <Button
-          size="sm"
-          onClick={() => onEdit(appointment)}
-          className="bg-indigo-600 hover:bg-indigo-700 text-white"
-        >
-          Editar
-        </Button>
+        {customAction}
+        {!readOnly && (
+          <>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setShowDeleteDialog(true)}
+              className="text-red-600 hover:text-red-700 hover:bg-red-50"
+              title="Eliminar registro"
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={() => setShowCancelDialog(true)}
+              disabled={appointment.status === 'Cancelada'}
+            >
+              Cancelar clase
+            </Button>
+            <Button
+              size="sm"
+              onClick={() => onEdit && onEdit(appointment)}
+              className="bg-indigo-600 hover:bg-indigo-700 text-white"
+            >
+              Editar
+            </Button>
+          </>
+        )}
       </div>
 
       {/* Diálogo de confirmación de cancelación */}

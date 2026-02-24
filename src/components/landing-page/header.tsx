@@ -38,7 +38,7 @@ export default function Header() {
         'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
         isScrolled
           ? 'bg-background/80 backdrop-blur-md shadow-sm'
-          : 'bg-transparent'
+          : 'bg-transparent',
       )}
     >
       <div className="container mx-auto px-4 py-4">
@@ -64,7 +64,7 @@ export default function Header() {
             ))}
             <ThemeToggle />
             <Button asChild>
-              <Link href="/citas">Agendar Cita</Link>
+              <Link href="/citas">Agendar Clase</Link>
             </Button>
           </nav>
 
@@ -114,7 +114,7 @@ export default function Header() {
               ))}
               <Button asChild size="lg" className="mt-6 w-full">
                 <Link href="/citas" onClick={closeMenu}>
-                  Agendar Cita
+                  Agendar Clase
                 </Link>
               </Button>
             </nav>
@@ -123,5 +123,4 @@ export default function Header() {
       )}
     </header>
   );
-
 }

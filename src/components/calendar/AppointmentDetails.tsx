@@ -203,7 +203,7 @@ export function AppointmentDetails({
           </div>
         </div>
 
-        {trialStudents.length > 0 && (
+        {trialStudents.length > 0 && !readOnly && (
           <div className="space-y-2 pt-2 border-t">
             <h4 className="text-sm font-medium flex items-center gap-2">
               <User className="h-4 w-4 text-blue-500" />

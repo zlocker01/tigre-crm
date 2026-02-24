@@ -32,6 +32,7 @@ import {
 } from '@/components/ui/sheet';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { useMediaQuery } from '@/hooks/use-media-query';
+import { TrialClassNotifications } from '@/components/notifications/trial-class-notifications';
 
 export function DashboardLayout({
   children,
@@ -267,6 +268,7 @@ export function DashboardLayout({
             </Link>
           </Button>
           <div className="ml-auto flex items-center gap-2">
+            <TrialClassNotifications />
             <ThemeToggle />
           </div>
         </header>

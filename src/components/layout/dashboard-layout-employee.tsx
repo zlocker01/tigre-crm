@@ -28,6 +28,7 @@ import {
 } from '@/components/ui/sheet';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { useMediaQuery } from '@/hooks/use-media-query';
+import { TrialClassNotifications } from '@/components/notifications/trial-class-notifications';
 
 export function DashboardLayoutEmployee({
   children,

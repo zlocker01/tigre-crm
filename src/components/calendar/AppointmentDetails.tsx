@@ -132,6 +132,21 @@ export function AppointmentDetails({
     }
   };
 
+  const trialStudents = clients.filter((client) => {
+    if (client.status !== 'trial' || !client.notes) return false;
+
+    const service = services.find((s) => s.id === appointment.service_id);
+    if (!service) return false;
+
+    const formattedDate = format(
+      new Date(appointment.start_datetime),
+      'dd/MM/yyyy HH:mm',
+    );
+    const expectedNote = `Clase prueba solicitada para: ${service.title} - ${formattedDate}`;
+
+    return client.notes.includes(expectedNote);
+  });
+
   return (
     <div className="space-y-4 p-4 border rounded-lg shadow-md bg-white dark:bg-slate-950">
       <div className="flex justify-between items-start">
@@ -187,6 +202,38 @@ export function AppointmentDetails({
             </p>
           </div>
         </div>
+
+        {trialStudents.length > 0 && (
+          <div className="space-y-2 pt-2 border-t">
+            <h4 className="text-sm font-medium flex items-center gap-2">
+              <User className="h-4 w-4 text-blue-500" />
+              Alumnos de Clase de Prueba ({trialStudents.length})
+            </h4>
+            <div className="bg-blue-50 dark:bg-blue-950/30 rounded-md p-2 space-y-2">
+              {trialStudents.map((student) => (
+                <div
+                  key={student.id}
+                  className="flex items-center justify-between text-sm"
+                >
+                  <div className="flex flex-col">
+                    <span className="font-medium text-blue-900 dark:text-blue-100">
+                      {student.name}
+                    </span>
+                    <span className="text-xs text-blue-700 dark:text-blue-300">
+                      {student.phone || 'Sin teléfono'}
+                    </span>
+                  </div>
+                  <Badge
+                    variant="secondary"
+                    className="text-xs bg-white dark:bg-slate-800"
+                  >
+                    Prueba
+                  </Badge>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         <div className="space-y-2">
           <p className="text-sm font-medium">Servicio</p>

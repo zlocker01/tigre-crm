@@ -4,7 +4,7 @@ import { useState } from "react";
 import { AppointmentCalendar } from "./AppointmentCalendar";
 import { AppointmentDetails } from "./AppointmentDetails";
 import { AppointmentForm } from "./AppointmentForm";
-import type { Appointment } from "@/interfaces/appointments/Appointment";
+import type { ClassSession } from "@/interfaces/appointments/Appointment";
 import { ClientForm } from "../clients/client-form";
 
 interface CalendarClientProps {
@@ -15,7 +15,7 @@ interface CalendarClientProps {
   clients: any[];
   services: any[];
   promotions: any[];
-  appointments: Appointment[];
+  appointments: ClassSession[];
   onDateChange: (date: Date) => void;
   onAppointmentSelect: (appointment: any) => void;
   onCreateAppointment: () => void;

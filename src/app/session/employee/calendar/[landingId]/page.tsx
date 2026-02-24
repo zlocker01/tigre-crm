@@ -14,7 +14,7 @@ import { AppointmentCalendar } from '@/components/calendar/AppointmentCalendar';
 import { AppointmentDetails } from '@/components/calendar/AppointmentDetails';
 import { AppointmentForm } from '@/components/calendar/AppointmentForm';
 import { CalendarSkeleton } from '@/components/skeletons/calendar/calendar-skeleton';
-import type { Appointment } from '@/interfaces/appointments/Appointment';
+import type { ClassSession } from '@/interfaces/appointments/Appointment';
 import {
   Dialog,
   DialogContent,
@@ -29,11 +29,11 @@ export default function CalendarPage() {
   const landingId = params.landingId as string;
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedAppointment, setSelectedAppointment] =
-    useState<Appointment | null>(null);
+    useState<ClassSession | null>(null);
   const [view, setView] = useState('month');
 
   // Nueva función para manejar la selección de cita
-  const handleAppointmentSelect = (appointment: Appointment) => {
+  const handleAppointmentSelect = (appointment: ClassSession) => {
     setSelectedAppointment(appointment);
   };
 

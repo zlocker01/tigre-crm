@@ -126,6 +126,27 @@ CREATE TABLE IF NOT EXISTS public.appointments (
     CONSTRAINT appointments_promotion_id_fkey FOREIGN KEY (promotion_id) REFERENCES public.promotions(id)
 );
 
+-- Table: class_sessions (calendario de clases, antes appointments)
+CREATE TABLE IF NOT EXISTS public.class_sessions (
+    id uuid NOT NULL DEFAULT gen_random_uuid(),
+    user_id uuid DEFAULT auth.uid(),
+    client_id uuid NOT NULL,
+    service_id bigint,
+    promotion_id bigint,
+    status character varying,
+    start_datetime timestamp with time zone,
+    end_datetime timestamp with time zone,
+    notes text,
+    price_charged numeric,
+    actual_duration_minutes smallint,
+    appointment_source text,
+    CONSTRAINT class_sessions_pkey PRIMARY KEY (id),
+    CONSTRAINT class_sessions_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id),
+    CONSTRAINT class_sessions_client_id_fkey FOREIGN KEY (client_id) REFERENCES public.clients(id),
+    CONSTRAINT class_sessions_service_id_fkey FOREIGN KEY (service_id) REFERENCES public.services(id),
+    CONSTRAINT class_sessions_promotion_id_fkey FOREIGN KEY (promotion_id) REFERENCES public.promotions(id)
+);
+
 -- Table: employees
 CREATE TABLE IF NOT EXISTS public.employees (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
@@ -312,7 +333,7 @@ CREATE OR REPLACE FUNCTION public.get_service_revenue_data()
  LANGUAGE sql
 AS $function$
   SELECT s.title as name, COALESCE(SUM(a.price_charged), 0) as value
-  FROM appointments a
+  FROM class_sessions a
   JOIN services s ON a.service_id = s.id
   GROUP BY s.title
   ORDER BY value DESC
@@ -334,7 +355,7 @@ AS $function$
            WHEN EXTRACT(DOW FROM start_datetime) = 6 THEN 'Sábado'
          END as day,
          COUNT(*) as citas
-  FROM appointments
+  FROM class_sessions
   GROUP BY day_number, day
   ORDER BY day_number;
 $function$;
@@ -344,7 +365,7 @@ CREATE OR REPLACE FUNCTION public.get_appointments_by_service()
  LANGUAGE sql
 AS $function$
   SELECT s.title as name, COUNT(a.id) as value
-  FROM appointments a
+  FROM class_sessions a
   JOIN services s ON a.service_id = s.id
   GROUP BY s.title
   ORDER BY value DESC
@@ -371,7 +392,7 @@ BEGIN
     a.status,
     COUNT(a.id) as appointment_count
   FROM 
-    appointments a
+    class_sessions a
   WHERE 
     a.status IN ('completed', 'cancelled', 'no_show')
   GROUP BY 
@@ -427,7 +448,7 @@ BEGIN
       COALESCE(SUM(COALESCE(a.price_charged, s.price)), 0) AS revenue_calc,
       COALESCE(SUM(COALESCE(a.price_charged, s.price) * 0.6), 0) AS expenses_calc
     FROM 
-      appointments a
+      class_sessions a
     LEFT JOIN 
       services s ON a.service_id = s.id
     WHERE 
@@ -780,6 +801,7 @@ ALTER TABLE public.clients ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.services ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.promotions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.appointments ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.class_sessions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.employees ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.working_hours ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.non_working_days ENABLE ROW LEVEL SECURITY;
@@ -827,6 +849,12 @@ CREATE POLICY "Enable read access for all users" ON public.appointments FOR SELE
 CREATE POLICY "Enable insert for  all" ON public.appointments FOR INSERT TO public WITH CHECK (true);
 CREATE POLICY "Update just for admin role suers" ON public.appointments FOR UPDATE TO authenticated USING (EXISTS ( SELECT 1 FROM users WHERE ((users.id = auth.uid()) AND (users.role = ANY (ARRAY['admin'::text, 'empleado'::text]))))) WITH CHECK (EXISTS ( SELECT 1 FROM users WHERE ((users.id = auth.uid()) AND (users.role = ANY (ARRAY['admin'::text, 'empleado'::text])))));
 CREATE POLICY "Delete just ofr admin role users" ON public.appointments FOR DELETE TO authenticated USING (EXISTS ( SELECT 1 FROM users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
+
+-- Policies for class_sessions
+CREATE POLICY "Enable read access for all users" ON public.class_sessions FOR SELECT TO public USING (true);
+CREATE POLICY "Enable insert for  all" ON public.class_sessions FOR INSERT TO public WITH CHECK (true);
+CREATE POLICY "Update just for admin role suers" ON public.class_sessions FOR UPDATE TO authenticated USING (EXISTS ( SELECT 1 FROM users WHERE ((users.id = auth.uid()) AND (users.role = ANY (ARRAY['admin'::text, 'empleado'::text]))))) WITH CHECK (EXISTS ( SELECT 1 FROM users WHERE ((users.id = auth.uid()) AND (users.role = ANY (ARRAY['admin'::text, 'empleado'::text])))));
+CREATE POLICY "Delete just ofr admin role users" ON public.class_sessions FOR DELETE TO authenticated USING (EXISTS ( SELECT 1 FROM users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
 
 -- Policies for employees
 CREATE POLICY "Enable read access for all users" ON public.employees FOR SELECT TO public USING (true);

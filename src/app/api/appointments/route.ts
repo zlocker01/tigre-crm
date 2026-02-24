@@ -3,7 +3,7 @@ import { getAppointments } from '@/data/appointments/getAppointments';
 import { createAppointment } from '@/data/appointments/createAppointment';
 import { getUserId } from '@/data/getUserIdServer';
 import { createClient } from '@/utils/supabase/server';
-import { addDays, addYears, getDay, parseISO, setHours, setMinutes } from 'date-fns';
+import { addDays, addYears, getDay } from 'date-fns';
 
 export const dynamic = 'force-dynamic';
 
@@ -52,19 +52,19 @@ export async function GET(request: NextRequest) {
         error: 'Failed to fetch appointments',
         details: error instanceof Error ? error.message : 'Unknown error',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const { 
-      landingPageId, 
-      is_recurring, 
-      recurring_days, 
+    const {
+      landingPageId,
+      is_recurring,
+      recurring_days,
       recurring_end_date,
-      ...appointmentPayload 
+      ...appointmentPayload
     } = await request.json();
 
     const supabase = await createClient();
@@ -78,20 +78,8 @@ export async function POST(request: NextRequest) {
 
     if (error) throw error;
 
-    // Extraer duración y precio desde service
+    // Calcular duración; el precio se gestiona fuera de esta API
     let duration_minutes: number | null = null;
-    let price: number | null = null;
-
-    if (appointmentPayload.service_id) {
-      const { data: serviceData, error: serviceError } = await supabase
-        .from('services')
-        .select('price')
-        .eq('id', appointmentPayload.service_id)
-        .single();
-
-      if (serviceError) throw serviceError;
-      price = serviceData?.price;
-    }
 
     // Calcular duración basada en start y end datetime seleccionados
     let finalStartDateTime = new Date(appointmentPayload.start_datetime);
@@ -101,7 +89,9 @@ export async function POST(request: NextRequest) {
       finalEndDateTime = new Date(appointmentPayload.end_datetime);
     } else {
       // Fallback: 1 hora por defecto si no se envía end_datetime
-      finalEndDateTime = new Date(finalStartDateTime.getTime() + 60 * 60 * 1000);
+      finalEndDateTime = new Date(
+        finalStartDateTime.getTime() + 60 * 60 * 1000,
+      );
     }
 
     const diffMs = finalEndDateTime.getTime() - finalStartDateTime.getTime();
@@ -116,17 +106,21 @@ export async function POST(request: NextRequest) {
       user_id: userId,
       appointment_source: userData?.role || 'web',
       actual_duration_minutes: duration_minutes,
-      price_charged: price,
+      price_charged: null,
     };
 
     if (is_recurring && recurring_days && recurring_days.length > 0) {
+      const seriesId = globalThis.crypto?.randomUUID
+        ? globalThis.crypto.randomUUID()
+        : Math.random().toString(36).slice(2) +
+          Math.random().toString(36).slice(2);
       const appointmentsToInsert = [];
       const startDate = finalStartDateTime;
       // Si no hay fecha fin, por defecto 1 año
-      const limitDate = recurring_end_date 
-        ? new Date(recurring_end_date) 
+      const limitDate = recurring_end_date
+        ? new Date(recurring_end_date)
         : addYears(new Date(), 1);
-      
+
       // Asegurarnos de que el límite incluya el final del día
       limitDate.setHours(23, 59, 59, 999);
 
@@ -143,17 +137,19 @@ export async function POST(request: NextRequest) {
             finalStartDateTime.getHours(),
             finalStartDateTime.getMinutes(),
             0,
-            0
+            0,
           );
 
           const endForDay = new Date(currentDateIterator);
-          // Si la cita termina al día siguiente (cruza medianoche), hay que manejarlo, 
+          // Si la cita termina al día siguiente (cruza medianoche), hay que manejarlo,
           // pero por simplicidad asumimos mismo día o sumamos la duración
-          const endTimeMs = startForDay.getTime() + (duration_minutes! * 60 * 1000);
+          const endTimeMs =
+            startForDay.getTime() + duration_minutes! * 60 * 1000;
           const calculatedEnd = new Date(endTimeMs);
-          
+
           appointmentsToInsert.push({
             ...baseAppointmentData,
+            series_id: seriesId,
             start_datetime: startForDay.toISOString(),
             end_datetime: calculatedEnd.toISOString(),
           });
@@ -167,13 +163,17 @@ export async function POST(request: NextRequest) {
         // Podríamos forzar al menos la fecha de inicio si coincide, o lanzar error.
         // Por ahora, si el usuario eligió mal los días vs fecha, no se crea nada.
         return NextResponse.json(
-          { success: false, error: 'No appointments generated with selected recurrence settings.' },
-          { status: 400 }
+          {
+            success: false,
+            error:
+              'No appointments generated with selected recurrence settings.',
+          },
+          { status: 400 },
         );
       }
 
       const { data: createdAppointments, error: insertError } = await supabase
-        .from('appointments')
+        .from('class_sessions')
         .insert(appointmentsToInsert)
         .select();
 
@@ -183,11 +183,10 @@ export async function POST(request: NextRequest) {
         {
           success: true,
           data: createdAppointments,
-          count: createdAppointments.length
+          count: createdAppointments.length,
         },
-        { status: 201 }
+        { status: 201 },
       );
-
     } else {
       // Creación única (sin recurrencia)
       const singleAppointmentData = {
@@ -197,7 +196,7 @@ export async function POST(request: NextRequest) {
       };
 
       const { data: newAppointment, error: insertError } = await supabase
-        .from('appointments')
+        .from('class_sessions')
         .insert([singleAppointmentData])
         .select()
         .single();
@@ -209,10 +208,9 @@ export async function POST(request: NextRequest) {
           success: true,
           data: newAppointment,
         },
-        { status: 201 }
+        { status: 201 },
       );
     }
-
   } catch (error) {
     console.error('Error creating appointment:', error);
     return NextResponse.json(
@@ -221,7 +219,7 @@ export async function POST(request: NextRequest) {
         error: 'Failed to create appointment',
         details: error instanceof Error ? error.message : 'Unknown error',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

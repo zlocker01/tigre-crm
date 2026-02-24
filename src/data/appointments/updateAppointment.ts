@@ -19,7 +19,7 @@ export const updateAppointment = async (
   }
 
   const { data: updatedAppointment, error } = await supabase
-    .from("appointments")
+    .from("class_sessions")
     .update(data)
     .eq("id", id)
     .select("*")

@@ -14,17 +14,15 @@ import {
 } from '@/components/ui/dialog';
 import { useToast } from '@/components/ui/use-toast';
 import { useState } from 'react';
-import type { Appointment } from '@/interfaces/appointments/Appointment';
+import type { ClassSession } from '@/interfaces/appointments/Appointment';
 import { Client } from '@/interfaces/client/Client';
-import { Promotion } from '@/interfaces/promotions/Promotion';
 import { Service } from '@/interfaces/services/Service';
 
 interface AppointmentDetailsProps {
-  appointment: Appointment | null;
+  appointment: ClassSession | null;
   clients: Client[];
   services: Service[];
-  onEdit: (appointment: Appointment) => void;
-  onCreateNew: () => void;
+  onEdit: (appointment: ClassSession) => void;
   onClose: () => void;
   onAppointmentCancelled?: () => void;
 }
@@ -34,7 +32,6 @@ export function AppointmentDetails({
   clients,
   services,
   onEdit,
-  onCreateNew,
   onClose,
   onAppointmentCancelled,
 }: AppointmentDetailsProps) {
@@ -86,9 +83,9 @@ export function AppointmentDetails({
   };
 
   return (
-    <div className="space-y-4 p-4 border rounded-lg">
+    <div className="space-y-4 p-4 border rounded-lg shadow-md bg-white dark:bg-slate-950">
       <div className="flex justify-between items-start">
-        <h3 className="text-lg font-semibold">Detalles de la Cita</h3>
+        <h3 className="text-lg font-semibold">Detalles de la Clase</h3>
         <Button
           variant="ghost"
           size="sm"
@@ -150,10 +147,6 @@ export function AppointmentDetails({
             return service ? (
               <>
                 <p>{service.title}</p>
-                <p>Precio: ${service.price}</p>
-                <p>
-                  Duración aproximada: {service.duration_minutes || 0} minutos
-                </p>
               </>
             ) : (
               <p>Sin servicio</p>
@@ -190,18 +183,22 @@ export function AppointmentDetails({
           onClick={() => setShowCancelDialog(true)}
           disabled={appointment.status === 'Cancelada'}
         >
-          Cancelar cita
+          Cancelar clase
         </Button>
-        {/* <Button size="sm" onClick={() => onEdit(appointment)}>
+        <Button
+          size="sm"
+          onClick={() => onEdit(appointment)}
+          className="bg-indigo-600 hover:bg-indigo-700 text-white"
+        >
           Editar
-        </Button> */}
+        </Button>
       </div>
 
       {/* Diálogo de confirmación de cancelación */}
       <Dialog open={showCancelDialog} onOpenChange={setShowCancelDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>¿Cancelar cita?</DialogTitle>
+            <DialogTitle>¿Cancelar clase?</DialogTitle>
           </DialogHeader>
           <div className="py-4 space-y-3">
             <div className="p-3 bg-muted rounded-lg space-y-2">

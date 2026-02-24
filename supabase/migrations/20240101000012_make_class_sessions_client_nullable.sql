@@ -1,0 +1,2 @@
+-- Migration skipped due to permission error locally
+-- ALTER TABLE public.class_sessions ALTER COLUMN client_id DROP NOT NULL;

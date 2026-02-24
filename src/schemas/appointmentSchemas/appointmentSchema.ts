@@ -17,6 +17,7 @@ export const appointmentSchema = z.object({
   is_recurring: z.boolean().optional(),
   recurring_days: z.array(z.number()).optional(), // 0 = Domingo, 1 = Lunes, ...
   recurring_end_date: z.string().optional().nullable(),
+  applyTo: z.enum(['single', 'future', 'series']).optional(),
 });
 
 export type AppointmentFormValues = z.infer<typeof appointmentSchema>;

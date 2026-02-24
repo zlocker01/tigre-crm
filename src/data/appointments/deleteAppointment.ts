@@ -10,7 +10,7 @@ export const deleteAppointment = async (id: string): Promise<boolean> => {
     return false;
   }
 
-  const { error } = await supabase.from("appointments").delete().eq("id", id);
+  const { error } = await supabase.from("class_sessions").delete().eq("id", id);
 
   if (error) {
     console.error("Error deleting appointment:", error.message);

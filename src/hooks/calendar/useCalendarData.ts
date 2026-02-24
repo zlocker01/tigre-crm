@@ -1,13 +1,12 @@
 import useSWR from "swr";
-import type { Appointment } from "@/interfaces/appointments/Appointment";
+import type { ClassSession } from "@/interfaces/appointments/Appointment";
 import type { Client } from "@/interfaces/client/Client";
 import type { Service } from "@/interfaces/services/Service";
 
 interface CalendarData {
-  appointments: Appointment[];
+  appointments: ClassSession[];
   clients: Client[];
   services: Service[];
-  promotions: Promotion[];
 }
 
 const fetchCalendarData = async ([_, landingPageId]: [
@@ -15,21 +14,14 @@ const fetchCalendarData = async ([_, landingPageId]: [
   string,
 ]): Promise<CalendarData> => {
   try {
-    const [
-      appointmentsResponse,
-      clientsResponse,
-      servicesResponse,
-      promotionsResponse,
-    ] = await Promise.all([
-      fetch(`/api/appointments`).then((res) => res.json()),
-      fetch(`/api/clients`).then((res) => res.json()),
-      fetch(`/api/services?landingPageId=${landingPageId}`).then((res) =>
-        res.json(),
-      ),
-      fetch(`/api/promotions?landingPageId=${landingPageId}`).then((res) =>
-        res.json(),
-      ),
-    ]);
+    const [appointmentsResponse, clientsResponse, servicesResponse] =
+      await Promise.all([
+        fetch(`/api/appointments`).then((res) => res.json()),
+        fetch(`/api/clients`).then((res) => res.json()),
+        fetch(`/api/services?landingPageId=${landingPageId}`).then((res) =>
+          res.json(),
+        ),
+      ]);
 
     const appointments = Array.isArray(appointmentsResponse?.data)
       ? appointmentsResponse.data
@@ -43,15 +35,10 @@ const fetchCalendarData = async ([_, landingPageId]: [
       ? servicesResponse.services
       : [];
 
-    const promotions = Array.isArray(promotionsResponse?.promotions)
-      ? promotionsResponse.promotions
-      : [];
-
     return {
       appointments,
       clients,
       services,
-      promotions,
     };
   } catch (error) {
     console.error("[useCalendarData] Error:", error);
@@ -59,7 +46,6 @@ const fetchCalendarData = async ([_, landingPageId]: [
       appointments: [],
       clients: [],
       services: [],
-      promotions: [],
     };
   }
 };
@@ -74,7 +60,6 @@ export const useCalendarData = (landingPageId: string) => {
     appointments: data?.appointments || [],
     clients: data?.clients || [],
     services: data?.services || [],
-    promotions: data?.promotions || [],
     isLoading,
     error: error?.message || null,
     mutate,

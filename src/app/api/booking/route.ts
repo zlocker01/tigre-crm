@@ -125,7 +125,7 @@ export async function POST(request: NextRequest) {
     // 5. Crear Cita
     const { data: newAppointment, error: createAppointmentError } =
       await supabase
-        .from('appointments')
+        .from('class_sessions')
         .insert({
           client_id: clientId,
           service_id: serviceId,

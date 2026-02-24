@@ -15,7 +15,7 @@ import { AppointmentDetails } from '@/components/calendar/AppointmentDetails';
 import { AppointmentDialog } from '@/components/calendar/AppointmentDialog';
 import { CalendarSkeleton } from '@/components/skeletons/calendar/calendar-skeleton';
 
-import type { Appointment } from '@/interfaces/appointments/Appointment';
+import type { ClassSession } from '@/interfaces/appointments/Appointment';
 import { NewClientDialog } from '@/components/clients/NewClientDialog';
 import type { ClientFormValues } from '@/schemas/clientSchemas/clientSchema';
 
@@ -25,12 +25,12 @@ export default function CalendarPage() {
   const landingId = params.landingId as string;
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedAppointment, setSelectedAppointment] =
-    useState<Appointment | null>(null);
+    useState<ClassSession | null>(null);
   const [view, setView] = useState('month');
   const [isNewClientDialogOpen, setIsNewClientDialogOpen] = useState(false);
 
   // Nueva función para manejar la selección de clase
-  const handleAppointmentSelect = (appointment: Appointment) => {
+  const handleAppointmentSelect = (appointment: ClassSession) => {
     setSelectedAppointment(appointment);
   };
 
@@ -76,22 +76,35 @@ export default function CalendarPage() {
 
       if (isEditing && selectedAppointment) {
         // Actualizar cita existente
-        // Para edición, por ahora no soportamos "editar serie", solo la cita individual.
-        // Limpiamos campos de recurrencia para evitar confusión en el backend si la API de PUT no lo maneja
-        const {
-          is_recurring,
-          recurring_days,
-          recurring_end_date,
-          ...updateData
-        } = data;
+        // Soportamos "editar serie" mediante el campo applyTo que viene en data
+
+        // Si es actualización de serie, necesitamos enviar también los datos de recurrencia
+        // por si han cambiado
+        let updatePayload = { ...data };
+
+        if (data.applyTo !== 'series') {
+          const {
+            is_recurring,
+            recurring_days,
+            recurring_end_date,
+            ...singleUpdateData
+          } = data;
+          updatePayload = singleUpdateData;
+        } else {
+          // Si es serie, nos aseguramos de que is_recurring sea true para que el backend sepa qué hacer
+          updatePayload.is_recurring = true;
+        }
 
         const res = await fetch(`/api/appointments/${selectedAppointment.id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(updateData),
+          body: JSON.stringify(updatePayload),
         });
 
-        if (!res.ok) throw new Error('Error al actualizar la cita');
+        if (!res.ok) {
+          const errorData = await res.json().catch(() => ({}));
+          throw new Error(errorData.error || 'Error al actualizar la cita');
+        }
       } else {
         // Crear nueva cita (única o recurrente)
         // Enviamos todo el payload al backend, que manejará la recurrencia
@@ -177,6 +190,7 @@ export default function CalendarPage() {
             view={view as 'month' | 'week' | 'day'}
             onViewChange={setView}
             appointments={appointments}
+            services={services}
             isLoading={isLoading}
             error={error}
             onDateChange={handleDateChange}
@@ -194,10 +208,6 @@ export default function CalendarPage() {
               }
             }}
             onClose={() => setSelectedAppointment(null)}
-            onCreateNew={() => {
-              setSelectedAppointment(null);
-              setIsFormOpen(true);
-            }}
             onAppointmentCancelled={() => mutate()}
           />
         </div>

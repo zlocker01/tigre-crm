@@ -377,7 +377,7 @@ export async function getAppointmentStatusDataFromSupabase(): Promise<
 
     // Alternativa si no existe la función RPC:
     // const { data, error } = await supabase
-    //   .from('appointments')
+    //   .from('class_sessions')
     //   .select('status, count(*)')
     //   .or('status.eq.completed,status.eq.cancelled,status.eq.no_show')
     //   .in('status', ['completed', 'cancelled', 'no_show'])
@@ -502,7 +502,7 @@ export async function getMetricsDataFromSupabase(): Promise<MetricData[]> {
 
     // Obtener datos de citas por mes
     const { data: appointmentsData, error: appointmentsError } = await supabase
-      .from('appointments')
+      .from('class_sessions')
       .select('start_datetime')
       .order('start_datetime');
 

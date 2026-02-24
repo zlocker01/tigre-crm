@@ -20,7 +20,7 @@ export const createAppointment = async (
   };
 
   const { data: newAppointment, error } = await supabase
-    .from("appointments")
+    .from("class_sessions")
     .insert([appointmentData])
     .select("*")
     .single();

@@ -6,7 +6,7 @@ export const getAppointments = async (): Promise<Appointment[] | undefined> => {
   const supabase = await createClient();
   // const userId = await getUserId(); // Permitir acceso público para ver disponibilidad
 
-  const { data, error } = await supabase.from("appointments").select("*");
+  const { data, error } = await supabase.from("class_sessions").select("*");
 
   if (error) {
     console.error("Error fetching appointments:", error.message);

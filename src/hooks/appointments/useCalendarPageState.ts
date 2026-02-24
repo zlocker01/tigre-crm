@@ -1,10 +1,10 @@
 import { useState } from "react";
-import type { Appointment } from "@/interfaces/appointments/Appointment";
+import type { ClassSession } from "@/interfaces/appointments/Appointment";
 
 // hooks/useCalendarPageState.ts
 export function useCalendarPageState(landingId: string) {
   const [selectedAppointment, setSelectedAppointment] =
-    useState<Appointment | null>(null);
+    useState<ClassSession | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
@@ -15,7 +15,7 @@ export function useCalendarPageState(landingId: string) {
     setIsEditing(false);
   };
 
-  const handleEditAppointment = (appointment: Appointment) => {
+  const handleEditAppointment = (appointment: ClassSession) => {
     setSelectedAppointment(appointment);
     setIsFormOpen(true);
     setIsEditing(true);

@@ -1,42 +1,29 @@
-import { useEffect } from "react";
-import type { AppointmentFormValues } from "@/schemas/appointmentSchemas/appointmentSchema";
-import type { UseFormReturn } from "react-hook-form";
-import type { Appointment } from "@/interfaces/appointments/Appointment";
-import type { Service } from "@/interfaces/services/Service";
-import type { Promotion } from "@/interfaces/promotions/Promotion";
+import { useEffect } from 'react';
+import type { AppointmentFormValues } from '@/schemas/appointmentSchemas/appointmentSchema';
+import type { UseFormReturn } from 'react-hook-form';
+import type { ClassSession } from '@/interfaces/appointments/Appointment';
 
 interface Params {
   form: UseFormReturn<AppointmentFormValues>;
-  appointments: Appointment[];
-  services: Service[];
-  promotions: Promotion[];
-  currentAppointmentId?: string; // Para excluir si estás editando una cita
+  appointments: ClassSession[];
+  currentAppointmentId?: string;
 }
 
 export function useCategoryConflictChecker({
   form,
   appointments,
-  services,
-  promotions,
   currentAppointmentId,
 }: Params) {
-  const watchFields = form.watch([
-    "start_datetime",
-    "end_datetime",
-    "service_id",
-    "promotion_id",
-  ]);
+  const watchFields = form.watch(['start_datetime', 'end_datetime']);
 
   useEffect(() => {
-    const [startStr, endStr, serviceId, promotionId] = watchFields;
+    const [startStr, endStr] = watchFields;
     if (!startStr || !endStr) {
       return;
     }
 
     const start = new Date(startStr);
     const end = new Date(endStr);
-
-    let selectedCategory: string | null = null;
 
     const hasConflict = appointments.some((app) => {
       if (app.id === currentAppointmentId) {
@@ -50,19 +37,12 @@ export function useCategoryConflictChecker({
     });
 
     if (hasConflict) {
-      form.setError("start_datetime", {
-        type: "manual",
-        message: "Ya hay una cita en este horario.",
+      form.setError('start_datetime', {
+        type: 'manual',
+        message: 'Ya hay una cita en este horario.',
       });
     } else {
-      form.clearErrors("start_datetime");
+      form.clearErrors('start_datetime');
     }
-  }, [
-    watchFields,
-    appointments,
-    services,
-    promotions,
-    currentAppointmentId,
-    form,
-  ]);
+  }, [watchFields, appointments, currentAppointmentId, form]);
 }

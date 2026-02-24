@@ -14,7 +14,7 @@ export const getAppointmentById = async (
   }
 
   const { data, error } = await supabase
-    .from("appointments")
+    .from("class_sessions")
     .select("*")
     .eq("id", id)
     .maybeSingle();

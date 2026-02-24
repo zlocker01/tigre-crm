@@ -1,0 +1,2 @@
+-- Migration skipped due to permission error locally
+-- ALTER TABLE public.class_sessions ADD COLUMN IF NOT EXISTS series_id uuid;

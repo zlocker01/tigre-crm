@@ -15,21 +15,23 @@ import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { useToast } from '@/components/ui/use-toast';
-import type { Appointment } from '@/interfaces/appointments/Appointment';
+import type { ClassSession } from '@/interfaces/appointments/Appointment';
 
 interface AppointmentCalendarProps {
   view: 'month' | 'week' | 'day';
-  appointments: Appointment[];
+  appointments: ClassSession[];
+  services?: import('@/interfaces/services/Service').Service[];
   isLoading: boolean;
   error: string | null;
   onDateChange?: (date: Date) => void;
-  onAppointmentSelect?: (appointment: Appointment) => void;
+  onAppointmentSelect?: (appointment: ClassSession) => void;
   onViewChange?: (view: 'month' | 'week' | 'day') => void;
 }
 
 export function AppointmentCalendar({
   view,
   appointments,
+  services = [],
   onViewChange,
   onDateChange = () => {},
   onAppointmentSelect = () => {},
@@ -38,6 +40,78 @@ export function AppointmentCalendar({
   const [calendarDays, setCalendarDays] = useState<Date[]>([]);
   const isMobile = useMediaQuery('(max-width: 640px)');
   const { toast } = useToast();
+
+  const getServiceColorStyles = (
+    serviceId?: number,
+    variant: 'solid' | 'light' = 'light',
+  ) => {
+    if (!serviceId) {
+      return variant === 'solid'
+        ? 'bg-slate-600 text-white border-slate-500 hover:bg-slate-700 dark:bg-slate-700 dark:border-slate-600'
+        : 'bg-slate-100 text-slate-800 border-slate-200 dark:bg-slate-900/30 dark:text-slate-100 dark:border-slate-800';
+    }
+
+    const colors = [
+      {
+        // 0: Blue
+        solid:
+          'bg-blue-600 text-white border-blue-500 hover:bg-blue-700 dark:bg-blue-700 dark:border-blue-600',
+        light:
+          'bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/30 dark:text-blue-100 dark:border-blue-800',
+      },
+      {
+        // 1: Emerald
+        solid:
+          'bg-emerald-600 text-white border-emerald-500 hover:bg-emerald-700 dark:bg-emerald-700 dark:border-emerald-600',
+        light:
+          'bg-emerald-100 text-emerald-800 border-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-100 dark:border-emerald-800',
+      },
+      {
+        // 2: Violet
+        solid:
+          'bg-violet-600 text-white border-violet-500 hover:bg-violet-700 dark:bg-violet-700 dark:border-violet-600',
+        light:
+          'bg-violet-100 text-violet-800 border-violet-200 dark:bg-violet-900/30 dark:text-violet-100 dark:border-violet-800',
+      },
+      {
+        // 3: Amber
+        solid:
+          'bg-amber-600 text-white border-amber-500 hover:bg-amber-700 dark:bg-amber-700 dark:border-amber-600',
+        light:
+          'bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-900/30 dark:text-amber-100 dark:border-amber-800',
+      },
+      {
+        // 4: Rose
+        solid:
+          'bg-rose-600 text-white border-rose-500 hover:bg-rose-700 dark:bg-rose-700 dark:border-rose-600',
+        light:
+          'bg-rose-100 text-rose-800 border-rose-200 dark:bg-rose-900/30 dark:text-rose-100 dark:border-rose-800',
+      },
+      {
+        // 5: Cyan
+        solid:
+          'bg-cyan-600 text-white border-cyan-500 hover:bg-cyan-700 dark:bg-cyan-700 dark:border-cyan-600',
+        light:
+          'bg-cyan-100 text-cyan-800 border-cyan-200 dark:bg-cyan-900/30 dark:text-cyan-100 dark:border-cyan-800',
+      },
+      {
+        // 6: Fuchsia
+        solid:
+          'bg-fuchsia-600 text-white border-fuchsia-500 hover:bg-fuchsia-700 dark:bg-fuchsia-700 dark:border-fuchsia-600',
+        light:
+          'bg-fuchsia-100 text-fuchsia-800 border-fuchsia-200 dark:bg-fuchsia-900/30 dark:text-fuchsia-100 dark:border-fuchsia-800',
+      },
+      {
+        // 7: Indigo
+        solid:
+          'bg-indigo-600 text-white border-indigo-500 hover:bg-indigo-700 dark:bg-indigo-700 dark:border-indigo-600',
+        light:
+          'bg-indigo-100 text-indigo-800 border-indigo-200 dark:bg-indigo-900/30 dark:text-indigo-100 dark:border-indigo-800',
+      },
+    ];
+
+    return colors[serviceId % colors.length][variant];
+  };
 
   useEffect(() => {
     if (view === 'month') {
@@ -110,7 +184,7 @@ export function AppointmentCalendar({
   };
 
   const handleAppointmentClick = (
-    appointment: Appointment,
+    appointment: ClassSession,
     e: React.MouseEvent | React.KeyboardEvent,
   ) => {
     e.stopPropagation();
@@ -156,7 +230,7 @@ export function AppointmentCalendar({
     </div>
   );
 
-  const layoutAppointmentsForDay = (appointments: Appointment[]) => {
+  const layoutAppointmentsForDay = (appointments: ClassSession[]) => {
     const groupedByStartTime = appointments.reduce(
       (acc, app) => {
         const startTime = new Date(app.start_datetime).getTime();
@@ -166,7 +240,7 @@ export function AppointmentCalendar({
         acc[startTime].push(app);
         return acc;
       },
-      {} as Record<number, Appointment[]>,
+      {} as Record<number, ClassSession[]>,
     );
 
     return Object.values(groupedByStartTime).flatMap((group) => {
@@ -190,7 +264,7 @@ export function AppointmentCalendar({
     const hours = Array.from({ length: 15 }, (_, i) => i + 6); // 6 AM to 8 PM
 
     return (
-      <div className="border rounded-lg p-4">
+      <div className="border rounded-lg p-4 shadow-md bg-white dark:bg-slate-950">
         <h3 className="text-lg font-semibold text-center mb-4">
           {format(day, "EEEE, d 'de' MMMM", { locale: es })}
         </h3>
@@ -209,17 +283,20 @@ export function AppointmentCalendar({
             const appointmentWidth = parseFloat(appointment.layout.width);
             const appointmentLeft = parseFloat(appointment.layout.left);
 
+            const isCancelled = appointment.status === 'Cancelada';
+            const colorClass = isCancelled
+              ? 'bg-red-50 text-red-700 border-red-200 dark:bg-red-900/30 dark:text-red-100 dark:border-red-800'
+              : getServiceColorStyles(appointment.service_id, 'light');
+
+            const service = services.find(
+              (s) => s.id === appointment.service_id,
+            );
+
             return (
               <button
                 key={`${appointment.id}-${index}`}
                 type="button"
-                className={`absolute p-2 rounded-lg text-left text-sm z-10 border shadow-sm hover:shadow-md transition-all ${
-                  appointment.status === 'Confirmada'
-                    ? 'bg-green-800 text-white border-green-600 hover:bg-green-600 dark:bg-green-700/60 dark:text-white dark:border-green-600 dark:hover:bg-green-700/80'
-                    : appointment.status === 'Cancelada'
-                      ? 'bg-red-800 text-white border-red-600 hover:bg-red-600 dark:bg-red-700/60 dark:text-white dark:border-red-600 dark:hover:bg-red-700/80'
-                      : 'bg-green-800 text-white border-green-600 hover:bg-green-600 dark:bg-green-700/60 dark:text-white dark:border-green-600 dark:hover:bg-green-700/80'
-                }`}
+                className={`absolute p-2 rounded-lg text-left text-sm z-10 border shadow-sm hover:shadow-md transition-all ${colorClass}`}
                 style={{
                   top: `${top}px`,
                   height: '60px',
@@ -228,7 +305,8 @@ export function AppointmentCalendar({
                 }}
                 onClick={(e) => handleAppointmentClick(appointment, e)}
               >
-                Cita {format(start, 'h:mm a')}
+                <span className="font-semibold">{format(start, 'h:mm a')}</span>
+                {service && <span className="ml-2">{service.title}</span>}
               </button>
             );
           })}
@@ -238,7 +316,7 @@ export function AppointmentCalendar({
   };
 
   const renderWeekView = () => (
-    <div className="border rounded-lg overflow-hidden">
+    <div className="border rounded-lg overflow-hidden shadow-md bg-white dark:bg-slate-950">
       <div className="grid grid-cols-7 divide-x">
         {calendarDays.map((day) => (
           <div
@@ -274,17 +352,20 @@ export function AppointmentCalendar({
                 const appointmentWidth = parseFloat(appointment.layout.width);
                 const appointmentLeft = parseFloat(appointment.layout.left);
 
+                const isCancelled = appointment.status === 'Cancelada';
+                const colorClass = isCancelled
+                  ? 'bg-red-50 text-red-700 border-red-200 dark:bg-red-900/30 dark:text-red-100 dark:border-red-800'
+                  : getServiceColorStyles(appointment.service_id, 'light');
+
+                const service = services.find(
+                  (s) => s.id === appointment.service_id,
+                );
+
                 return (
                   <button
                     key={`${appointment.id}-${index}`}
                     type="button"
-                    className={`absolute text-xs p-1 rounded truncate text-left border shadow-sm hover:shadow-md transition-all ${
-                      appointment.status === 'Confirmada'
-                        ? 'bg-green-50 text-green-700 border-green-200 dark:bg-green-900/30 dark:text-green-100 dark:border-green-800'
-                        : appointment.status === 'Cancelada'
-                          ? 'bg-red-50 text-red-700 border-red-200 dark:bg-red-900/30 dark:text-red-100 dark:border-red-800'
-                          : 'bg-green-50 text-green-700 border-green-200 dark:bg-green-900/30 dark:text-green-100 dark:border-green-800'
-                    }`}
+                    className={`absolute text-xs p-1 rounded truncate text-left border shadow-sm hover:shadow-md transition-all ${colorClass}`}
                     style={{
                       top: `${top}%`,
                       width: `calc(${appointmentWidth}% - 2px)`,
@@ -292,7 +373,14 @@ export function AppointmentCalendar({
                     }}
                     onClick={(e) => handleAppointmentClick(appointment, e)}
                   >
-                    {format(start, 'HH:mm')}
+                    <span className="font-semibold">
+                      {format(start, 'HH:mm')}
+                    </span>
+                    {service && (
+                      <span className="ml-1 hidden sm:inline">
+                        {service.title}
+                      </span>
+                    )}
                   </button>
                 );
               })}
@@ -352,36 +440,37 @@ export function AppointmentCalendar({
                   </span>
                 </div>
                 <div className="space-y-1">
-                  {dayAppointments.slice(0, 3).map((appointment, index) => (
-                    <button
-                      key={`${appointment.id}-${index}`}
-                      type="button"
-                      className={`text-xs p-1 rounded truncate w-full text-left border shadow-sm hover:shadow-md transition-all ${
-                        appointment.status === 'Confirmada'
-                          ? 'bg-green-200 text-green-800 border-green-400 dark:bg-green-900/30 dark:text-green-100 dark:border-green-800'
-                          : appointment.status === 'Cancelada'
-                            ? 'bg-red-200 text-red-800 border-red-400 dark:bg-red-900/30 dark:text-red-100 dark:border-red-800'
-                            : 'bg-green-200 text-green-800 border-green-400 dark:bg-green-900/30 dark:text-green-100 dark:border-green-800'
-                      } hover:opacity-80`}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleAppointmentClick(appointment, e);
-                      }}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                          e.preventDefault();
+                  {dayAppointments.slice(0, 3).map((appointment, index) => {
+                    const isCancelled = appointment.status === 'Cancelada';
+                    const colorClass = isCancelled
+                      ? 'bg-red-200 text-red-800 border-red-400 dark:bg-red-900/30 dark:text-red-100 dark:border-red-800'
+                      : getServiceColorStyles(appointment.service_id, 'light');
+
+                    return (
+                      <button
+                        key={`${appointment.id}-${index}`}
+                        type="button"
+                        className={`text-xs p-1 rounded truncate w-full text-left border shadow-sm hover:shadow-md transition-all ${colorClass}`}
+                        onClick={(e) => {
                           e.stopPropagation();
                           handleAppointmentClick(appointment, e);
-                        }
-                      }}
-                      aria-label={`Clase a las ${format(
-                        appointment.start_datetime,
-                        'HH:mm',
-                      )}, estado: ${appointment.status}`}
-                    >
-                      {format(appointment.start_datetime, 'HH:mm')}
-                    </button>
-                  ))}
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleAppointmentClick(appointment, e);
+                          }
+                        }}
+                        aria-label={`Clase a las ${format(
+                          appointment.start_datetime,
+                          'HH:mm',
+                        )}, estado: ${appointment.status}`}
+                      >
+                        {format(appointment.start_datetime, 'HH:mm')}
+                      </button>
+                    );
+                  })}
                   {dayAppointments.length > 3 && (
                     <div className="text-xs text-muted-foreground text-center">
                       +{dayAppointments.length - 3} más

@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Calendar, User, X } from 'lucide-react';
+import { Calendar, User, X, Trash2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Badge } from '@/components/ui/badge';
@@ -12,6 +12,8 @@ import {
   DialogTitle,
   DialogFooter,
 } from '@/components/ui/dialog';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
 import { useState } from 'react';
 import type { ClassSession } from '@/interfaces/appointments/Appointment';
@@ -37,6 +39,10 @@ export function AppointmentDetails({
 }: AppointmentDetailsProps) {
   const { toast } = useToast();
   const [showCancelDialog, setShowCancelDialog] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [deleteOption, setDeleteOption] = useState<'single' | 'series'>(
+    'single',
+  );
 
   if (!appointment) {
     return (
@@ -77,6 +83,46 @@ export function AppointmentDetails({
         title: 'Error',
         description:
           'No se pudo cancelar la clase. Por favor, inténtalo de nuevo.',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const handleDeleteAppointment = async () => {
+    try {
+      const queryParams =
+        deleteOption === 'series' ? '?applyTo=series' : '?applyTo=single';
+      const response = await fetch(
+        `/api/appointments/${appointment.id}${queryParams}`,
+        {
+          method: 'DELETE',
+        },
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Error al eliminar la clase');
+      }
+
+      setShowDeleteDialog(false);
+      onClose();
+      if (onAppointmentCancelled) {
+        onAppointmentCancelled();
+      }
+      toast({
+        title: 'Clase eliminada',
+        description:
+          deleteOption === 'series'
+            ? 'La serie completa ha sido eliminada correctamente.'
+            : 'La clase ha sido eliminada correctamente.',
+        variant: 'success',
+      });
+    } catch (error) {
+      console.error('Error al eliminar la clase:', error);
+      toast({
+        title: 'Error',
+        description:
+          'No se pudo eliminar la clase. Por favor, inténtalo de nuevo.',
         variant: 'destructive',
       });
     }
@@ -178,6 +224,15 @@ export function AppointmentDetails({
 
       <div className="flex justify-end space-x-2 pt-4">
         <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setShowDeleteDialog(true)}
+          className="text-red-600 hover:text-red-700 hover:bg-red-50"
+          title="Eliminar registro"
+        >
+          <Trash2 className="h-4 w-4" />
+        </Button>
+        <Button
           variant="destructive"
           size="sm"
           onClick={() => setShowCancelDialog(true)}
@@ -242,6 +297,66 @@ export function AppointmentDetails({
             </Button>
             <Button variant="destructive" onClick={handleCancelAppointment}>
               Sí, cancelar clase
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Diálogo de confirmación de eliminación */}
+      <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>¿Eliminar registro?</DialogTitle>
+          </DialogHeader>
+          <div className="py-4 space-y-4">
+            <p className="text-sm text-muted-foreground">
+              Esta acción eliminará permanentemente el registro de la base de
+              datos. A diferencia de cancelar, esto borrará la clase por
+              completo.
+            </p>
+
+            {appointment.series_id && (
+              <div className="space-y-3 pt-2">
+                <Label className="text-base font-medium">
+                  Opciones de eliminación
+                </Label>
+                <RadioGroup
+                  value={deleteOption}
+                  onValueChange={(val) =>
+                    setDeleteOption(val as 'single' | 'series')
+                  }
+                  className="flex flex-col space-y-1"
+                >
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="single" id="del-single" />
+                    <Label htmlFor="del-single">Solo esta clase</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="series" id="del-series" />
+                    <Label htmlFor="del-series">
+                      Toda la serie (todas las repeticiones)
+                    </Label>
+                  </div>
+                </RadioGroup>
+              </div>
+            )}
+          </div>
+
+          <DialogFooter className="flex justify-between gap-3 md:gap-0">
+            <Button
+              variant="outline"
+              onClick={() => setShowDeleteDialog(false)}
+            >
+              Cancelar
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleDeleteAppointment}
+              className="bg-red-700 hover:bg-red-800"
+            >
+              {deleteOption === 'series' && appointment.series_id
+                ? 'Eliminar toda la serie'
+                : 'Eliminar esta clase'}
             </Button>
           </DialogFooter>
         </DialogContent>

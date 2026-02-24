@@ -76,89 +76,107 @@ export async function PUT(
     if (applyTo === 'series') {
       // Verificar si hay cambio en los días de recurrencia
       // Los días vienen en updateData.recurring_days si se enviaron
-      const hasRecurrenceChange = updateData.recurring_days && Array.isArray(updateData.recurring_days) && updateData.recurring_days.length > 0;
-      
+      const hasRecurrenceChange =
+        updateData.recurring_days &&
+        Array.isArray(updateData.recurring_days) &&
+        updateData.recurring_days.length > 0;
+
       if (hasRecurrenceChange) {
-         // REGENERACIÓN DE SERIE
-         // 1. Borrar todas las citas futuras de la serie (incluyendo la actual si se regenera todo, o desde hoy)
-         // Para simplificar "Editar Serie", borraremos TODAS las futuras desde HOY (o desde la fecha de la cita editada)
-         // y regeneraremos.
-         // PERO, si el usuario quiere cambiar los días de TODA la serie, implica que las pasadas también deberían haber sido así,
-         // lo cual es imposible de cambiar.
-         // Estrategia: Borrar futuras desde la fecha de inicio de la cita actual y regenerar.
-         
-         const startDate = new Date(updateData.start_datetime || current.start_datetime);
-         
-         // Borrar futuras (>= startDate)
-         const { error: deleteError } = await supabase
+        // REGENERACIÓN DE SERIE
+        // 1. Borrar todas las citas futuras de la serie (incluyendo la actual si se regenera todo, o desde hoy)
+        // Para simplificar "Editar Serie", borraremos TODAS las futuras desde HOY (o desde la fecha de la cita editada)
+        // y regeneraremos.
+        // PERO, si el usuario quiere cambiar los días de TODA la serie, implica que las pasadas también deberían haber sido así,
+        // lo cual es imposible de cambiar.
+        // Estrategia: Borrar futuras desde la fecha de inicio de la cita actual y regenerar.
+
+        const startDate = new Date(
+          updateData.start_datetime || current.start_datetime,
+        );
+
+        // Borrar futuras (>= startDate)
+        const { error: deleteError } = await supabase
+          .from('class_sessions')
+          .delete()
+          .eq('series_id', current.series_id)
+          .gte('start_datetime', startDate.toISOString());
+
+        if (deleteError) {
+          return NextResponse.json(
+            { error: deleteError.message },
+            { status: 500 },
+          );
+        }
+
+        // 2. Regenerar nuevas citas
+        const userId = await getUserId();
+
+        // Calcular duración base
+        const startDt = new Date(
+          updateData.start_datetime || current.start_datetime,
+        );
+        const endDt = new Date(updateData.end_datetime || current.end_datetime);
+        const durationMs = endDt.getTime() - startDt.getTime();
+        const durationMinutes = Math.floor(durationMs / (1000 * 60));
+
+        const appointmentsToInsert = [];
+        // Usar la fecha de inicio de la cita actual como base
+        let currentDateIterator = startDt;
+
+        // Límite: fecha fin de recurrencia o 1 año
+        const limitDate = updateData.recurring_end_date
+          ? new Date(updateData.recurring_end_date)
+          : addYears(new Date(), 1);
+        limitDate.setHours(23, 59, 59, 999);
+
+        const recurringDays = updateData.recurring_days; // Array de días (0-6)
+
+        while (currentDateIterator <= limitDate) {
+          const currentDayOfWeek = getDay(currentDateIterator);
+
+          if (recurringDays.includes(currentDayOfWeek)) {
+            const startForDay = new Date(currentDateIterator);
+            // Mantener hora
+            startForDay.setHours(
+              startDt.getHours(),
+              startDt.getMinutes(),
+              0,
+              0,
+            );
+
+            const endForDay = new Date(startForDay.getTime() + durationMs);
+
+            appointmentsToInsert.push({
+              client_id: updateData.client_id ?? current.client_id,
+              service_id: updateData.service_id ?? current.service_id,
+              status: updateData.status ?? current.status,
+              user_id: userId,
+              series_id: current.series_id, // Mantenemos el mismo ID de serie
+              start_datetime: startForDay.toISOString(),
+              end_datetime: endForDay.toISOString(),
+              // Otros campos que puedan ser necesarios
+            });
+          }
+          currentDateIterator = addDays(currentDateIterator, 1);
+        }
+
+        if (appointmentsToInsert.length > 0) {
+          const { error: insertError } = await supabase
             .from('class_sessions')
-            .delete()
-            .eq('series_id', current.series_id)
-            .gte('start_datetime', startDate.toISOString());
-            
-         if (deleteError) {
-             return NextResponse.json({ error: deleteError.message }, { status: 500 });
-         }
+            .insert(appointmentsToInsert);
 
-         // 2. Regenerar nuevas citas
-         const userId = await getUserId();
-         
-         // Calcular duración base
-         const startDt = new Date(updateData.start_datetime || current.start_datetime);
-         const endDt = new Date(updateData.end_datetime || current.end_datetime);
-         const durationMs = endDt.getTime() - startDt.getTime();
-         const durationMinutes = Math.floor(durationMs / (1000 * 60));
+          if (insertError) {
+            return NextResponse.json(
+              { error: insertError.message },
+              { status: 500 },
+            );
+          }
+        }
 
-         const appointmentsToInsert = [];
-         // Usar la fecha de inicio de la cita actual como base
-         let currentDateIterator = startDt;
-         
-         // Límite: fecha fin de recurrencia o 1 año
-         const limitDate = updateData.recurring_end_date
-            ? new Date(updateData.recurring_end_date)
-            : addYears(new Date(), 1);
-         limitDate.setHours(23, 59, 59, 999);
-
-         const recurringDays = updateData.recurring_days; // Array de días (0-6)
-
-         while (currentDateIterator <= limitDate) {
-            const currentDayOfWeek = getDay(currentDateIterator);
-
-            if (recurringDays.includes(currentDayOfWeek)) {
-                const startForDay = new Date(currentDateIterator);
-                // Mantener hora
-                startForDay.setHours(startDt.getHours(), startDt.getMinutes(), 0, 0);
-                
-                const endForDay = new Date(startForDay.getTime() + durationMs);
-
-                appointmentsToInsert.push({
-                    client_id: updateData.client_id ?? current.client_id,
-                    service_id: updateData.service_id ?? current.service_id,
-                    status: updateData.status ?? current.status,
-                    user_id: userId,
-                    series_id: current.series_id, // Mantenemos el mismo ID de serie
-                    start_datetime: startForDay.toISOString(),
-                    end_datetime: endForDay.toISOString(),
-                    // Otros campos que puedan ser necesarios
-                });
-            }
-            currentDateIterator = addDays(currentDateIterator, 1);
-         }
-         
-         if (appointmentsToInsert.length > 0) {
-             const { error: insertError } = await supabase
-                .from('class_sessions')
-                .insert(appointmentsToInsert);
-                
-             if (insertError) {
-                 return NextResponse.json({ error: insertError.message }, { status: 500 });
-             }
-         }
-
-         return NextResponse.json({
-            message: 'Serie regenerada con nuevos días de recurrencia.',
-            applyTo: 'series',
-         });
+        return NextResponse.json({
+          message: 'Serie regenerada con nuevos días de recurrencia.',
+          applyTo: 'series',
+        });
       }
 
       // Calcular diferencia de tiempo si se actualizan fechas (SIN cambiar días de recurrencia)
@@ -329,13 +347,62 @@ export async function PUT(
 }
 
 export async function DELETE(
-  _: NextRequest,
+  req: NextRequest,
   props: { params: Promise<{ id: string }> },
 ) {
   const params = await props.params;
-  const error = await deleteAppointment(params.id);
-  if (error) {
-    return NextResponse.json({ error }, { status: 500 });
+  const { searchParams } = new URL(req.url);
+  const applyTo = searchParams.get('applyTo');
+
+  if (applyTo === 'series') {
+    const supabase = await createClient();
+
+    // Obtener la cita para saber su series_id
+    const current = await getAppointmentById(params.id);
+
+    if (!current) {
+      return NextResponse.json(
+        { error: 'Cita no encontrada.' },
+        { status: 404 },
+      );
+    }
+
+    if (!current.series_id) {
+      // Si no es serie, borrar solo la actual
+      const success = await deleteAppointment(params.id);
+      if (!success) {
+        return NextResponse.json(
+          { error: 'Error al eliminar la cita' },
+          { status: 500 },
+        );
+      }
+      return NextResponse.json({
+        message: 'Cita eliminada (no era serie).',
+      });
+    }
+
+    // Borrar toda la serie
+    const { error } = await supabase
+      .from('class_sessions')
+      .delete()
+      .eq('series_id', current.series_id);
+
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+
+    return NextResponse.json({
+      message: 'Serie completa eliminada correctamente.',
+    });
+  }
+
+  // Borrado simple (solo esta cita)
+  const success = await deleteAppointment(params.id);
+  if (!success) {
+    return NextResponse.json(
+      { error: 'Error al eliminar la cita' },
+      { status: 500 },
+    );
   }
   return NextResponse.json({
     message: 'Cita eliminada correctamente.',

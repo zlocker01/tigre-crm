@@ -11,6 +11,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Check, XCircle, Layers } from 'lucide-react';
 import Link from 'next/link';
+import { cn } from '@/lib/utils';
 import type { Package } from '@/interfaces/packages/Package';
 
 const fetcher = (url: string) =>
@@ -100,7 +101,14 @@ export default function Packages({ landingId }: { landingId: string }) {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div
+            className={cn(
+              'grid gap-6',
+              pkgs.length === 1
+                ? 'max-w-md mx-auto'
+                : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3',
+            )}
+          >
             {pkgs.map((pkg) => {
               const benefits = normalizeList(pkg.benefits);
               const restrictions = normalizeList(pkg.restrictions);

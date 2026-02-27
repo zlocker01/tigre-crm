@@ -1,12 +1,13 @@
-"use client";
+'use client';
 
-import { Accordion } from "@/components/ui/accordion";
-import { LandingContactEditor } from "./landing-contact-editor";
-import { LandingFaqEditor } from "./landing-faq-editor";
-import { LandingHeroEditor } from "./landing-hero-editor";
-import { LandingAboutEditor } from "./landing-about-editor";
-import { LandingGalleryEditor } from "./landing-gallery-editor";
-import { LandingJobBannerEditor } from "./landing-job-banner-editor";
+import { Accordion } from '@/components/ui/accordion';
+import { LandingContactEditor } from './landing-contact-editor';
+import { LandingFaqEditor } from './landing-faq-editor';
+import { LandingHeroEditor } from './landing-hero-editor';
+import { LandingAboutEditor } from './landing-about-editor';
+import { LandingGalleryEditor } from './landing-gallery-editor';
+import { LandingEventsEditor } from './landing-events-editor';
+import { LandingJobBannerEditor } from './landing-job-banner-editor';
 
 interface LandingEditorProps {
   content: any; // El objeto content completo recibido del cliente
@@ -67,6 +68,9 @@ export function LandingEditor({
           aboutContent={content.about}
           landing_id={landing_id}
         />
+
+        {/* Events Section */}
+        <LandingEventsEditor landing_id={landing_id} />
 
         {/* Job Banner Section */}
         <LandingJobBannerEditor

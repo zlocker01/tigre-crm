@@ -22,6 +22,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
+import { cn } from '@/lib/utils';
 
 const fetcher = (url: string) =>
   fetch(url).then((res) => {
@@ -97,33 +98,41 @@ export default function Promotions({ landingId }: { landingId: string }) {
         {isMounted && (
           <Carousel
             opts={{
-              align: 'start',
-              loop: true,
+              align: 'center',
+              loop: promotions.length > 1,
             }}
             className="w-full relative"
           >
-            <CarouselContent className="-ml-1">
+            <CarouselContent
+              className={cn(
+                '-ml-1',
+                promotions.length === 1 && 'justify-center',
+              )}
+            >
               {promotions.map((promo) => (
                 <CarouselItem
                   key={promo.id}
                   className="pl-4 md:basis-1/2 lg:basis-1/3"
                 >
                   <div className="p-1 h-full">
-                    <Card className="overflow-hidden transition-all hover:shadow-lg flex flex-col relative h-[500px] gap-3">
-                      {/* Imagen de fondo */}
-                      <img
-                        src={promo.image || '/placeholder.svg'}
-                        alt={promo.title}
-                        className="object-cover absolute inset-0 z-0 w-full h-full"
-                        loading="lazy"
-                      />
-                      {/* Overlay de gradiente para legibilidad */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-10" />
+                    <Card className="overflow-hidden transition-all hover:shadow-lg flex flex-col relative h-[500px] border-0 shadow-md dark:border dark:border-border/50">
+                      {/* Imagen */}
+                      <div className="relative h-[45%] w-full dark:absolute dark:inset-0 dark:h-full dark:z-0">
+                        <img
+                          src={promo.image || '/placeholder.svg'}
+                          alt={promo.title}
+                          className="object-cover w-full h-full"
+                          loading="lazy"
+                        />
+                        {/* Overlay solo en Dark Mode */}
+                        <div className="hidden dark:block absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
+                      </div>
 
-                      <div className="absolute top-4 right-4 z-20 flex flex-col gap-2 items-end">
+                      {/* Badge (siempre visible) */}
+                      <div className="absolute top-4 right-4 z-30 flex flex-col gap-2 items-end">
                         <Badge
                           variant="destructive"
-                          className="text-sm px-3 py-1"
+                          className="text-sm px-3 py-1 shadow-sm"
                         >
                           {Math.round(
                             ((parseFloat(promo.price) -
@@ -135,30 +144,30 @@ export default function Promotions({ landingId }: { landingId: string }) {
                         </Badge>
                       </div>
 
-                      {/* Contenido encima de la imagen */}
-                      <div className="relative z-20 flex flex-col h-full justify-end p-6">
+                      {/* Contenido */}
+                      <div className="relative z-20 flex flex-col h-[55%] justify-between p-6 bg-white dark:bg-transparent dark:h-full dark:justify-end">
                         <div className="space-y-2">
                           <CardHeader className="p-0">
-                            <CardTitle className="text-white drop-shadow-lg font-bold text-lg md:text-xl lg:text-2xl">
+                            <CardTitle className="font-bold text-lg md:text-xl lg:text-2xl text-gray-900 dark:text-white dark:drop-shadow-lg">
                               {promo.title}
                             </CardTitle>
-                            <CardDescription className="text-white/90 drop-shadow-md mb-2">
+                            <CardDescription className="mb-2 text-gray-600 dark:text-white/90 dark:drop-shadow-md line-clamp-3">
                               {promo.description}
                             </CardDescription>
                           </CardHeader>
-                          <CardContent className="space-y-2 p-0">
+                          <CardContent className="space-y-2 p-0 mt-4">
                             {/* Prices */}
                             <div className="flex items-baseline gap-2">
-                              <p className="text-2xl font-bold text-primary drop-shadow-md">
+                              <p className="text-2xl font-bold text-primary dark:drop-shadow-md">
                                 ${promo.discount_price}
                               </p>
-                              <p className="text-md font-normal text-white/80 line-through drop-shadow-sm">
+                              <p className="text-md font-normal text-gray-400 line-through dark:text-white/80 dark:drop-shadow-sm">
                                 ${promo.price}
                               </p>
                             </div>
 
                             {/* Validity */}
-                            <div className="flex items-center gap-2 text-sm text-white/80 drop-shadow-sm">
+                            <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-white/80 dark:drop-shadow-sm">
                               <CalendarPlus className="h-4 w-4" />
                               <span>
                                 Válido hasta{' '}
@@ -172,18 +181,18 @@ export default function Promotions({ landingId }: { landingId: string }) {
                               </span>
                             </div>
                           </CardContent>
-                          <CardFooter className="p-0 pt-4">
-                            <Button asChild className="w-full">
-                              <Link
-                                href="/citas"
-                                className="flex items-center gap-2"
-                              >
-                                <CalendarPlus className="h-4 w-4" />
-                                <span>Reservar ahora</span>
-                              </Link>
-                            </Button>
-                          </CardFooter>
                         </div>
+                        <CardFooter className="p-0 pt-4 mt-auto">
+                          <Button asChild className="w-full shadow-sm">
+                            <Link
+                              href="/citas"
+                              className="flex items-center gap-2"
+                            >
+                              <CalendarPlus className="h-4 w-4" />
+                              <span>Reservar ahora</span>
+                            </Link>
+                          </Button>
+                        </CardFooter>
                       </div>
                     </Card>
                   </div>

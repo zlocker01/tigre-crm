@@ -53,7 +53,7 @@ export function PromotionCard({
 
   return (
     <Card
-      className={`w-full overflow-hidden transition-all duration-300 hover:shadow-lg bg-gray-700 text-white ${
+      className={`w-full overflow-hidden transition-all duration-300 hover:shadow-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white ${
         promotion.active === false ? 'opacity-60' : ''
       }`}
     >
@@ -71,7 +71,7 @@ export function PromotionCard({
       </div>
       <CardHeader>
         <div className="flex justify-between items-start">
-          <CardTitle className="text-lg text-white">
+          <CardTitle className="text-lg text-gray-900 dark:text-white">
             {promotion.title}
           </CardTitle>
           <div className="flex space-x-2">
@@ -92,26 +92,26 @@ export function PromotionCard({
         </div>
       </CardHeader>
       <CardContent>
-        <p className="text-gray-300 mb-4">{promotion.description}</p>
+        <p className="text-gray-600 dark:text-gray-300 mb-4">{promotion.description}</p>
         <div className="flex items-baseline">
           {promotion.discount_price < promotion.price ? (
             <>
-              <span className="text-2xl font-bold text-amber-400">
+              <span className="text-2xl font-bold text-amber-600 dark:text-amber-400">
                 ${promotion.discount_price.toFixed(2)}
               </span>
-              <span className="ml-2 text-sm text-gray-400 line-through">
+              <span className="ml-2 text-sm text-gray-500 dark:text-gray-400 line-through">
                 ${promotion.price.toFixed(2)}
               </span>
             </>
           ) : (
-            <span className="text-2xl font-bold text-amber-400">
+            <span className="text-2xl font-bold text-amber-600 dark:text-amber-400">
               ${promotion.price.toFixed(2)}
             </span>
           )}
         </div>
       </CardContent>
       <CardFooter className="flex justify-between items-center pt-0">
-        <div className="text-sm text-gray-400">
+        <div className="text-sm text-gray-500 dark:text-gray-400">
           Válido hasta: {formatDate(promotion.valid_until)}
         </div>
       </CardFooter>

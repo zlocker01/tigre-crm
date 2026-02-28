@@ -79,6 +79,7 @@ export function ClientDetails({
   const [isEditing, setIsEditing] = useState(false);
   const [activeTab, setActiveTab] = useState('info');
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [packageName, setPackageName] = useState<string>('');
   const { toast } = useToast();
   const router = useRouter();
@@ -158,6 +159,7 @@ export function ClientDetails({
 
   const handleDeleteClient = async () => {
     try {
+      setIsDeleting(true);
       const response = await fetch(`/api/clients/${client.id}`, {
         method: 'DELETE',
       });
@@ -183,6 +185,8 @@ export function ClientDetails({
         variant: 'destructive',
       });
       setIsDeleteDialogOpen(false);
+    } finally {
+      setIsDeleting(false);
     }
   };
 

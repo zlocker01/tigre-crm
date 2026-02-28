@@ -47,7 +47,7 @@ export default function NotFound() {
                 <Compass className="h-full w-full text-primary" />
               </div>
               <h1 className="text-2xl font-bold tracking-tight">
-                Ortoestetik - Página no encontrada
+                JSBJJMX - Página no encontrada
               </h1>
             </div>
           </div>

@@ -179,7 +179,7 @@ export function DashboardLayout({
               <Users className="h-4 w-4 text-primary" />
             </div>
             <div className="flex-1">
-              <p className="text-sm font-medium">Ortoestetik</p>
+              <p className="text-sm font-medium">JSBJJMX</p>
               <p className="text-xs text-muted-foreground">Administrador</p>
             </div>
             <ThemeToggle />
@@ -231,7 +231,7 @@ export function DashboardLayout({
                 <Users className="h-4 w-4 text-primary" />
               </div>
               <div className="flex-1">
-                <p className="text-sm font-medium">Ortoestetik</p>
+                <p className="text-sm font-medium">JSBJJMX</p>
                 <p className="text-xs text-muted-foreground">Administrador</p>
               </div>
               <ThemeToggle />
@@ -245,8 +245,8 @@ export function DashboardLayout({
         <header
           className={`sticky top-0 z-10 flex h-14 items-center gap-4 border-b px-4 md:px-6 transition-colors duration-300 ${
             scrolled
-              ? "bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-lg"
-              : "bg-card"
+              ? 'bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-lg'
+              : 'bg-card'
           }`}
         >
           <Button

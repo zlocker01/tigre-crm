@@ -149,7 +149,7 @@ export const SideBar = () => {
         <div className="h-full px-3 py-6 overflow-y-auto">
           <div className="flex items-center justify-center mb-8">
             <h1 className="text-2xl font-bold text-primaryColor">
-              Ortoestetika
+              JSBJJMX
             </h1>
           </div>
 

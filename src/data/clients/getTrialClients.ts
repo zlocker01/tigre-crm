@@ -10,7 +10,7 @@ export const getTrialClients = async (
     .from('clients')
     .select('*')
     .eq('status', 'trial')
-    .order('created_at', { ascending: false })
+    .order('registration_date', { ascending: false })
     .limit(limit);
 
   if (error) {

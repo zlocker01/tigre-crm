@@ -25,7 +25,9 @@ export function TrialClassNotifications() {
       // Don't set loading to true on subsequent fetches to avoid flickering
       if (notifications.length === 0) setLoading(true);
 
-      const response = await fetch('/api/notifications/trial-classes');
+      const response = await fetch('/api/notifications/trial-classes', {
+        cache: 'no-store',
+      });
       if (response.ok) {
         const data = await response.json();
         const newNotifications: Client[] = data.clients || [];

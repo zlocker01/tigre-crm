@@ -213,7 +213,7 @@ export function ClientDetails({
         <div className="flex items-center gap-4">
           <Avatar className="h-16 w-16">
             <AvatarImage
-              src="/app/avatar.jpg"
+              src="/app/avatar.png"
               alt={client.name}
               className="object-cover"
             />

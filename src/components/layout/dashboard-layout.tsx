@@ -148,7 +148,7 @@ export function DashboardLayout({
           >
             <img
               src="/landing-page/logo.png"
-              alt="Odontologo Tlaxcala"
+              alt="Logo JSBJJMX"
               className="max-h-24 w-auto flex justify-center"
             />
           </Link>
@@ -198,7 +198,7 @@ export function DashboardLayout({
               >
                 <img
                   src="/landing-page/logo.png"
-                  alt="odontologia Tlaxcala"
+                  alt="Logo JSBJJMX"
                   className="max-h-24 w-auto"
                 />
               </Link>

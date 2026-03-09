@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS public.landing_pages (
 
 -- Table: newsletter_subscribers
 CREATE TABLE IF NOT EXISTS public.newsletter_subscribers (
-    id uuid NOT NULL DEFAULT uuid_generate_v4(),
+    id uuid NOT NULL DEFAULT gen_random_uuid(),
     email text NOT NULL,
     subscribed_at timestamp with time zone DEFAULT now(),
     is_subscribed boolean DEFAULT true,
@@ -340,6 +340,127 @@ CREATE TABLE IF NOT EXISTS public.faq_items (
     CONSTRAINT faq_items_landing_page_id_fkey FOREIGN KEY (landing_page_id) REFERENCES public.landing_pages(id)
 );
 
+
+
+-- 6. ENABLE RLS AND CREATE POLICIES
+
+ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.subscriptions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.clients ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.services ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.promotions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.appointments ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.class_sessions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.employees ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.inventory ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.working_hours ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.non_working_days ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.push_subscriptions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.financial_records ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.satisfaction_metrics ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.monthly_client_stats ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.landing_pages ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.hero_sections ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.about_sections ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.contact_sections ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.job_banner_sections ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.gallery_items ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.faq_items ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.newsletter_subscribers ENABLE ROW LEVEL SECURITY;
+
+-- Policies for users
+CREATE POLICY "Enable access for authenticated users on" ON public.users FOR ALL TO public USING (auth.uid() = id) WITH CHECK (auth.uid() = id);
+CREATE POLICY "update_avatar_policy" ON public.users FOR UPDATE TO public USING (auth.uid() = id) WITH CHECK (true);
+
+-- Policies for subscriptions
+CREATE POLICY "Enable access for authenticated users on" ON public.subscriptions FOR ALL TO public USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
+
+-- Policies for clients
+CREATE POLICY "Enable read access for all users" ON public.clients FOR SELECT TO public USING (true);
+CREATE POLICY "Select only for auth users" ON public.clients FOR SELECT TO authenticated USING (true);
+CREATE POLICY "Enable insert for all" ON public.clients FOR INSERT TO public WITH CHECK (true);
+CREATE POLICY "Enable update for users based on auth id" ON public.clients FOR UPDATE TO public USING (user_id = auth.uid()) WITH CHECK (user_id = auth.uid());
+CREATE POLICY "Enable delete for users based on user_id" ON public.clients FOR DELETE TO authenticated USING (EXISTS ( SELECT 1 FROM public.users users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
+
+-- Policies for services
+CREATE POLICY "Enable read access for all users" ON public.services FOR SELECT TO public USING (true);
+CREATE POLICY "Enable insert for authenticated users only" ON public.services FOR INSERT TO authenticated WITH CHECK (EXISTS ( SELECT 1 FROM public.users users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
+CREATE POLICY "updateForAdmin" ON public.services FOR UPDATE TO public USING (EXISTS ( SELECT 1 FROM public.users users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text)))) WITH CHECK (EXISTS ( SELECT 1 FROM public.users users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
+CREATE POLICY "deleteForAdmin" ON public.services FOR DELETE TO public USING (EXISTS ( SELECT 1 FROM public.users users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
+
+-- Policies for promotions
+CREATE POLICY "Enable read access for all users" ON public.promotions FOR SELECT TO public USING (true);
+CREATE POLICY "Enable insert for authenticated users only" ON public.promotions FOR INSERT TO authenticated WITH CHECK (EXISTS ( SELECT 1 FROM public.users users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
+CREATE POLICY "Enable update for authenticated users only" ON public.promotions FOR UPDATE TO authenticated USING (EXISTS ( SELECT 1 FROM public.users users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text)))) WITH CHECK (EXISTS ( SELECT 1 FROM public.users users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
+CREATE POLICY "Enable delete for users based on user_id" ON public.promotions FOR DELETE TO public USING (EXISTS ( SELECT 1 FROM public.users users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
+
+-- Policies for appointments
+CREATE POLICY "Enable read access for all users" ON public.appointments FOR SELECT TO public USING (true);
+CREATE POLICY "Enable insert for  all" ON public.appointments FOR INSERT TO public WITH CHECK (true);
+CREATE POLICY "Update just for admin role suers" ON public.appointments FOR UPDATE TO authenticated USING (EXISTS ( SELECT 1 FROM public.users users WHERE ((users.id = auth.uid()) AND (users.role = ANY (ARRAY['admin'::text, 'empleado'::text]))))) WITH CHECK (EXISTS ( SELECT 1 FROM public.users users WHERE ((users.id = auth.uid()) AND (users.role = ANY (ARRAY['admin'::text, 'empleado'::text])))));
+CREATE POLICY "Delete just ofr admin role users" ON public.appointments FOR DELETE TO authenticated USING (EXISTS ( SELECT 1 FROM public.users users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
+
+-- Policies for class_sessions
+CREATE POLICY "Enable read access for all users" ON public.class_sessions FOR SELECT TO public USING (true);
+CREATE POLICY "Enable insert for  all" ON public.class_sessions FOR INSERT TO public WITH CHECK (true);
+CREATE POLICY "Update just for admin role suers" ON public.class_sessions FOR UPDATE TO authenticated USING (EXISTS ( SELECT 1 FROM public.users users WHERE ((users.id = auth.uid()) AND (users.role = ANY (ARRAY['admin'::text, 'empleado'::text]))))) WITH CHECK (EXISTS ( SELECT 1 FROM public.users users WHERE ((users.id = auth.uid()) AND (users.role = ANY (ARRAY['admin'::text, 'empleado'::text])))));
+CREATE POLICY "Delete just ofr admin role users" ON public.class_sessions FOR DELETE TO authenticated USING (EXISTS ( SELECT 1 FROM public.users users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
+
+-- Policies for employees
+CREATE POLICY "Enable read access for all users" ON public.employees FOR SELECT TO public USING (true);
+CREATE POLICY "Enable insert for admin role users only" ON public.employees FOR INSERT TO authenticated WITH CHECK (EXISTS ( SELECT 1 FROM public.users users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
+CREATE POLICY "Enable update for users based on role" ON public.employees FOR UPDATE TO public USING (EXISTS ( SELECT 1 FROM public.users users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text)))) WITH CHECK (EXISTS ( SELECT 1 FROM public.users users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
+CREATE POLICY "Enable delete for users based on role" ON public.employees FOR DELETE TO public USING (EXISTS ( SELECT 1 FROM public.users users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
+
+-- Policies for inventory
+CREATE POLICY "Enable read access for authenticated users" ON public.inventory FOR SELECT TO authenticated USING (true);
+CREATE POLICY "Enable insert for authenticated users" ON public.inventory FOR INSERT TO authenticated WITH CHECK (true);
+CREATE POLICY "Enable update for authenticated users" ON public.inventory FOR UPDATE TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "Enable delete for authenticated users" ON public.inventory FOR DELETE TO authenticated USING (true);
+
+-- Policies for working_hours
+CREATE POLICY "Enable read access for all users" ON public.working_hours FOR SELECT TO public USING (true);
+CREATE POLICY "Enable update for users based on role admin" ON public.working_hours FOR UPDATE TO public USING (EXISTS ( SELECT 1 FROM public.users users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text)))) WITH CHECK (EXISTS ( SELECT 1 FROM public.users users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
+
+-- Policies for non_working_days
+CREATE POLICY "Enable read access for all users" ON public.non_working_days FOR SELECT TO public USING (true);
+CREATE POLICY "Enable insert for users role admin" ON public.non_working_days FOR INSERT TO public WITH CHECK (EXISTS ( SELECT 1 FROM public.users users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
+CREATE POLICY "Enable delete for users based on user role" ON public.non_working_days FOR DELETE TO public USING (EXISTS ( SELECT 1 FROM public.users users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
+
+-- Policies for push_subscriptions
+CREATE POLICY "Usuarios pueden ver sus propias suscripciones" ON public.push_subscriptions FOR SELECT TO public USING (auth.uid() IS NOT NULL);
+CREATE POLICY "Allow all operations" ON public.push_subscriptions FOR ALL TO public USING (true) WITH CHECK (true);
+CREATE POLICY "Usuarios pueden eliminar sus propias suscripciones" ON public.push_subscriptions FOR DELETE TO public USING (auth.uid() IS NOT NULL);
+
+-- Policies for landing_pages (Sections)
+CREATE POLICY "Enable read access for all users" ON public.landing_pages FOR SELECT TO public USING (true);
+CREATE POLICY "Enable read access for all users" ON public.hero_sections FOR SELECT TO public USING (true);
+CREATE POLICY "Enable insert for users based on user_id" ON public.hero_sections FOR INSERT TO public WITH CHECK (((auth.jwt() -> 'role'::text))::text = 'admin'::text);
+CREATE POLICY "updateSectionForAdmin" ON public.hero_sections FOR UPDATE TO authenticated USING (EXISTS ( SELECT 1 FROM public.users users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text)))) WITH CHECK (EXISTS ( SELECT 1 FROM public.users users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
+
+CREATE POLICY "Enable read access for all users" ON public.about_sections FOR SELECT TO public USING (true);
+CREATE POLICY "Update Section For Admin users" ON public.about_sections FOR UPDATE TO authenticated USING (EXISTS ( SELECT 1 FROM public.users users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text)))) WITH CHECK (EXISTS ( SELECT 1 FROM public.users users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
+
+CREATE POLICY "Enable read access for all users" ON public.contact_sections FOR SELECT TO public USING (true);
+CREATE POLICY "Enable update for authenticated users only" ON public.contact_sections FOR UPDATE TO authenticated USING (EXISTS ( SELECT 1 FROM public.users users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text)))) WITH CHECK (EXISTS ( SELECT 1 FROM public.users users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
+
+CREATE POLICY "Enable read access for all users" ON public.job_banner_sections FOR SELECT TO public USING (true);
+CREATE POLICY "Enable update for users based on email" ON public.job_banner_sections FOR UPDATE TO public USING (EXISTS ( SELECT 1 FROM public.users users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text)))) WITH CHECK (EXISTS ( SELECT 1 FROM public.users users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
+
+CREATE POLICY "Enable read access for all users" ON public.gallery_items FOR SELECT TO public USING (true);
+CREATE POLICY "Enable insert for authenticated users  with role admin" ON public.gallery_items FOR INSERT TO authenticated WITH CHECK (EXISTS ( SELECT 1 FROM public.users users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
+CREATE POLICY "update for authenticated users with role admin" ON public.gallery_items FOR UPDATE TO public USING (EXISTS ( SELECT 1 FROM public.users users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text)))) WITH CHECK (EXISTS ( SELECT 1 FROM public.users users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
+CREATE POLICY "Enable delete for users role admin" ON public.gallery_items FOR DELETE TO public USING (EXISTS ( SELECT 1 FROM public.users users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
+
+CREATE POLICY "Enable read access for all users" ON public.faq_items FOR SELECT TO public USING (true);
+CREATE POLICY "Enable insert for authenticated users with role admin" ON public.faq_items FOR INSERT TO authenticated WITH CHECK (EXISTS ( SELECT 1 FROM public.users users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
+CREATE POLICY "Enable update for authenticated users only" ON public.faq_items FOR UPDATE TO authenticated USING (EXISTS ( SELECT 1 FROM public.users users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text)))) WITH CHECK (EXISTS ( SELECT 1 FROM public.users users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
+CREATE POLICY "Enable delete for users based on role admin" ON public.faq_items FOR DELETE TO authenticated USING (EXISTS ( SELECT 1 FROM public.users users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
+
+-- Policies for newsletter_subscribers
+CREATE POLICY "Enable insert  for all users" ON public.newsletter_subscribers FOR INSERT TO public WITH CHECK (true);
+CREATE POLICY "Enable select for authenticated users with admin role" ON public.newsletter_subscribers FOR SELECT TO authenticated USING (EXISTS ( SELECT 1 FROM public.users users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
+
 -- 4. CREATE FUNCTIONS
 
 CREATE OR REPLACE FUNCTION public.get_service_revenue_data()
@@ -347,8 +468,8 @@ CREATE OR REPLACE FUNCTION public.get_service_revenue_data()
  LANGUAGE sql
 AS $function$
   SELECT s.title as name, COALESCE(SUM(a.price_charged), 0) as value
-  FROM class_sessions a
-  JOIN services s ON a.service_id = s.id
+  FROM public.class_sessions a
+  JOIN public.services s ON a.service_id = s.id
   GROUP BY s.title
   ORDER BY value DESC
   LIMIT 10;
@@ -369,7 +490,7 @@ AS $function$
            WHEN EXTRACT(DOW FROM start_datetime) = 6 THEN 'Sábado'
          END as day,
          COUNT(*) as citas
-  FROM class_sessions
+  FROM public.class_sessions
   GROUP BY day_number, day
   ORDER BY day_number;
 $function$;
@@ -379,8 +500,8 @@ CREATE OR REPLACE FUNCTION public.get_appointments_by_service()
  LANGUAGE sql
 AS $function$
   SELECT s.title as name, COUNT(a.id) as value
-  FROM class_sessions a
-  JOIN services s ON a.service_id = s.id
+  FROM public.class_sessions a
+  JOIN public.services s ON a.service_id = s.id
   GROUP BY s.title
   ORDER BY value DESC
   LIMIT 10;
@@ -391,7 +512,7 @@ CREATE OR REPLACE FUNCTION public.get_client_sources()
  LANGUAGE sql
 AS $function$
   SELECT client_source as name, COUNT(*) as value
-  FROM clients
+  FROM public.clients
   GROUP BY client_source
   ORDER BY value DESC;
 $function$;
@@ -406,7 +527,7 @@ BEGIN
     a.status,
     COUNT(a.id) as appointment_count
   FROM 
-    class_sessions a
+    public.class_sessions a
   WHERE 
     a.status IN ('completed', 'cancelled', 'no_show')
   GROUP BY 
@@ -462,9 +583,9 @@ BEGIN
       COALESCE(SUM(COALESCE(a.price_charged, s.price)), 0) AS revenue_calc,
       COALESCE(SUM(COALESCE(a.price_charged, s.price) * 0.6), 0) AS expenses_calc
     FROM 
-      class_sessions a
+      public.class_sessions a
     LEFT JOIN 
-      services s ON a.service_id = s.id
+      public.services s ON a.service_id = s.id
     WHERE 
       a.status = 'completed' AND
       a.start_datetime >= period_start AND
@@ -515,7 +636,7 @@ BEGIN
   FOR month_idx IN 1..12 LOOP
     -- Calcular nuevos clientes (registrados en este mes)
     SELECT COUNT(*) INTO new_clients
-    FROM clients
+    FROM public.clients
     WHERE EXTRACT(MONTH FROM created_at) = month_idx
     AND EXTRACT(YEAR FROM created_at) = current_year;
     
@@ -523,15 +644,15 @@ BEGIN
     -- Para simplificar, usaremos una estimación basada en clientes que no han regresado
     IF month_idx > 3 THEN
       SELECT COUNT(*) INTO lost_clients
-      FROM clients c
+      FROM public.clients c
       WHERE EXISTS (
-        SELECT 1 FROM appointments a
+        SELECT 1 FROM public.appointments a
         WHERE a.client_id = c.id
         AND EXTRACT(MONTH FROM a.appointment_date) = month_idx - 3
         AND EXTRACT(YEAR FROM a.appointment_date) = current_year
       )
       AND NOT EXISTS (
-        SELECT 1 FROM appointments a
+        SELECT 1 FROM public.appointments a
         WHERE a.client_id = c.id
         AND EXTRACT(MONTH FROM a.appointment_date) BETWEEN month_idx - 2 AND month_idx
         AND EXTRACT(YEAR FROM a.appointment_date) = current_year
@@ -545,7 +666,7 @@ BEGIN
     IF month_idx = 1 THEN
       -- Para enero, contar clientes registrados hasta ese mes
       SELECT COUNT(*) INTO total_clients
-      FROM clients
+      FROM public.clients
       WHERE EXTRACT(YEAR FROM created_at) < current_year
       OR (EXTRACT(YEAR FROM created_at) = current_year AND EXTRACT(MONTH FROM created_at) <= month_idx);
       
@@ -583,14 +704,14 @@ DECLARE
 BEGIN
   -- Nuevos clientes (registrados en los últimos 3 meses)
   SELECT COUNT(*) INTO new_clients
-  FROM clients
+  FROM public.clients
   WHERE created_at >= current_date_minus_3_months;
   
   -- Clientes ocasionales (1-3 visitas en el último año)
   SELECT COUNT(DISTINCT client_id) INTO occasional_clients
   FROM (
     SELECT client_id, COUNT(*) as visit_count
-    FROM appointments
+    FROM public.appointments
     WHERE appointment_date >= CURRENT_DATE - INTERVAL '1 year'
     GROUP BY client_id
     HAVING COUNT(*) BETWEEN 1 AND 3
@@ -600,7 +721,7 @@ BEGIN
   SELECT COUNT(DISTINCT client_id) INTO regular_clients
   FROM (
     SELECT client_id, COUNT(*) as visit_count
-    FROM appointments
+    FROM public.appointments
     WHERE appointment_date >= CURRENT_DATE - INTERVAL '1 year'
     GROUP BY client_id
     HAVING COUNT(*) BETWEEN 4 AND 8
@@ -610,7 +731,7 @@ BEGIN
   SELECT COUNT(DISTINCT client_id) INTO frequent_clients
   FROM (
     SELECT client_id, COUNT(*) as visit_count
-    FROM appointments
+    FROM public.appointments
     WHERE appointment_date >= CURRENT_DATE - INTERVAL '1 year'
     GROUP BY client_id
     HAVING COUNT(*) >= 9
@@ -621,8 +742,8 @@ BEGIN
     SELECT 
       a.client_id, 
       SUM(s.price) as total_spent
-    FROM appointments a
-    JOIN services s ON a.service_id = s.id
+    FROM public.appointments a
+    JOIN public.services s ON a.service_id = s.id
     WHERE a.appointment_date >= CURRENT_DATE - INTERVAL '1 year'
     AND a.status = 'completed'
     GROUP BY a.client_id
@@ -630,7 +751,7 @@ BEGIN
   ),
   client_count AS (
     SELECT COUNT(DISTINCT client_id) as total_clients
-    FROM appointments
+    FROM public.appointments
     WHERE appointment_date >= CURRENT_DATE - INTERVAL '1 year'
   )
   SELECT COUNT(*) INTO vip_clients
@@ -732,7 +853,7 @@ BEGIN
     
     -- Total de clientes con citas en este mes
     SELECT COUNT(DISTINCT client_id) INTO total_clients
-    FROM appointments
+    FROM public.appointments
     WHERE EXTRACT(MONTH FROM appointment_date) = month_idx
     AND EXTRACT(YEAR FROM appointment_date) = current_year;
     
@@ -742,7 +863,7 @@ BEGIN
         client_id,
         appointment_date,
         LEAD(appointment_date) OVER (PARTITION BY client_id ORDER BY appointment_date) as next_appointment_date
-      FROM appointments
+      FROM public.appointments
       WHERE EXTRACT(YEAR FROM appointment_date) = current_year
     )
     SELECT COUNT(DISTINCT client_id) INTO returning_clients
@@ -806,116 +927,4 @@ BEGIN
         FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
     END IF;
 END $$;
-
--- 6. ENABLE RLS AND CREATE POLICIES
-
-ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.subscriptions ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.clients ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.services ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.promotions ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.appointments ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.class_sessions ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.employees ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.working_hours ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.non_working_days ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.push_subscriptions ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.financial_records ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.satisfaction_metrics ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.monthly_client_stats ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.landing_pages ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.hero_sections ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.about_sections ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.contact_sections ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.job_banner_sections ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.gallery_items ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.faq_items ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.newsletter_subscribers ENABLE ROW LEVEL SECURITY;
-
--- Policies for users
-CREATE POLICY "Enable access for authenticated users on" ON public.users FOR ALL TO public USING (auth.uid() = id) WITH CHECK (auth.uid() = id);
-CREATE POLICY "update_avatar_policy" ON public.users FOR UPDATE TO public USING (auth.uid() = id) WITH CHECK (true);
-
--- Policies for subscriptions
-CREATE POLICY "Enable access for authenticated users on" ON public.subscriptions FOR ALL TO public USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
-
--- Policies for clients
-CREATE POLICY "Enable read access for all users" ON public.clients FOR SELECT TO public USING (true);
-CREATE POLICY "Select only for auth users" ON public.clients FOR SELECT TO authenticated USING (true);
-CREATE POLICY "Enable insert for all" ON public.clients FOR INSERT TO public WITH CHECK (true);
-CREATE POLICY "Enable update for users based on auth id" ON public.clients FOR UPDATE TO public USING (user_id = auth.uid()) WITH CHECK (user_id = auth.uid());
-CREATE POLICY "Enable delete for users based on user_id" ON public.clients FOR DELETE TO authenticated USING (EXISTS ( SELECT 1 FROM users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
-
--- Policies for services
-CREATE POLICY "Enable read access for all users" ON public.services FOR SELECT TO public USING (true);
-CREATE POLICY "Enable insert for authenticated users only" ON public.services FOR INSERT TO authenticated WITH CHECK (EXISTS ( SELECT 1 FROM users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
-CREATE POLICY "updateForAdmin" ON public.services FOR UPDATE TO public USING (EXISTS ( SELECT 1 FROM users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text)))) WITH CHECK (EXISTS ( SELECT 1 FROM users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
-CREATE POLICY "deleteForAdmin" ON public.services FOR DELETE TO public USING (EXISTS ( SELECT 1 FROM users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
-
--- Policies for promotions
-CREATE POLICY "Enable read access for all users" ON public.promotions FOR SELECT TO public USING (true);
-CREATE POLICY "Enable insert for authenticated users only" ON public.promotions FOR INSERT TO authenticated WITH CHECK (EXISTS ( SELECT 1 FROM users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
-CREATE POLICY "Enable update for authenticated users only" ON public.promotions FOR UPDATE TO authenticated USING (EXISTS ( SELECT 1 FROM users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text)))) WITH CHECK (EXISTS ( SELECT 1 FROM users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
-CREATE POLICY "Enable delete for users based on user_id" ON public.promotions FOR DELETE TO public USING (EXISTS ( SELECT 1 FROM users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
-
--- Policies for appointments
-CREATE POLICY "Enable read access for all users" ON public.appointments FOR SELECT TO public USING (true);
-CREATE POLICY "Enable insert for  all" ON public.appointments FOR INSERT TO public WITH CHECK (true);
-CREATE POLICY "Update just for admin role suers" ON public.appointments FOR UPDATE TO authenticated USING (EXISTS ( SELECT 1 FROM users WHERE ((users.id = auth.uid()) AND (users.role = ANY (ARRAY['admin'::text, 'empleado'::text]))))) WITH CHECK (EXISTS ( SELECT 1 FROM users WHERE ((users.id = auth.uid()) AND (users.role = ANY (ARRAY['admin'::text, 'empleado'::text])))));
-CREATE POLICY "Delete just ofr admin role users" ON public.appointments FOR DELETE TO authenticated USING (EXISTS ( SELECT 1 FROM users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
-
--- Policies for class_sessions
-CREATE POLICY "Enable read access for all users" ON public.class_sessions FOR SELECT TO public USING (true);
-CREATE POLICY "Enable insert for  all" ON public.class_sessions FOR INSERT TO public WITH CHECK (true);
-CREATE POLICY "Update just for admin role suers" ON public.class_sessions FOR UPDATE TO authenticated USING (EXISTS ( SELECT 1 FROM users WHERE ((users.id = auth.uid()) AND (users.role = ANY (ARRAY['admin'::text, 'empleado'::text]))))) WITH CHECK (EXISTS ( SELECT 1 FROM users WHERE ((users.id = auth.uid()) AND (users.role = ANY (ARRAY['admin'::text, 'empleado'::text])))));
-CREATE POLICY "Delete just ofr admin role users" ON public.class_sessions FOR DELETE TO authenticated USING (EXISTS ( SELECT 1 FROM users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
-
--- Policies for employees
-CREATE POLICY "Enable read access for all users" ON public.employees FOR SELECT TO public USING (true);
-CREATE POLICY "Enable insert for admin role users only" ON public.employees FOR INSERT TO authenticated WITH CHECK (EXISTS ( SELECT 1 FROM users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
-CREATE POLICY "Enable update for users based on role" ON public.employees FOR UPDATE TO public USING (EXISTS ( SELECT 1 FROM users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text)))) WITH CHECK (EXISTS ( SELECT 1 FROM users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
-CREATE POLICY "Enable delete for users based on role" ON public.employees FOR DELETE TO public USING (EXISTS ( SELECT 1 FROM users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
-
--- Policies for working_hours
-CREATE POLICY "Enable read access for all users" ON public.working_hours FOR SELECT TO public USING (true);
-CREATE POLICY "Enable update for users based on role admin" ON public.working_hours FOR UPDATE TO public USING (EXISTS ( SELECT 1 FROM users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text)))) WITH CHECK (EXISTS ( SELECT 1 FROM users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
-
--- Policies for non_working_days
-CREATE POLICY "Enable read access for all users" ON public.non_working_days FOR SELECT TO public USING (true);
-CREATE POLICY "Enable insert for users role admin" ON public.non_working_days FOR INSERT TO public WITH CHECK (EXISTS ( SELECT 1 FROM users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
-CREATE POLICY "Enable delete for users based on user role" ON public.non_working_days FOR DELETE TO public USING (EXISTS ( SELECT 1 FROM users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
-
--- Policies for push_subscriptions
-CREATE POLICY "Usuarios pueden ver sus propias suscripciones" ON public.push_subscriptions FOR SELECT TO public USING (auth.uid() IS NOT NULL);
-CREATE POLICY "Allow all operations" ON public.push_subscriptions FOR ALL TO public USING (true) WITH CHECK (true);
-CREATE POLICY "Usuarios pueden eliminar sus propias suscripciones" ON public.push_subscriptions FOR DELETE TO public USING (auth.uid() IS NOT NULL);
-
--- Policies for landing_pages (Sections)
-CREATE POLICY "Enable read access for all users" ON public.landing_pages FOR SELECT TO public USING (true);
-CREATE POLICY "Enable read access for all users" ON public.hero_sections FOR SELECT TO public USING (true);
-CREATE POLICY "Enable insert for users based on user_id" ON public.hero_sections FOR INSERT TO public WITH CHECK (((auth.jwt() -> 'role'::text))::text = 'admin'::text);
-CREATE POLICY "updateSectionForAdmin" ON public.hero_sections FOR UPDATE TO authenticated USING (EXISTS ( SELECT 1 FROM users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text)))) WITH CHECK (EXISTS ( SELECT 1 FROM users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
-
-CREATE POLICY "Enable read access for all users" ON public.about_sections FOR SELECT TO public USING (true);
-CREATE POLICY "Update Section For Admin users" ON public.about_sections FOR UPDATE TO authenticated USING (EXISTS ( SELECT 1 FROM users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text)))) WITH CHECK (EXISTS ( SELECT 1 FROM users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
-
-CREATE POLICY "Enable read access for all users" ON public.contact_sections FOR SELECT TO public USING (true);
-CREATE POLICY "Enable update for authenticated users only" ON public.contact_sections FOR UPDATE TO authenticated USING (EXISTS ( SELECT 1 FROM users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text)))) WITH CHECK (EXISTS ( SELECT 1 FROM users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
-
-CREATE POLICY "Enable read access for all users" ON public.job_banner_sections FOR SELECT TO public USING (true);
-CREATE POLICY "Enable update for users based on email" ON public.job_banner_sections FOR UPDATE TO public USING (EXISTS ( SELECT 1 FROM users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text)))) WITH CHECK (EXISTS ( SELECT 1 FROM users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
-
-CREATE POLICY "Enable read access for all users" ON public.gallery_items FOR SELECT TO public USING (true);
-CREATE POLICY "Enable insert for authenticated users  with role admin" ON public.gallery_items FOR INSERT TO authenticated WITH CHECK (EXISTS ( SELECT 1 FROM users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
-CREATE POLICY "update for authenticated users with role admin" ON public.gallery_items FOR UPDATE TO public USING (EXISTS ( SELECT 1 FROM users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text)))) WITH CHECK (EXISTS ( SELECT 1 FROM users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
-CREATE POLICY "Enable delete for users role admin" ON public.gallery_items FOR DELETE TO public USING (EXISTS ( SELECT 1 FROM users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
-
-CREATE POLICY "Enable read access for all users" ON public.faq_items FOR SELECT TO public USING (true);
-CREATE POLICY "Enable insert for authenticated users with role admin" ON public.faq_items FOR INSERT TO authenticated WITH CHECK (EXISTS ( SELECT 1 FROM users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
-CREATE POLICY "Enable update for authenticated users only" ON public.faq_items FOR UPDATE TO authenticated USING (EXISTS ( SELECT 1 FROM users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text)))) WITH CHECK (EXISTS ( SELECT 1 FROM users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
-CREATE POLICY "Enable delete for users based on role admin" ON public.faq_items FOR DELETE TO authenticated USING (EXISTS ( SELECT 1 FROM users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
-
--- Policies for newsletter_subscribers
-CREATE POLICY "Enable insert  for all users" ON public.newsletter_subscribers FOR INSERT TO public WITH CHECK (true);
-CREATE POLICY "Enable select for authenticated users with admin role" ON public.newsletter_subscribers FOR SELECT TO authenticated USING (EXISTS ( SELECT 1 FROM users WHERE ((users.id = auth.uid()) AND (users.role = 'admin'::text))));
 

@@ -9,6 +9,7 @@ export async function GET() {
     // 1. Get all events raw data
     const { data: allEvents, error: dataError } = await supabase
       .from("events")
+
       .select("*");
 
     // 2. Simulate getEvents for the first event's landing_id (if exists)

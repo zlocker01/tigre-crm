@@ -32,7 +32,7 @@ export async function POST(req: Request) {
         );
     }
 
-    const { data, error } = await createEvent({ landing_id, image_url });
+    const { data, error } = await createEvent({ landing_id, image_url, is_active: true });
     
     if (error) {
       return NextResponse.json({ error }, { status: 500 });

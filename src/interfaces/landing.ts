@@ -8,6 +8,7 @@ export const galleryItemSchema = z.object({
     .min(10, "La descripción debe tener al menos 10 caracteres"),
   image: z.string().url("Debe ser una URL válida"),
   category: z.string().min(1, "La categoría es obligatoria"),
+  is_before_after: z.boolean().optional(),
   landing_page_id: z.number().optional(),
 });
 

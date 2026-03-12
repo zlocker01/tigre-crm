@@ -28,7 +28,7 @@ export function useAppointmentAutoUpdate({
       return {
         selectedService: service,
         selectedPromotion: promotion,
-        durationMinutes: service?.duration_minutes || 30,
+        durationMinutes: 30,
       };
     }, [selectedServiceId, selectedPromotionId, services, promotions]);
 

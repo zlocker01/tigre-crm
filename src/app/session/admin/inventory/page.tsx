@@ -32,7 +32,20 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useToast } from '@/components/ui/use-toast';
-import { Loader2, Package, Plus, Search, Trash2, Pencil } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import {
+  AlertTriangle,
+  Boxes,
+  CalendarDays,
+  Loader2,
+  MapPin,
+  Package,
+  Pencil,
+  Plus,
+  Search,
+  Tag,
+  Trash2,
+} from 'lucide-react';
 import { DeleteDialog } from '@/components/ui/DeleteDialog';
 import {
   Form,
@@ -113,6 +126,8 @@ export default function InventoryPage() {
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [detailsOpen, setDetailsOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<InventoryItem | null>(null);
   const [helpOpen, setHelpOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const [deletingId, setDeletingId] = useState<number | null>(null);
@@ -197,6 +212,11 @@ export default function InventoryPage() {
       status: item.status,
     });
     setDialogOpen(true);
+  };
+
+  const openDetailsDialog = (item: InventoryItem) => {
+    setSelectedItem(item);
+    setDetailsOpen(true);
   };
 
   const handleSubmit = async (values: InventoryFormState) => {
@@ -307,6 +327,28 @@ export default function InventoryPage() {
     );
   });
 
+  const formatDate = (date?: string) =>
+    date ? new Date(date).toLocaleDateString('es-MX') : '-';
+
+  const formatDateTime = (date?: string) =>
+    date ? new Date(date).toLocaleString('es-MX') : '-';
+
+  const formatCurrency = (value?: number) =>
+    typeof value === 'number'
+      ? new Intl.NumberFormat('es-MX', {
+          style: 'currency',
+          currency: 'MXN',
+        }).format(value)
+      : '-';
+
+  const statusBadgeClassName: Record<InventoryItemStatus, string> = {
+    available: 'bg-emerald-600 text-white hover:bg-emerald-700 border-0',
+    out_of_stock: 'bg-red-600 text-white hover:bg-red-700 border-0',
+    in_use: 'bg-blue-600 text-white hover:bg-blue-700 border-0',
+    maintenance: 'bg-amber-500 text-white hover:bg-amber-600 border-0',
+    expired: 'bg-zinc-700 text-white hover:bg-zinc-800 border-0',
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -376,7 +418,15 @@ export default function InventoryPage() {
                 ) : (
                   filteredItems.map((item) => (
                     <TableRow key={item.id}>
-                      <TableCell>{item.name}</TableCell>
+                      <TableCell>
+                        <button
+                          type="button"
+                          onClick={() => openDetailsDialog(item)}
+                          className="text-primary underline-offset-4 hover:underline font-medium focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring rounded-sm"
+                        >
+                          {item.name}
+                        </button>
+                      </TableCell>
                       <TableCell>
                         {item.category} /{' '}
                         {itemTypeLabels[item.item_type] || item.item_type}
@@ -644,6 +694,125 @@ export default function InventoryPage() {
           </Form>
         </DialogContent>
       </Dialog>
+
+      <Dialog
+        open={detailsOpen}
+        onOpenChange={(open) => {
+          setDetailsOpen(open);
+          if (!open) setSelectedItem(null);
+        }}
+      >
+        <DialogContent className="w-full max-w-[520px] sm:max-w-[760px] md:max-w-[880px] max-h-[85vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Detalle del producto</DialogTitle>
+          </DialogHeader>
+          {selectedItem ? (
+            <Card className="overflow-hidden">
+              <div className="border-b bg-gradient-to-r from-primary/10 via-primary/5 to-transparent p-4">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                  <div className="flex items-start gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-md bg-primary/10 text-primary">
+                      <Package className="h-5 w-5" />
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-lg font-semibold leading-tight">
+                        {selectedItem.name}
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        <Badge
+                          variant="secondary"
+                          className="bg-background/70 text-foreground border"
+                        >
+                          <Tag className="mr-1 h-3.5 w-3.5" />
+                          {selectedItem.category}
+                        </Badge>
+                        <Badge
+                          variant="secondary"
+                          className="bg-background/70 text-foreground border"
+                        >
+                          {itemTypeLabels[selectedItem.item_type] ||
+                            selectedItem.item_type}
+                        </Badge>
+                        <Badge
+                          className={statusBadgeClassName[selectedItem.status]}
+                        >
+                          {itemStatusLabels[selectedItem.status] ||
+                            selectedItem.status}
+                        </Badge>
+                        {typeof selectedItem.minimum_stock === 'number' &&
+                        selectedItem.quantity <= selectedItem.minimum_stock ? (
+                          <Badge className="bg-amber-500 text-white border-0">
+                            <AlertTriangle className="mr-1 h-3.5 w-3.5" />
+                            Bajo stock
+                          </Badge>
+                        ) : null}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <CardContent className="space-y-6 p-4">
+                <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+                  <div className="rounded-md border p-3">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <Boxes className="h-4 w-4" />
+                      <span>Inventario</span>
+                    </div>
+                    <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
+                      <div className="rounded-md bg-muted/20 p-2">
+                        <p className="text-xs text-muted-foreground">
+                          Cantidad
+                        </p>
+                        <p className="font-semibold">
+                          {selectedItem.quantity}
+                          {selectedItem.unit ? ` ${selectedItem.unit}` : ''}
+                        </p>
+                      </div>
+                      <div className="rounded-md bg-muted/20 p-2">
+                        <p className="text-xs text-muted-foreground">
+                          Stock mínimo
+                        </p>
+                        <p className="font-semibold">
+                          {typeof selectedItem.minimum_stock === 'number'
+                            ? selectedItem.minimum_stock
+                            : '-'}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="rounded-md border p-3">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <MapPin className="h-4 w-4" />
+                      <span>Ubicación</span>
+                    </div>
+                    <p className="mt-2 font-semibold">
+                      {selectedItem.location || '-'}
+                    </p>
+                  </div>
+
+                  <div className="rounded-md border p-3">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <CalendarDays className="h-4 w-4" />
+                      <span>Caducidad</span>
+                    </div>
+                    <p className="mt-2 font-semibold">
+                      {formatDate(selectedItem.expiration_date)}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ) : null}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDetailsOpen(false)}>
+              Cerrar
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       <Dialog open={helpOpen} onOpenChange={setHelpOpen}>
         <DialogContent className="w-full max-w-[480px] sm:max-w-[640px] md:max-w-[720px] max-h-[85vh] overflow-y-auto">
           <DialogHeader>

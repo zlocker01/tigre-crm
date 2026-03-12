@@ -6,6 +6,11 @@ export const appointmentSchema = z.object({
     .number()
     .nullable()
     .transform((val) => (val === undefined ? null : val)),
+  promotion_id: z
+    .number()
+    .nullable()
+    .transform((val) => (val === undefined ? null : val))
+    .optional(),
   start_datetime: z.string().refine((val) => !isNaN(Date.parse(val)), {
     message: 'La fecha de inicio debe ser una fecha válida',
   }),

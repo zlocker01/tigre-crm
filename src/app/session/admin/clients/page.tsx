@@ -3,6 +3,7 @@
 export const dynamic = 'force-dynamic';
 
 import { useState } from 'react';
+
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -23,7 +24,6 @@ import type { ClientFormValues } from '@/schemas/clientSchemas/clientSchema';
 import useSWR, { mutate } from 'swr';
 import type { Client } from '@/interfaces/client/Client';
 import type { Service } from '@/interfaces/services/Service';
-import type { Promotion } from '@/interfaces/promotions/Promotion';
 
 export default function ClientsPage() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -36,12 +36,7 @@ export default function ClientsPage() {
   const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
   // Fetch data required for the appointment form
-  const { data: clientsData } = useSWR<Client[]>('/api/clients', fetcher);
   const { data: servicesData } = useSWR<Service[]>('/api/services', fetcher);
-  const { data: promotionsData } = useSWR<Promotion[]>(
-    '/api/promotions',
-    fetcher,
-  );
 
   const handleCreateClient = async (data: ClientFormValues) => {
     const res = await fetch('/api/clients', {
@@ -199,9 +194,7 @@ export default function ClientsPage() {
           open={isAppointmentDialogOpen}
           onOpenChange={setIsAppointmentDialogOpen}
           onSubmit={handleAppointmentSubmit}
-          clients={clientsData || []}
           services={servicesData || []}
-          promotions={promotionsData || []}
           // Pasamos un objeto appointment parcial con el cliente ya seleccionado
           appointment={{ client_id: selectedClient.id } as any}
         />

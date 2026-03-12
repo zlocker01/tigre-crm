@@ -1,6 +1,7 @@
 "use server";
 
 import { createServerClient } from "@supabase/ssr";
+import type { CookieOptions } from "@supabase/ssr";
 import { cookies } from "next/headers";
 
 export async function createRetryServerClient() {
@@ -11,14 +12,14 @@ export async function createRetryServerClient() {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        get(name) {
+        get(name: string) {
           return cookieStore.get(name)?.value;
         },
-        set(name, value, options) {
+        set(name: string, value: string, options: CookieOptions) {
           try {
             // Only attempt to set cookies if we're in a server context
             if (typeof window === 'undefined') {
-              cookieStore.set(name, value, options);
+              cookieStore.set(name, value, options as any);
             }
           } catch (e: any) {
              // In Next.js Server Components, we cannot set cookies.
@@ -31,11 +32,11 @@ export async function createRetryServerClient() {
             console.error("Error setting cookie:", e);
           }
         },
-        remove(name, options) {
+        remove(name: string, options: CookieOptions) {
           try {
             // Only attempt to set cookies if we're in a server context
             if (typeof window === 'undefined') {
-              cookieStore.set(name, '', { ...options, maxAge: 0 });
+              cookieStore.set(name, '', { ...options, maxAge: 0 } as any);
             }
           } catch (e: any) {
             if (e?.message?.includes("Cookies can only be modified")) {

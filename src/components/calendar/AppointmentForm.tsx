@@ -57,6 +57,7 @@ export function AppointmentForm({
     defaultValues: {
       client_id: appointment?.client_id || '',
       service_id: appointment?.service_id ?? null,
+      promotion_id: null,
       start_datetime: appointment?.start_datetime || '',
       end_datetime: appointment?.end_datetime || '',
       status: 'Confirmada',

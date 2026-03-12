@@ -1,5 +1,5 @@
 {
-  "theme_color": "#c6a961",
+  "theme_color": "#000",
   "background_color": "#fff",
   "icons": [
     {
@@ -21,7 +21,7 @@
   "lang": "es-MX",
   "name": "JSBJJ MX",
   "short_name": "JSBJJ MX",
-  "start_url": "/login",
+  "start_url": "/session",
   "scope": "/",
   "description": "JSBJJ MX App"
 }

@@ -30,7 +30,7 @@ export default function WhatsAppButton() {
 
   const handleWhatsAppClick = () => {
     window.open(
-      `https://wa.me/${phoneNumber}?text=Hola,%20me%20gustaría%20agendar%20una%20cita`,
+      `https://wa.me/${phoneNumber}?text=Hola,%20me%20gustaría%20agendar%20una%20clase`,
       "_blank",
     );
   };
@@ -56,7 +56,7 @@ export default function WhatsAppButton() {
             </Button>
           </div>
           <p className="text-sm text-muted-foreground mb-4">
-            Contáctanos por WhatsApp para agendar tu cita o resolver cualquier
+            Contáctanos por WhatsApp para agendar tu clase o resolver cualquier
             duda.
           </p>
           <Button

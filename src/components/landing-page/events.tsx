@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import Image from 'next/image';
 import { EventItem } from '@/interfaces/events/EventItem';
 import {
   Carousel,
@@ -109,11 +108,12 @@ export default function Events({ data }: EventsProps) {
                     className="pl-6 md:basis-1/2 lg:basis-1/3 xl:basis-1/3"
                   >
                     <div className="relative aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl hover:shadow-[0_20px_60px_rgba(220,38,38,0.2)] dark:hover:shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all duration-500 group border border-red-100 dark:border-white/10 bg-white dark:bg-transparent">
-                      <Image
+                      <img
                         src={event.image_url}
                         alt="Próximo Evento"
-                        fill
-                        className="object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out"
+                        loading="lazy"
+                        decoding="async"
+                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out"
                       />
                       {/* Overlay gradiente al hacer hover */}
                       <div className="absolute inset-0 bg-gradient-to-t from-red-900/90 via-transparent to-transparent dark:from-black/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">

@@ -16,7 +16,6 @@ import { eventSchema, EventFormData } from '@/schemas/eventSchemas/eventSchema';
 import { toast } from '../ui/use-toast';
 import { createClient } from '@/utils/supabase/client';
 import { EventItem } from '@/interfaces/events/EventItem';
-import Image from 'next/image';
 import { ToggleEventButton } from './toggle-event-button';
 
 interface LandingEventsEditorProps {
@@ -198,11 +197,12 @@ export function LandingEventsEditor({ landing_id }: LandingEventsEditorProps) {
                 key={event.id}
                 className="relative group aspect-[4/5] rounded-lg overflow-hidden border bg-gray-100 dark:bg-gray-800"
               >
-                <Image
+                <img
                   src={event.image_url}
                   alt="Evento"
-                  fill
-                  className="object-cover"
+                  loading="lazy"
+                  decoding="async"
+                  className="absolute inset-0 w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                   <Button

@@ -61,7 +61,7 @@ function groupByMonth(appointments: Appointment[]): MetricData[] {
     };
     entry.citas += 1;
     entry.ingresos += a.price_charged || 0;
-    entry.clientes.add(a.client_id);
+    if (a.client_id) entry.clientes.add(a.client_id);
     map.set(key, entry);
   });
 
@@ -241,11 +241,13 @@ function computeClientsOverview(
   const firstAppt = new Map<string, Date>();
   const recentCount = new Map<string, number>();
   appointments.forEach((a) => {
+    if (!a.client_id) return;
     const d = new Date(a.start_datetime);
-    const fa = firstAppt.get(a.client_id);
-    if (!fa || d < fa) firstAppt.set(a.client_id, d);
+    const clientId = a.client_id;
+    const fa = firstAppt.get(clientId);
+    if (!fa || d < fa) firstAppt.set(clientId, d);
     if (d >= oneEighty) {
-      recentCount.set(a.client_id, (recentCount.get(a.client_id) || 0) + 1);
+      recentCount.set(clientId, (recentCount.get(clientId) || 0) + 1);
     }
   });
 
@@ -282,9 +284,11 @@ function computeClientSummary(appointments: Appointment[], clients: Client[]) {
   const newPrevMonth = new Set<string>();
   const firstAppt = new Map<string, Date>();
   appointments.forEach((a) => {
+    if (!a.client_id) return;
     const d = new Date(a.start_datetime);
-    const fa = firstAppt.get(a.client_id);
-    if (!fa || d < fa) firstAppt.set(a.client_id, d);
+    const clientId = a.client_id;
+    const fa = firstAppt.get(clientId);
+    if (!fa || d < fa) firstAppt.set(clientId, d);
   });
   firstAppt.forEach((d, clientId) => {
     if (d >= startThisMonth) newThisMonth.add(clientId);
@@ -307,10 +311,12 @@ function computeClientSummary(appointments: Appointment[], clients: Client[]) {
   const hadThisMonth = new Set<string>();
   const hadPrevMonth = new Set<string>();
   appointments.forEach((a) => {
+    if (!a.client_id) return;
     const d = new Date(a.start_datetime);
-    if (d >= startThisMonth) hadThisMonth.add(a.client_id);
+    const clientId = a.client_id;
+    if (d >= startThisMonth) hadThisMonth.add(clientId);
     else if (d >= startPrevMonth && d <= endPrevMonth)
-      hadPrevMonth.add(a.client_id);
+      hadPrevMonth.add(clientId);
   });
   const retained = Array.from(hadThisMonth).filter((id) =>
     hadPrevMonth.has(id),
@@ -373,20 +379,11 @@ function computeAppointmentSummary(appointments: Appointment[]) {
       ? 0
       : Number(((attended / monthAppointments.length) * 100).toFixed(1));
 
-  const avgDuration = Math.round(
-    monthAppointments.reduce(
-      (sum, a) => sum + (a.actual_duration_minutes || 0),
-      0,
-    ) / Math.max(1, monthAppointments.length),
-  );
-
   return {
     total: appointments.length,
     growthPercent,
     attendanceRate,
     attendanceGrowth: 0,
-    avgDuration,
-    durationChange: 0,
   };
 }
 
@@ -547,15 +544,10 @@ function computePopularServicesData(
 
   // Contar citas por servicio para el mes actual
   const countsThisMonth = new Map<number, number>();
-  const totalDuration = new Map<number, number>();
   thisMonthAppts.forEach((a) => {
     if (a.service_id) {
       const id = Number(a.service_id);
       countsThisMonth.set(id, (countsThisMonth.get(id) || 0) + 1);
-      totalDuration.set(
-        id,
-        (totalDuration.get(id) || 0) + (a.actual_duration_minutes || 0),
-      );
     }
   });
 
@@ -588,12 +580,10 @@ function computePopularServicesData(
       const growthFormatted =
         growthPercent > 0 ? `+${growthPercent}%` : `${growthPercent}%`;
 
-      const avg = Math.round((totalDuration.get(id) || 0) / Math.max(1, count));
       return {
         service: svc?.title || `Servicio ${id}`,
         appointments: count,
         growth: growthFormatted,
-        avgDuration: `${avg || svc?.duration_minutes || 0} min`,
       };
     },
   );
@@ -723,29 +713,31 @@ export default async function DashboardPage() {
         new Date(a.start_datetime).getTime(),
     )
     .slice(0, 5)
-    .map((a) => ({
-      id: a.id,
-      user_id: a.user_id,
-      start_datetime: a.start_datetime,
-      end_datetime: a.end_datetime,
-      status: a.status,
-      notes: a.notes,
-      date: a.date,
-      actual_duration_minutes: a.actual_duration_minutes,
-      price_charged: a.price_charged,
-      created_at: a.created_at,
-      client: {
-        id: a.client_id,
-        name: clientById.get(a.client_id)?.name || 'Cliente',
-        avatar: clientById.get(a.client_id)?.avatar || '/app/avatar.png',
-      },
-      service: {
-        id: Number(a.service_id || 0),
-        title:
-          (a.service_id && serviceById.get(Number(a.service_id))?.title) ||
-          'Servicio',
-      },
-    }));
+    .map((a) => {
+      const clientId = a.client_id ?? 'unknown-client';
+      const client = a.client_id ? clientById.get(a.client_id) : undefined;
+      return {
+        id: a.id,
+        user_id: a.user_id,
+        start_datetime: a.start_datetime,
+        end_datetime: a.end_datetime,
+        status: a.status,
+        date: a.date,
+        price_charged: a.price_charged,
+        created_at: a.created_at,
+        client: {
+          id: clientId,
+          name: client?.name || 'Cliente',
+          avatar: client?.avatar || '/app/avatar.png',
+        },
+        service: {
+          id: Number(a.service_id || 0),
+          title:
+            (a.service_id && serviceById.get(Number(a.service_id))?.title) ||
+            'Servicio',
+        },
+      };
+    });
 
   // Datasets para análisis detallado
   const appointmentsByDayData = computeAppointmentsByDayData(appointments);
@@ -823,7 +815,7 @@ export default async function DashboardPage() {
 
       <div className="flex items-center justify-between gap-2">
         <h2 className="text-lg font-semibold">Resumen rápido</h2>
-        <InfoDialog description="Aquí ves un resumen rápido: cuántos clientes tienes, cuántos vuelven y cuánto valor genera cada uno en promedio.">
+        <InfoDialog description="Resumen rápido de la academia: cuántos alumnos tienes, cuántos regresan a entrenar y cuánto ingreso promedio genera cada alumno.">
           Resumen rápido
         </InfoDialog>
       </div>
@@ -856,7 +848,7 @@ export default async function DashboardPage() {
         <div>
           <div className="flex items-center justify-between gap-2 mb-2">
             <h3 className="text-lg font-semibold">Métricas Generales</h3>
-            <InfoDialog description="Aquí ves, mes a mes, cuántas citas, ingresos y clientes has tenido, para comparar meses fuertes y meses más tranquilos.">
+            <InfoDialog description="Aquí ves, mes a mes, la actividad de la academia: reservas/clases, ingresos y alumnos activos para comparar meses fuertes y meses más tranquilos.">
               Métricas generales
             </InfoDialog>
           </div>
@@ -873,7 +865,7 @@ export default async function DashboardPage() {
                 <CardTitle>Ingresos</CardTitle>
                 <CardDescription>Comparativa mensual y semanal</CardDescription>
               </div>
-              <InfoDialog description="Muestra cuánto dinero entra a tu consultorio por semana y por mes, para ver si estás ganando más o menos que antes.">
+              <InfoDialog description="Muestra cuánto dinero entra a la academia por semana y por mes (mensualidades, inscripciones, seminarios, ventas), para ver tendencias y temporadas.">
                 Ingresos
               </InfoDialog>
             </div>
@@ -901,7 +893,7 @@ export default async function DashboardPage() {
                   Distribución de ingresos por tipo de servicio
                 </CardDescription>
               </div>
-              <InfoDialog description="Te muestra qué tratamientos dejan más dinero para que sepas qué servicios promocionar y si los que más trabajas son los más rentables.">
+              <InfoDialog description="Te muestra qué servicios dejan más ingresos (clases, inscripciones, seminarios o productos) para decidir qué impulsar y qué ajustar.">
                 Ingresos por servicio
               </InfoDialog>
             </div>
@@ -920,7 +912,7 @@ export default async function DashboardPage() {
                   Distribución de clientes por categoría
                 </CardDescription>
               </div>
-              <InfoDialog description="Divide a tus clientes en nuevos, recurrentes e inactivos para que veas quién sigue viniendo y quién hace tiempo que no agenda.">
+              <InfoDialog description="Segmenta a tus alumnos en nuevos, recurrentes e inactivos para identificar retención y quién necesita seguimiento para volver a entrenar.">
                 Resumen de clientes
               </InfoDialog>
             </div>
@@ -938,7 +930,7 @@ export default async function DashboardPage() {
               <CardTitle>Citas Recientes</CardTitle>
               <CardDescription>Últimas citas registradas</CardDescription>
             </div>
-            <InfoDialog description="Muestra las últimas citas registradas para que veas rápido qué viene en tu agenda y si hubo cambios como cancelaciones o confirmaciones.">
+            <InfoDialog description="Muestra las últimas reservas/agendas para que veas rápido qué entrenamientos vienen y si hubo cambios como cancelaciones o confirmaciones.">
               Citas recientes
             </InfoDialog>
           </div>
@@ -950,7 +942,7 @@ export default async function DashboardPage() {
 
       <div className="flex items-center justify-between gap-2">
         <h2 className="text-lg font-semibold">Análisis detallado de citas</h2>
-        <InfoDialog description="Aquí tienes gráficas más completas sobre tus citas: días y horarios con más demanda, servicios más reservados y filtros de tiempo para ver distintos periodos.">
+        <InfoDialog description="Aquí tienes gráficas más completas sobre la agenda: días y horarios con más demanda, servicios/clases más reservados y filtros de tiempo para analizar distintos periodos.">
           Análisis de citas
         </InfoDialog>
       </div>

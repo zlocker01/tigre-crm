@@ -142,31 +142,26 @@ const popularServicesData = [
     service: "Clase Principiantes",
     appointments: 145,
     growth: "+12%",
-    avgDuration: "45 min",
   },
   {
     service: "Clase Avanzados",
     appointments: 98,
     growth: "+8%",
-    avgDuration: "60 min",
   },
   {
     service: "Clase Infantil",
     appointments: 76,
     growth: "+15%",
-    avgDuration: "75 min",
   },
   {
     service: "Clase Mujeres",
     appointments: 65,
     growth: "+5%",
-    avgDuration: "90 min",
   },
   {
     service: "Clase Competidores",
     appointments: 54,
     growth: "+3%",
-    avgDuration: "120 min",
   },
 ];
 
@@ -486,7 +481,6 @@ export function AppointmentsAnalysis() {
                       <TableHead>Servicio</TableHead>
                       <TableHead className="text-right">Clases</TableHead>
                       <TableHead className="text-right">Crecimiento</TableHead>
-                      <TableHead className="text-right">Duración</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -508,9 +502,6 @@ export function AppointmentsAnalysis() {
                           >
                             {service.growth}
                           </span>
-                        </TableCell>
-                        <TableCell className="text-right">
-                          {service.avgDuration}
                         </TableCell>
                       </TableRow>
                     ))}

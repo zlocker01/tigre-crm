@@ -81,7 +81,10 @@ const inventorySchema = z.object({
   name: z.string().min(1, 'El nombre es obligatorio'),
   category: z.string().min(1, 'La categoría es obligatoria'),
   item_type: z
-    .union([z.enum(['consumable', 'equipment', 'apparel', 'supplement']), z.literal('')])
+    .union([
+      z.enum(['consumable', 'equipment', 'apparel', 'supplement']),
+      z.literal(''),
+    ])
     .refine((v) => v !== '', {
       message: 'Selecciona un tipo de producto válido',
     }),
@@ -484,10 +487,16 @@ export default function InventoryPage() {
                             <SelectValue placeholder="Selecciona tipo" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="consumable">Consumible</SelectItem>
+                            <SelectItem value="consumable">
+                              Consumible
+                            </SelectItem>
                             <SelectItem value="equipment">Equipo</SelectItem>
-                            <SelectItem value="apparel">Indumentaria</SelectItem>
-                            <SelectItem value="supplement">Suplemento</SelectItem>
+                            <SelectItem value="apparel">
+                              Indumentaria
+                            </SelectItem>
+                            <SelectItem value="supplement">
+                              Suplemento
+                            </SelectItem>
                           </SelectContent>
                         </Select>
                       </FormControl>
@@ -642,7 +651,7 @@ export default function InventoryPage() {
               Cómo usar el inventario de la academia
             </DialogTitle>
           </DialogHeader>
-          <div className="space-y-4 text-sm text-muted-foreground">
+          <div className="space-y-4 text-sm text-muted-foreground dark:text-foreground/90">
             <p>
               Esta sección te ayuda a
               <span className="mx-1 font-semibold text-primary">
@@ -665,7 +674,7 @@ export default function InventoryPage() {
                   Categoría
                 </span>
                 agrupa por tipo de producto, por ejemplo:
-                <span className="mx-1 font-medium text-secondary">
+                <span className="mx-1 font-medium text-secondary dark:text-foreground/80">
                   Kimonos → Indumentaria, Rashguards → Indumentaria, Cintas →
                   Consumible, Tatami → Equipo, Escudos / paos → Equipo
                 </span>
@@ -689,7 +698,7 @@ export default function InventoryPage() {
               </p>
               <p>
                 Usa
-                <span className="mx-1 font-semibold text-secondary">
+                <span className="mx-1 font-semibold text-secondary dark:text-foreground/80">
                   Stock mínimo
                 </span>
                 para que sepas
@@ -716,7 +725,7 @@ export default function InventoryPage() {
                   Ubicación
                 </span>
                 puedes poner dónde se guarda:
-                <span className="mx-1 font-medium text-secondary">
+                <span className="mx-1 font-medium text-secondary dark:text-foreground/80">
                   tatami principal, bodega, recepción, área de limpieza
                 </span>
                 , etc.
@@ -728,7 +737,7 @@ export default function InventoryPage() {
                 El
                 <span className="mx-1 font-semibold text-primary">Estado</span>
                 te permite saber si un producto está
-                <span className="mx-1 font-medium text-secondary">
+                <span className="mx-1 font-medium text-secondary dark:text-foreground/80">
                   disponible, agotado, en uso, en mantenimiento o caducado
                 </span>
                 .

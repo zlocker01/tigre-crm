@@ -62,8 +62,6 @@ interface AppointmentsAnalysisProps {
     growthPercent: number;
     attendanceRate: number;
     attendanceGrowth: number;
-    avgDuration: number;
-    durationChange: number;
   };
   cancellationTrendData?: { month: string; tasa: number }[];
   datasetsByRange?: Record<
@@ -80,8 +78,6 @@ interface AppointmentsAnalysisProps {
         growthPercent: number;
         attendanceRate: number;
         attendanceGrowth: number;
-        avgDuration: number;
-        durationChange: number;
       };
       cancellationTrendData: { month: string; tasa: number }[];
     }
@@ -157,11 +153,6 @@ export function AppointmentsAnalysis(props: AppointmentsAnalysisProps) {
           title="Tasa de Asistencia"
           value={`${appointmentSummary.attendanceRate}%`}
           changePercent={appointmentSummary.attendanceGrowth}
-        />
-        <SummaryCard
-          title="Duración Promedio"
-          value={`${appointmentSummary.avgDuration} min`}
-          changePercent={appointmentSummary.durationChange}
         />
       </div>
 
@@ -271,7 +262,6 @@ export function AppointmentsAnalysis(props: AppointmentsAnalysisProps) {
                       <TableHead>Servicio</TableHead>
                       <TableHead className="text-right">Clases</TableHead>
                       <TableHead className="text-right">Crecimiento</TableHead>
-                      <TableHead className="text-right">Duración</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -293,9 +283,6 @@ export function AppointmentsAnalysis(props: AppointmentsAnalysisProps) {
                           >
                             {service.growth}
                           </span>
-                        </TableCell>
-                        <TableCell className="text-right">
-                          {service.avgDuration}
                         </TableCell>
                       </TableRow>
                     ))}

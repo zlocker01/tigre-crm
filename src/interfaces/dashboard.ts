@@ -74,7 +74,6 @@ export interface PopularServiceData {
   service: string;
   appointments: number;
   growth: string;
-  avgDuration: string;
 }
 
 // Tipos para datos de servicios

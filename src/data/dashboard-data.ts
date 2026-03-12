@@ -238,31 +238,26 @@ export function getPopularServicesData(): PopularServiceData[] {
       service: "Clase Principiantes",
       appointments: 145,
       growth: "+12%",
-      avgDuration: "45 min",
     },
     {
       service: "Clase Avanzados",
       appointments: 98,
       growth: "+8%",
-      avgDuration: "60 min",
     },
     {
       service: "Clase Infantil",
       appointments: 76,
       growth: "+15%",
-      avgDuration: "75 min",
     },
     {
       service: "Clase Mujeres",
       appointments: 65,
       growth: "+5%",
-      avgDuration: "90 min",
     },
     {
       service: "Clase Competidores",
       appointments: 54,
       growth: "+3%",
-      avgDuration: "120 min",
     },
   ];
 }
@@ -343,8 +338,6 @@ export function getAppointmentSummaryData() {
     growthPercent: 8.2,
     attendanceRate: 89.5,
     attendanceGrowth: 1.3,
-    avgDuration: 65,
-    durationChange: -2.1,
   };
 }
 

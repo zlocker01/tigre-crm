@@ -30,14 +30,14 @@ export default function Location({ data, schedules }: LocationProps) {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
           <div className="h-[400px] rounded-xl overflow-hidden">
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d941.3541828998782!2d-98.24230133045572!3d19.30771486454816!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85cfd941b58ee7ff%3A0xdd2c4693b089280b!2sC.%2023%2023%2C%20La%20Loma%20Xicohtencatl%2C%20San%20Isidro%2C%2090062%20Tlaxcala%20de%20Xicoht%C3%A9ncatl%2C%20Tlax.!5e0!3m2!1ses-419!2smx!4v1767839257001!5m2!1ses-419!2smx"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3762.987731766058!2d-98.14595082532671!3d19.41293604130961!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d020231f82a749%3A0x1c9deb9554681be4!2sAv%20Xicohtencatl%20717%2C%20Centro%2C%2090300%20Cdad.%20de%20Apizaco%2C%20Tlax.!5e0!3m2!1ses-419!2smx!4v1773287949112!5m2!1ses-419!2smx"
               width="100%"
               height="100%"
               style={{ border: 0 }}
               allowFullScreen
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              title="Ubicación de Bella Estética"
+              title="Ubicación en Google Maps"
             />
           </div>
 
@@ -144,9 +144,7 @@ export default function Location({ data, schedules }: LocationProps) {
             </div>
 
             <Button size="lg" asChild className="w-full">
-              <Link href="/citas">
-                Agendar Cita
-              </Link>
+              <Link href="/citas">Agendar Cita</Link>
             </Button>
           </div>
         </div>

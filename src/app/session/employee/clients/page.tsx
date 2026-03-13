@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/card';
 import { ClientsTable } from '@/components/clients/clients-table';
 import { ClientDetails } from '@/components/clients/client-details';
-import { Download, Plus, Search } from 'lucide-react';
+import { Plus, Search } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -24,9 +24,8 @@ import {
 } from '@/components/ui/dialog';
 import { ClientForm } from '@/components/clients/client-form';
 import { useToast } from '@/components/ui/use-toast';
-import { AdvancedMetrics } from '@/components/dashboard/advanced-metrics';
 import type { ClientFormValues } from '@/schemas/clientSchemas/clientSchema';
-import useSWR, { mutate } from 'swr';
+import { mutate } from 'swr';
 import type { Client } from '@/interfaces/client/Client';
 
 export default function ClientsPage() {
@@ -120,10 +119,6 @@ export default function ClientsPage() {
               />
             </CardContent>
           </Card>
-
-          <div className="mt-4">
-            <AdvancedMetrics />
-          </div>
         </div>
 
         <div className="w-full lg:w-80 order-1 lg:order-2">

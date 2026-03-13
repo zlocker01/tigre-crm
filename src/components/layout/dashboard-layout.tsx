@@ -7,7 +7,6 @@ import { usePathname } from 'next/navigation';
 import {
   Calendar,
   CameraIcon,
-  Clock,
   ExternalLink,
   IdCardLanyard,
   LayoutDashboard,
@@ -82,11 +81,6 @@ export function DashboardLayout({
       title: 'Galeria de Imagenes',
       href: '/session/admin/images-gallery',
       icon: CameraIcon,
-    },
-    {
-      title: 'Gestión de Horarios',
-      href: '/session/admin/schedule',
-      icon: Clock,
     },
     {
       title: 'Clases',

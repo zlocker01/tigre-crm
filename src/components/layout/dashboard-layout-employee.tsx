@@ -5,18 +5,15 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
+  Boxes,
   Calendar,
   CameraIcon,
-  Clock,
   ExternalLink,
-  LayoutDashboard,
   Menu,
-  MessageSquare,
   Pencil,
   Tag,
   User,
   Users,
-  X,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -63,6 +60,26 @@ export function DashboardLayoutEmployee({
       title: 'Horario de Clases',
       href: `/session/employee/calendar/${landingId}`,
       icon: Calendar,
+    },
+    {
+      title: 'Editor Landing',
+      href: '/session/employee/landing-editor',
+      icon: Pencil,
+    },
+    {
+      title: 'Clases',
+      href: '/session/employee/services',
+      icon: Tag,
+    },
+    {
+      title: 'Inventario',
+      href: '/session/employee/inventory',
+      icon: Boxes,
+    },
+    {
+      title: 'Galería',
+      href: '/session/employee/images-gallery',
+      icon: CameraIcon,
     },
     {
       title: 'Alumnos',

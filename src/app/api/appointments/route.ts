@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
         .from('users')
         .select('role')
         .eq('id', user.id)
-        .single();
+        .maybeSingle();
 
       if (userData?.role === 'admin' || userData?.role === 'empleado') {
         return NextResponse.json({
@@ -70,11 +70,18 @@ export async function POST(request: NextRequest) {
     const supabase = await createClient();
     const userId = await getUserId();
 
+    if (!userId) {
+      return NextResponse.json(
+        { success: false, error: 'No autorizado' },
+        { status: 401 },
+      );
+    }
+
     const { data: userData, error } = await supabase
       .from('users')
       .select('role')
       .eq('id', userId)
-      .single();
+      .maybeSingle();
 
     if (error) throw error;
 
@@ -199,9 +206,15 @@ export async function POST(request: NextRequest) {
         .from('class_sessions')
         .insert([singleAppointmentData])
         .select()
-        .single();
+        .maybeSingle();
 
       if (insertError) throw insertError;
+      if (!newAppointment) {
+        return NextResponse.json(
+          { success: false, error: 'No se pudo crear la clase.' },
+          { status: 400 },
+        );
+      }
 
       return NextResponse.json(
         {

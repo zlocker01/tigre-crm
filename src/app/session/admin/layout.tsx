@@ -1,8 +1,10 @@
 import "../globals.css";
 import type React from "react";
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 import { DashboardLayout } from "@/components/layout/dashboard-layout";
 import { getLandingId } from "@/data/getLandingId";
+import { getUserRole } from "@/data/getUserRole";
 
 export const metadata: Metadata = {
   title: "Dashboard de Gestión",
@@ -15,6 +17,11 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const userRole = await getUserRole();
+  if (userRole !== "admin") {
+    redirect("/session/employee/profile");
+  }
+
   const landingId = await getLandingId();
   if (!landingId) {
     return (

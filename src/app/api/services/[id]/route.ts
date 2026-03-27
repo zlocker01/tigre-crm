@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getService } from "@/data/services/getService";
 import { updateService } from "@/data/services/updateService";
 import { deleteService } from "@/data/services/deleteService";
+import { createClient } from "@/utils/supabase/server";
 
 export async function GET(request: Request, props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
@@ -18,6 +19,32 @@ export async function GET(request: Request, props: { params: Promise<{ id: strin
 export async function PUT(req: Request, props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+
+    if (userError || !user) {
+      return NextResponse.json(
+        { error: "No autorizado" },
+        { status: 401 },
+      );
+    }
+
+    const { data: userData, error: roleError } = await supabase
+      .from("users")
+      .select("role")
+      .eq("id", user.id)
+      .maybeSingle();
+
+    if (roleError || userData?.role !== "admin") {
+      return NextResponse.json(
+        { error: "No autorizado para actualizar servicios" },
+        { status: 403 },
+      );
+    }
+
     const body = await req.json();
     const serviceId = Number(params.id);
     const result = await updateService(serviceId, body);
@@ -44,6 +71,29 @@ export async function PUT(req: Request, props: { params: Promise<{ id: string }>
 
 export async function DELETE(_: Request, props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
+  const supabase = await createClient();
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError || !user) {
+    return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+  }
+
+  const { data: userData, error: roleError } = await supabase
+    .from("users")
+    .select("role")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  if (roleError || userData?.role !== "admin") {
+    return NextResponse.json(
+      { error: "No autorizado para eliminar servicios" },
+      { status: 403 },
+    );
+  }
+
   const error = await deleteService(Number(params.id));
   if (error) {
     return NextResponse.json({ error }, { status: 500 });

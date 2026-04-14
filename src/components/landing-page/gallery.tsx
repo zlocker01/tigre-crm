@@ -20,6 +20,7 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import type { GalleryItem } from '@/interfaces/galleryItems/GalleryItem';
+import Image from 'next/image';
 
 const categories = [
   { id: 'all', label: 'Todos' },
@@ -88,10 +89,16 @@ export default function Gallery({ data }: { data: GalleryItem[] }) {
                           <DialogTrigger asChild>
                             <Card className="overflow-hidden cursor-pointer hover:shadow-lg transition-all">
                               <div className="relative h-64 w-full bg-muted">
-                                <img
+                                <Image
                                   src={item.image || '/placeholder.svg'}
-                                  alt={item.title || 'Imagen de galería'}
-                                  className="absolute inset-0 h-full w-full object-contain object-center"
+                                  alt={
+                                    item.title
+                                      ? `${item.title} | Galería JSBJJ MX`
+                                      : 'Imagen de la galería de JSBJJ MX'
+                                  }
+                                  fill
+                                  sizes="(max-width: 768px) 100vw, 25vw"
+                                  className="object-contain object-center"
                                 />
                               </div>
                               {(item.title || item.description) && (
@@ -122,10 +129,16 @@ export default function Gallery({ data }: { data: GalleryItem[] }) {
                               )}
                             </DialogHeader>
                             <div className="relative h-[60vh] w-full">
-                              <img
+                              <Image
                                 src={item.image || '/placeholder.svg'}
-                                alt={item.title || 'Imagen ampliada'}
-                                className="absolute inset-0 h-full w-full object-contain"
+                                alt={
+                                  item.title
+                                    ? `${item.title} | Imagen ampliada`
+                                    : 'Imagen ampliada de la galería'
+                                }
+                                fill
+                                sizes="(max-width: 768px) 100vw, 80vw"
+                                className="object-contain"
                               />
                             </div>
                           </DialogContent>

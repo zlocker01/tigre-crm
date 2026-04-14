@@ -7,8 +7,12 @@ import { getLandingId } from "@/data/getLandingId";
 import { getUserRole } from "@/data/getUserRole";
 
 export const metadata: Metadata = {
-  title: "Dashboard de Gestión",
-  description: "Dashboard completo para la gestión de La Rochelle",
+  title: "Dashboard Admin",
+  description: "Panel de administración interno de JSBJJ MX.",
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default async function RootLayout({

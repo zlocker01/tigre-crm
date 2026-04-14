@@ -1,4 +1,14 @@
 import React from "react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Términos y Condiciones",
+  description:
+    "Política de uso y privacidad de JSBJJ MX: condiciones de uso, tratamiento de datos y seguridad.",
+  alternates: {
+    canonical: "/politica-de-uso-y-privacidad",
+  },
+};
 
 export default function PoliticaDeUsoYPrivacidad() {
   return (

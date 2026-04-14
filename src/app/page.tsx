@@ -23,8 +23,54 @@ import { getFaqItems } from '@/data/faqItems/getFaqItems';
 import { getJobBannerSections } from '@/data/jobBannerSections/getJobBannerSections';
 import { getEmployees } from '@/data/employees/getEmployees';
 import { getEvents } from '@/data/events/getEvents';
-import { LandingPage } from '@/interfaces/landingPages/LandingPage';
 import CookiesModal from '@/components/landing-page/cookiesModal';
+import type { Metadata } from 'next';
+
+const siteUrl = (() => {
+  const fromEnv = process.env.NEXT_PUBLIC_SITE_URL;
+  if (fromEnv) {
+    return fromEnv;
+  }
+
+  const vercelUrl = process.env.VERCEL_URL;
+  if (vercelUrl) {
+    return `https://${vercelUrl}`;
+  }
+
+  return 'https://jsbjjmx-crm-zlocker01s-projects.vercel.app';
+})();
+
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: 'Inicio',
+    description:
+      'Academia profesional de Brazilian Jiu-Jitsu (BJJ) y MMA en Apizaco, Tlaxcala. Clases para principiantes, avanzados, niños, mujeres y competencia.',
+    alternates: {
+      canonical: '/',
+    },
+    openGraph: {
+      url: '/',
+      title: 'JSBJJ MX | Academia de Brazilian Jiu-Jitsu',
+      description:
+        'Entrena Brazilian Jiu-Jitsu (BJJ) y MMA con coaches certificados en Apizaco, Tlaxcala.',
+      images: [
+        {
+          url: '/landing-page/recepcion.jpg',
+          width: 1200,
+          height: 630,
+          alt: 'JSBJJ MX | Academia de Brazilian Jiu-Jitsu',
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: 'JSBJJ MX | Academia de Brazilian Jiu-Jitsu',
+      description:
+        'Clases de Brazilian Jiu-Jitsu (BJJ) y MMA en Apizaco, Tlaxcala.',
+      images: ['/landing-page/recepcion.jpg'],
+    },
+  };
+}
 
 export default async function Home() {
   const landingId: string | null = await getLandingId();
@@ -70,9 +116,37 @@ export default async function Home() {
     console.error('Errores al cargar las secciones:', errors);
   }
 
+  const contactInfo = contactSection?.[0];
+  const hero = heroSection?.[0];
+
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': ['SportsActivityLocation', 'LocalBusiness'],
+    '@id': siteUrl,
+    name: hero?.title || 'JSBJJ MX',
+    description:
+      'Academia profesional de Brazilian Jiu-Jitsu (BJJ) y MMA en Apizaco, Tlaxcala.',
+    url: siteUrl,
+    image: hero?.image || `${siteUrl}/landing-page/recepcion.jpg`,
+    telephone: contactInfo?.phone || undefined,
+    email: contactInfo?.email || undefined,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: contactInfo?.address || undefined,
+      addressLocality: 'Apizaco',
+      addressRegion: 'Tlaxcala',
+      addressCountry: 'MX',
+    },
+    sameAs: [contactInfo?.facebook, contactInfo?.instagram].filter(Boolean),
+  };
+
   return (
     <>
       <Header />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      />
       <main className="overflow-x-hidden">
         {heroSection && <Hero data={heroSection[0]} />}
         <Services landingId={landingId} />

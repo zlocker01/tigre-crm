@@ -10,6 +10,10 @@ import { DashboardLayoutEmployee } from "@/components/layout/dashboard-layout-em
 export const metadata: Metadata = {
   title: "Dashboard de Empleado",
   description: "Dashboard para empleados de JSBJJ MX",
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default async function RootLayout({

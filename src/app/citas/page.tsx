@@ -3,6 +3,17 @@ import Booking from '@/components/landing-page/booking';
 import Header from '@/components/landing-page/header';
 import Footer from '@/components/landing-page/footer';
 import { getLandingId } from '@/data/getLandingId';
+import type { Metadata } from 'next';
+import Image from 'next/image';
+
+export const metadata: Metadata = {
+  title: 'Agendar Clase',
+  description:
+    'Agenda tu clase de BJJ en JSBJJ MX. Selecciona fecha y horario disponible para tu próxima sesión.',
+  alternates: {
+    canonical: '/citas',
+  },
+};
 
 export default async function CitasPage() {
   const landingId: string | null = await getLandingId();
@@ -20,9 +31,13 @@ export default async function CitasPage() {
       <Header />
       <main className="flex-grow pt-24">
         <div className="container mx-auto px-4 my-6 -mb-10 flex justify-center">
-          <img
+          <Image
             src="/landing-page/logo.png"
-            alt="Logo Clínica"
+            alt="Logo JSBJJ MX"
+            width={420}
+            height={140}
+            priority
+            sizes="(max-width: 768px) 280px, 420px"
             className="h-56 w-auto object-contain"
           />
         </div>

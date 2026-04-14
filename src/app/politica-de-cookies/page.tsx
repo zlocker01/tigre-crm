@@ -1,4 +1,14 @@
 import React from "react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Política de Cookies",
+  description:
+    "Información sobre el uso de cookies en JSBJJ MX: tipos de cookies, finalidad y gestión.",
+  alternates: {
+    canonical: "/politica-de-cookies",
+  },
+};
 
 export default function PoliticaDeCookies() {
   return (
@@ -8,7 +18,7 @@ export default function PoliticaDeCookies() {
         <div className="space-y-8">
           <div className="bg-blue-50 rounded-lg p-6 border border-blue-100">
             <p className="text-gray-700">
-              En <span className="font-semibold">La Rochelle App</span> utilizamos cookies para mejorar la experiencia del usuario, analizar el tráfico y personalizar el contenido. Al continuar navegando por nuestro sitio, aceptas el uso de cookies según lo establecido en esta política.
+              En <span className="font-semibold">JSBJJ MX App</span> utilizamos cookies para mejorar la experiencia del usuario, analizar el tráfico y personalizar el contenido. Al continuar navegando por nuestro sitio, aceptas el uso de cookies según lo establecido en esta política.
             </p>
           </div>
           <div className="bg-blue-50 rounded-lg p-6 border border-blue-100">

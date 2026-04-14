@@ -1,14 +1,13 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import type { HeroSection } from '@/interfaces/heroSection/Interface';
-import { useId } from 'react';
+import Image from 'next/image';
 import GraduationCarousel from './graduationCarousel';
 
 export default function Hero({ data }: { data: HeroSection }) {
-  const heroId = useId();
   return (
     <section
-      id={heroId}
+      id="hero"
       className="relative overflow-hidden mt-24 md:mt-20 bg-background"
     >
       <div className="container mx-auto px-4 py-10 md:py-16">
@@ -39,9 +38,13 @@ export default function Hero({ data }: { data: HeroSection }) {
             </div>
           </div>
           <div className="relative w-full max-w-sm mx-auto lg:max-w-md lg:ml-auto h-72 md:h-80 lg:h-[380px] rounded-2xl overflow-hidden flex items-center justify-center bg-background">
-            <img
-              src={data.image}
-              alt={data.title}
+            <Image
+              src={data.image || '/placeholder.svg'}
+              alt={data.title || 'Imagen principal de JSBJJ MX'}
+              width={800}
+              height={800}
+              priority
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               className="max-h-full w-auto object-contain"
             />
             {/* <GraduationCarousel /> */}

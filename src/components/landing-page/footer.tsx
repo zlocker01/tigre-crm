@@ -167,10 +167,13 @@ export default async function Footer() {
             reservados.
           </p>
           <div className="mt-2 space-x-4">
-            <Link href="#" className="hover:text-primary">
+            <Link href="/privacidad" className="hover:text-primary">
               Aviso de Privacidad
             </Link>
-            <Link href="#" className="hover:text-primary">
+            <Link
+              href="/politica-de-uso-y-privacidad"
+              className="hover:text-primary"
+            >
               Términos y Condiciones
             </Link>
           </div>

@@ -6,6 +6,7 @@ import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -44,9 +45,13 @@ export default function Header() {
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <Link href="/" className="text-2xl font-bold">
-            <img
+            <Image
               src="/landing-page/logo.png"
-              alt="la rochelle estetica y barberia en Tlaxcala"
+              alt="Logo JSBJJ MX"
+              width={240}
+              height={80}
+              priority
+              sizes="(max-width: 768px) 160px, 240px"
               className="h-14 md:h-20 w-auto"
             />
           </Link>
@@ -85,9 +90,12 @@ export default function Header() {
           <div className="container mx-auto px-4 py-6">
             <div className="flex justify-between items-center mb-8">
               <Link href="/" className="flex items-center" onClick={closeMenu}>
-                <img
+                <Image
                   src="/landing-page/logo.png"
-                  alt="JSBJJ MX"
+                  alt="Logo JSBJJ MX"
+                  width={240}
+                  height={80}
+                  sizes="240px"
                   className="h-16 w-auto"
                 />
               </Link>

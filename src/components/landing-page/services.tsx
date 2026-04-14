@@ -40,6 +40,7 @@ import {
   CheckCircle2,
 } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { Badge } from '../ui/badge';
 import type { Service } from '@/interfaces/services/Service';
@@ -218,12 +219,15 @@ export default function Services({ landingId }: { landingId: string }) {
                           <div className="p-1 min-h-96">
                             <Card className="flex h-full flex-col overflow-hidden rounded-3xl border border-border/40 bg-background shadow-sm transition-all hover:shadow-lg">
                               <div className="relative overflow-hidden">
-                                <img
-                                  src={service.image || '/placeholder.svg'}
-                                  alt={service.title}
-                                  className="h-52 w-full object-cover object-center"
-                                  loading="lazy"
-                                />
+                                <div className="relative h-52 w-full">
+                                  <Image
+                                    src={service.image || '/placeholder.svg'}
+                                    alt={`${service.title} | Clase en JSBJJ MX`}
+                                    fill
+                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                    className="object-cover object-center"
+                                  />
+                                </div>
                                 <div className="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-background/90 via-background/40 to-transparent" />
                                 <div className="absolute right-4 top-4">
                                   <LevelBadge level={service.level} />

@@ -1,8 +1,16 @@
-"use client";
-
 export const dynamic = "force-static";
 
 import { Title } from "@/components/navegation/Title";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Nosotros",
+  description:
+    "Conoce JSBJJ MX: nuestra academia, coaches y filosofía de entrenamiento en Brazilian Jiu-Jitsu (BJJ).",
+  alternates: {
+    canonical: "/nosotros",
+  },
+};
 
 const page = () => {
   return (

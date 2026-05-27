@@ -46,11 +46,17 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error('Error fetching appointments:', error);
+    const details =
+      error instanceof Error
+        ? error.message
+        : typeof error === 'object' && error && 'message' in error
+          ? String((error as any).message)
+          : 'Unknown error';
     return NextResponse.json(
       {
         success: false,
         error: 'Failed to fetch appointments',
-        details: error instanceof Error ? error.message : 'Unknown error',
+        details,
       },
       { status: 500 },
     );
@@ -226,11 +232,17 @@ export async function POST(request: NextRequest) {
     }
   } catch (error) {
     console.error('Error creating appointment:', error);
+    const details =
+      error instanceof Error
+        ? error.message
+        : typeof error === 'object' && error && 'message' in error
+          ? String((error as any).message)
+          : 'Unknown error';
     return NextResponse.json(
       {
         success: false,
         error: 'Failed to create appointment',
-        details: error instanceof Error ? error.message : 'Unknown error',
+        details,
       },
       { status: 500 },
     );

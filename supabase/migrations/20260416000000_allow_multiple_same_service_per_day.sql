@@ -13,8 +13,10 @@ BEGIN
       AND con.contype = 'u'
       AND EXISTS (
         SELECT 1
-        FROM unnest(con.conkey) AS attnum
-        JOIN pg_attribute a ON a.attrelid = rel.oid AND a.attnum = attnum
+        FROM unnest(con.conkey) AS key_cols(attnum)
+        JOIN pg_attribute a
+          ON a.attrelid = rel.oid
+         AND a.attnum = key_cols.attnum
         WHERE a.attname = 'service_id'
       )
   LOOP

@@ -3,12 +3,13 @@ import type React from "react";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { DashboardLayout } from "@/components/layout/dashboard-layout";
+import { branding } from "@/config/branding";
 import { getLandingId } from "@/data/getLandingId";
 import { getUserRole } from "@/data/getUserRole";
 
 export const metadata: Metadata = {
   title: "Dashboard Admin",
-  description: "Panel de administración interno de JSBJJ MX.",
+  description: branding.adminDescription,
   robots: {
     index: false,
     follow: false,

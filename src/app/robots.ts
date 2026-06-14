@@ -1,18 +1,5 @@
 import type { MetadataRoute } from 'next';
-
-const siteUrl = (() => {
-  const fromEnv = process.env.NEXT_PUBLIC_SITE_URL;
-  if (fromEnv) {
-    return fromEnv;
-  }
-
-  const vercelUrl = process.env.VERCEL_URL;
-  if (vercelUrl) {
-    return `https://${vercelUrl}`;
-  }
-
-  return 'https://jsbjjmx-crm-zlocker01s-projects.vercel.app';
-})();
+import { branding } from '@/config/branding';
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -23,6 +10,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/admin', '/session', '/api'],
       },
     ],
-    sitemap: `${siteUrl}/sitemap.xml`,
+    sitemap: `${branding.siteUrl}/sitemap.xml`,
   };
 }

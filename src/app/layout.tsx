@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from 'next';
 import { Toaster } from '@/components/ui/toaster';
 import { ThemeProvider } from '@/components/theme/theme-provider';
 import { Cinzel, Poppins } from 'next/font/google';
+import { branding } from '@/config/branding';
 import { cn } from '@/lib/utils';
 
 const poppins = Poppins({
@@ -19,29 +20,14 @@ const cinzel = Cinzel({
   display: 'swap',
 });
 
-const siteUrl = (() => {
-  const fromEnv = process.env.NEXT_PUBLIC_SITE_URL;
-  if (fromEnv) {
-    return fromEnv;
-  }
-
-  const vercelUrl = process.env.VERCEL_URL;
-  if (vercelUrl) {
-    return `https://${vercelUrl}`;
-  }
-
-  return 'https://jsbjjmx-crm-zlocker01s-projects.vercel.app';
-})();
-
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+  metadataBase: new URL(branding.siteUrl),
   title: {
-    default: 'JSBJJ MX | Academia de Brazilian Jiu-Jitsu en Apizaco, Tlaxcala',
-    template: '%s | JSBJJ MX',
+    default: branding.ogTitle,
+    template: `%s | ${branding.shortName}`,
   },
-  description:
-    'Academia profesional de Brazilian Jiu-Jitsu (BJJ) y MMA en Apizaco, Tlaxcala. Clases para todos los niveles, ambiente seguro y coaches certificados.',
-  applicationName: 'JSBJJ MX',
+  description: branding.siteDescription,
+  applicationName: branding.appName,
   keywords: [
     'BJJ',
     'Brazilian Jiu-Jitsu',
@@ -54,9 +40,9 @@ export const metadata: Metadata = {
     'México',
     'Clases de jiu jitsu',
   ],
-  authors: [{ name: 'JSBJJ MX' }],
-  creator: 'JSBJJ MX',
-  publisher: 'JSBJJ MX',
+  authors: [{ name: branding.legalName }],
+  creator: branding.legalName,
+  publisher: branding.legalName,
   alternates: {
     canonical: '/',
   },
@@ -75,25 +61,23 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'es_MX',
     url: '/',
-    siteName: 'JSBJJ MX',
-    title: 'JSBJJ MX | Academia de Brazilian Jiu-Jitsu',
-    description:
-      'Academia profesional de Brazilian Jiu-Jitsu (BJJ) y MMA en Apizaco, Tlaxcala.',
+    siteName: branding.appName,
+    title: branding.ogTitle,
+    description: branding.ogDescription,
     images: [
       {
-        url: '/landing-page/recepcion.jpg',
+        url: branding.ogImagePath,
         width: 1200,
         height: 630,
-        alt: 'JSBJJ MX | Academia de Brazilian Jiu-Jitsu',
+        alt: branding.ogTitle,
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'JSBJJ MX | Academia de Brazilian Jiu-Jitsu',
-    description:
-      'Clases de Brazilian Jiu-Jitsu (BJJ) y MMA en Apizaco, Tlaxcala.',
-    images: ['/landing-page/recepcion.jpg'],
+    title: branding.ogTitle,
+    description: branding.ogDescription,
+    images: [branding.ogImagePath],
   },
   manifest: '/manifest.json',
   icons: {

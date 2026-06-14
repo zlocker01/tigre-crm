@@ -9,22 +9,17 @@ create table if not exists packages (
   restrictions jsonb not null default '[]'::jsonb,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
-
 -- Add RLS policies (copying from services pattern usually)
 alter table packages enable row level security;
-
 create policy "Enable read access for all users"
 on packages for select
 using (true);
-
 create policy "Enable insert for authenticated users only"
 on packages for insert
 with check (auth.role() = 'authenticated');
-
 create policy "Enable update for authenticated users only"
 on packages for update
 using (auth.role() = 'authenticated');
-
 create policy "Enable delete for authenticated users only"
 on packages for delete
 using (auth.role() = 'authenticated');

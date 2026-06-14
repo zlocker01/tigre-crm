@@ -25,49 +25,33 @@ import { getEmployees } from '@/data/employees/getEmployees';
 import { getEvents } from '@/data/events/getEvents';
 import CookiesModal from '@/components/landing-page/cookiesModal';
 import type { Metadata } from 'next';
-
-const siteUrl = (() => {
-  const fromEnv = process.env.NEXT_PUBLIC_SITE_URL;
-  if (fromEnv) {
-    return fromEnv;
-  }
-
-  const vercelUrl = process.env.VERCEL_URL;
-  if (vercelUrl) {
-    return `https://${vercelUrl}`;
-  }
-
-  return 'https://jsbjjmx-crm-zlocker01s-projects.vercel.app';
-})();
+import { branding } from '@/config/branding';
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: 'Inicio',
-    description:
-      'Academia profesional de Brazilian Jiu-Jitsu (BJJ) y MMA en Apizaco, Tlaxcala. Clases para principiantes, avanzados, niños, mujeres y competencia.',
+    description: branding.siteDescription,
     alternates: {
       canonical: '/',
     },
     openGraph: {
       url: '/',
-      title: 'JSBJJ MX | Academia de Brazilian Jiu-Jitsu',
-      description:
-        'Entrena Brazilian Jiu-Jitsu (BJJ) y MMA con coaches certificados en Apizaco, Tlaxcala.',
+      title: branding.ogTitle,
+      description: branding.ogDescription,
       images: [
         {
-          url: '/landing-page/recepcion.jpg',
+          url: branding.ogImagePath,
           width: 1200,
           height: 630,
-          alt: 'JSBJJ MX | Academia de Brazilian Jiu-Jitsu',
+          alt: branding.ogTitle,
         },
       ],
     },
     twitter: {
       card: 'summary_large_image',
-      title: 'JSBJJ MX | Academia de Brazilian Jiu-Jitsu',
-      description:
-        'Clases de Brazilian Jiu-Jitsu (BJJ) y MMA en Apizaco, Tlaxcala.',
-      images: ['/landing-page/recepcion.jpg'],
+      title: branding.ogTitle,
+      description: branding.ogDescription,
+      images: [branding.ogImagePath],
     },
   };
 }
@@ -122,20 +106,19 @@ export default async function Home() {
   const schema = {
     '@context': 'https://schema.org',
     '@type': ['SportsActivityLocation', 'LocalBusiness'],
-    '@id': siteUrl,
-    name: hero?.title || 'JSBJJ MX',
-    description:
-      'Academia profesional de Brazilian Jiu-Jitsu (BJJ) y MMA en Apizaco, Tlaxcala.',
-    url: siteUrl,
-    image: hero?.image || `${siteUrl}/landing-page/recepcion.jpg`,
+    '@id': branding.siteUrl,
+    name: hero?.title || branding.appName,
+    description: branding.ogDescription,
+    url: branding.siteUrl,
+    image: hero?.image || `${branding.siteUrl}${branding.ogImagePath}`,
     telephone: contactInfo?.phone || undefined,
     email: contactInfo?.email || undefined,
     address: {
       '@type': 'PostalAddress',
       streetAddress: contactInfo?.address || undefined,
-      addressLocality: 'Apizaco',
-      addressRegion: 'Tlaxcala',
-      addressCountry: 'MX',
+      addressLocality: branding.businessCity,
+      addressRegion: branding.businessRegion,
+      addressCountry: branding.businessCountry,
     },
     sameAs: [contactInfo?.facebook, contactInfo?.instagram].filter(Boolean),
   };

@@ -4,12 +4,13 @@ import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/theme-provider";
 import { DashboardLayout } from "@/components/layout/dashboard-layout";
 import { ToastProvider } from "@/components/toast-provider";
+import { branding } from "@/config/branding";
 import { getLandingId } from "@/data/getLandingId";
 import { DashboardLayoutEmployee } from "@/components/layout/dashboard-layout-employee";
 
 export const metadata: Metadata = {
   title: "Dashboard de Empleado",
-  description: "Dashboard para empleados de JSBJJ MX",
+  description: branding.employeeDescription,
   robots: {
     index: false,
     follow: false,

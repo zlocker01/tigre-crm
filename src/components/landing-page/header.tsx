@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/theme-toggle';
+import { branding } from '@/config/branding';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 
@@ -46,8 +47,8 @@ export default function Header() {
         <div className="flex items-center justify-between">
           <Link href="/" className="text-2xl font-bold">
             <Image
-              src="/landing-page/logo.png"
-              alt="Logo JSBJJ MX"
+              src={branding.landingLogoPath}
+              alt={`Logo ${branding.appName}`}
               width={240}
               height={80}
               priority
@@ -91,8 +92,8 @@ export default function Header() {
             <div className="flex justify-between items-center mb-8">
               <Link href="/" className="flex items-center" onClick={closeMenu}>
                 <Image
-                  src="/landing-page/logo.png"
-                  alt="Logo JSBJJ MX"
+                  src={branding.landingLogoPath}
+                  alt={`Logo ${branding.appName}`}
                   width={240}
                   height={80}
                   sizes="240px"

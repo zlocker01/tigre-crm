@@ -3,7 +3,6 @@
 
 -- 1. Crear la columna 'status' si no existe
 ALTER TABLE clients ADD COLUMN IF NOT EXISTS status TEXT DEFAULT 'active';
-
 -- 2. Migrar datos con conversión explícita a texto (::text)
 -- Esto soluciona el error "operator does not exist: text = boolean"
 DO $$
@@ -14,11 +13,9 @@ BEGIN
         UPDATE clients SET status = 'inactive' WHERE is_active::text = 'false';
     END IF;
 END $$;
-
 -- 3. Definir los valores permitidos
 ALTER TABLE clients DROP CONSTRAINT IF EXISTS valid_status;
 ALTER TABLE clients ADD CONSTRAINT valid_status 
 CHECK (status IN ('active', 'pending_payment', 'suspended', 'paused', 'trial', 'injured', 'inactive'));
-
 -- 4. (Opcional) Limpiar columna antigua
--- ALTER TABLE clients DROP COLUMN IF EXISTS is_active;
+-- ALTER TABLE clients DROP COLUMN IF EXISTS is_active;;

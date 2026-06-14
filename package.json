@@ -9,6 +9,11 @@
     "lint": "biome check --apply",
     "format": "biome format --write .",
     "ts-lint": "tsc --noEmit --incremental",
+    "supabase:start": "supabase start",
+    "supabase:stop": "supabase stop",
+    "supabase:reset": "supabase db reset",
+    "supabase:status": "supabase status",
+    "supabase:migrations": "supabase migration list",
     "prepare": "husky",
     "lint:staged": "lint-staged"
   },

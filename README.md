@@ -1,36 +1,88 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# JSBJJ CRM
 
-## Getting Started
+CRM en Next.js + Supabase con backend local preparado para funcionar como template reproducible.
 
-First, run the development server:
+## Requisitos
+
+- Node.js 20+
+- pnpm
+- Docker Desktop activo para Supabase local
+- Supabase CLI
+
+## Levantar el proyecto
+
+1. Instala dependencias:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Configura tus variables en `.env.local`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Levanta Supabase local:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+pnpm supabase:start
+```
 
-## Learn More
+4. Resetea la base con todas las migraciones:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+pnpm supabase:reset
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+5. Inicia la app:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+pnpm dev
+```
 
-## Deploy on Vercel
+## Backend Template
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+La fuente de verdad del backend queda en:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `supabase/migrations`: historial completo de esquema, RLS, triggers y funciones RPC
+- `supabase/seed.sql`: seed base para que `db reset` funcione en clones limpios
+- `supabase/config.toml`: config local del stack de Supabase
+
+## Proyecto Real Y Template Base
+
+- El proyecto real actual se conserva: no necesitas borrar su DB para reutilizar la arquitectura.
+- El repo tambien queda estabilizado como base: la configuracion reutilizable vive en `src/config/branding.ts`.
+- Usa `.env.example` para crear el `.env.local` del siguiente negocio.
+- Revisa `docs/template-base.md` para el flujo seguro de clonacion.
+
+## Clonar Este Backend En Otro Proyecto
+
+1. Copia la carpeta `supabase/`.
+2. Cambia `project_id` en `supabase/config.toml` para evitar colisiones locales entre proyectos.
+3. Ejecuta:
+
+```bash
+pnpm install
+pnpm supabase:start
+pnpm supabase:reset
+```
+
+4. Si vas a conectar un proyecto remoto nuevo:
+
+```bash
+pnpm exec supabase link
+pnpm supabase:migrations
+```
+
+## Scripts Utiles
+
+```bash
+pnpm supabase:start
+pnpm supabase:stop
+pnpm supabase:status
+pnpm supabase:reset
+pnpm supabase:migrations
+```
+
+## Notas
+
+- Los metadatos locales generados por Supabase (`supabase/.temp` y `supabase/.branches`) no deben versionarse.
+- Si `pnpm supabase:start` falla, normalmente Docker Desktop no esta iniciado.
+- El template incluye migraciones nuevas para alinear `class_sessions`, `working_hours`, triggers de `auth.users` y funciones RPC de dashboard con el estado actual del proyecto.

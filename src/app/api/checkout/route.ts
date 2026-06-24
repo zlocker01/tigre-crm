@@ -1,11 +1,12 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/utils/supabase/admin";
-import { stripe } from "@/utils/stripe/stripe";
+import { getStripe } from "@/utils/stripe/stripe";
 import { getPlans } from "@/data/plans/getPlans";
 
 export async function POST(request: NextRequest) {
   try {
+    const stripe = getStripe();
     // Destructure the specific stripePriceId sent from the frontend
     const { planId, userId, email, stripePriceId } = await request.json();
 

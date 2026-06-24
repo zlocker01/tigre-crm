@@ -1,10 +1,11 @@
-import { stripe } from "@/utils/stripe/stripe";
+import { getStripe } from "@/utils/stripe/stripe";
 import { createClient } from "@/utils/supabase/server";
 import { NextResponse } from "next/server";
 
 // Move this to a helper function (not exported)
 async function createStripeCustomer(userId: string, email: string) {
   const supabase = await createClient();
+  const stripe = getStripe();
 
   const { data: existing } = await supabase
     .from("suscripciones")

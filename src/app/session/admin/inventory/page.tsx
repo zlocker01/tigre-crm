@@ -826,7 +826,7 @@ export default function InventoryPage() {
               <span className="mx-1 font-semibold text-primary">
                 registrar y controlar
               </span>
-              el material y equipo de JSBJJ MX.
+              el material y equipo de Tigre Fitness & MMA.
             </p>
             <div className="space-y-1 rounded-md border border-primary/20 bg-primary/5 px-3 py-2">
               <p className="font-semibold text-primary">
@@ -928,3 +928,4 @@ export default function InventoryPage() {
     </div>
   );
 }
+

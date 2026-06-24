@@ -12,65 +12,65 @@
     --font-serif:
       var(--font-cinzel), 'Cinzel', 'Georgia', 'Times New Roman', serif;
 
-    --background: 0 0% 98%;
-    --foreground: 222.2 47.4% 11.2%;
+    --background: 24 8% 74%;
+    --foreground: 220 14% 16%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 47.4% 11.2%;
+    --card: 24 12% 92%;
+    --card-foreground: 220 14% 16%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 47.4% 11.2%;
+    --popover: 24 12% 92%;
+    --popover-foreground: 220 14% 16%;
 
-    --primary: 348 84% 38%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 35 100% 52%;
+    --primary-foreground: 220 20% 10%;
 
-    --secondary: 220 16% 12%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 220 10% 26%;
+    --secondary-foreground: 35 40% 96%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215 20.2% 34.1%;
+    --muted: 24 10% 82%;
+    --muted-foreground: 220 10% 34%;
 
-    --accent: 348 84% 38%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 32 95% 58%;
+    --accent-foreground: 220 20% 10%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 348 84% 38%;
+    --border: 24 8% 64%;
+    --input: 24 8% 64%;
+    --ring: 35 100% 52%;
 
     --radius: 0.75rem;
   }
 
   .dark {
-    --background: 220 40% 5%;
-    --foreground: 210 40% 98%;
+    --background: 220 14% 9%;
+    --foreground: 35 30% 96%;
 
-    --card: 220 30% 10%;
-    --card-foreground: 210 40% 98%;
+    --card: 220 13% 13%;
+    --card-foreground: 35 30% 96%;
 
-    --popover: 220 30% 10%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 220 13% 13%;
+    --popover-foreground: 35 30% 96%;
 
-    --primary: 348 84% 45%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 35 100% 56%;
+    --primary-foreground: 220 22% 8%;
 
-    --secondary: 0 0% 0%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 220 12% 18%;
+    --secondary-foreground: 35 30% 96%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 220 12% 17%;
+    --muted-foreground: 30 12% 72%;
 
-    --accent: 348 84% 38%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 32 95% 60%;
+    --accent-foreground: 220 22% 8%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 42 100% 46%;
+    --border: 220 10% 23%;
+    --input: 220 10% 23%;
+    --ring: 35 100% 56%;
   }
 }
 
@@ -120,15 +120,15 @@
   background: linear-gradient(
     135deg,
     hsl(var(--primary)) 0%,
-    hsl(var(--secondary)) 100%
+    hsl(var(--secondary) / 0.92) 100%
   );
 }
 
 .bg-subtle-gradient {
   background: linear-gradient(
     135deg,
-    hsl(var(--primary) / 0.1) 0%,
-    hsl(var(--secondary) / 0.1) 100%
+    hsl(var(--primary) / 0.18) 0%,
+    hsl(var(--secondary) / 0.08) 100%
   );
 }
 

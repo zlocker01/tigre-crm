@@ -6,7 +6,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Aviso de Privacidad",
   description:
-    "Consulta el aviso de privacidad y el tratamiento de datos personales de JSBJJ MX.",
+    "Consulta el aviso de privacidad y el tratamiento de datos personales de Tigre Fitness & MMA.",
   alternates: {
     canonical: "/privacidad",
   },
@@ -21,3 +21,4 @@ const page = () => {
 };
 
 export default page;
+

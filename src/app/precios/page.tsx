@@ -6,7 +6,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Precios",
   description:
-    "Consulta precios, paquetes y opciones de entrenamiento en JSBJJ MX (BJJ y MMA).",
+    "Consulta precios, paquetes y opciones de entrenamiento en Tigre Fitness & MMA (BJJ y MMA).",
   alternates: {
     canonical: "/precios",
   },
@@ -21,3 +21,4 @@ const page = () => {
 };
 
 export default page;
+

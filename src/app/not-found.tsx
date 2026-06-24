@@ -47,7 +47,7 @@ export default function NotFound() {
                 <Compass className="h-full w-full text-primary" />
               </div>
               <h1 className="text-2xl font-bold tracking-tight">
-                JSBJJ MX - Página no encontrada
+                Tigre Fitness & MMA - Página no encontrada
               </h1>
             </div>
           </div>
@@ -173,3 +173,4 @@ export default function NotFound() {
     </div>
   );
 }
+

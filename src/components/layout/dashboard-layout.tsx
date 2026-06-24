@@ -142,7 +142,7 @@ export function DashboardLayout({
           >
             <img
               src="/landing-page/logo.png"
-              alt="Logo JSBJJMX"
+              alt="Logo Tigre Fitness & MMA"
               className="max-h-24 w-auto flex justify-center"
             />
           </Link>
@@ -173,7 +173,7 @@ export function DashboardLayout({
               <Users className="h-4 w-4 text-primary" />
             </div>
             <div className="flex-1">
-              <p className="text-sm font-medium">JSBJJMX</p>
+              <p className="text-sm font-medium">Tigre Fitness & MMA</p>
               <p className="text-xs text-muted-foreground">Administrador</p>
             </div>
             <ThemeToggle />
@@ -192,7 +192,7 @@ export function DashboardLayout({
               >
                 <img
                   src="/landing-page/logo.png"
-                  alt="Logo JSBJJMX"
+                  alt="Logo Tigre Fitness & MMA"
                   className="max-h-24 w-auto"
                 />
               </Link>
@@ -225,7 +225,7 @@ export function DashboardLayout({
                 <Users className="h-4 w-4 text-primary" />
               </div>
               <div className="flex-1">
-                <p className="text-sm font-medium">JSBJJMX</p>
+                <p className="text-sm font-medium">Tigre Fitness & MMA</p>
                 <p className="text-xs text-muted-foreground">Administrador</p>
               </div>
               <ThemeToggle />
@@ -273,3 +273,4 @@ export function DashboardLayout({
     </div>
   );
 }
+

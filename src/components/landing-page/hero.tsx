@@ -40,7 +40,7 @@ export default function Hero({ data }: { data: HeroSection }) {
           <div className="relative w-full max-w-sm mx-auto lg:max-w-md lg:ml-auto h-72 md:h-80 lg:h-[380px] rounded-2xl overflow-hidden flex items-center justify-center bg-background">
             <Image
               src={data.image || '/placeholder.svg'}
-              alt={data.title || 'Imagen principal de JSBJJ MX'}
+              alt={data.title || 'Imagen principal de Tigre Fitness & MMA'}
               width={800}
               height={800}
               priority
@@ -54,3 +54,4 @@ export default function Hero({ data }: { data: HeroSection }) {
     </section>
   );
 }
+

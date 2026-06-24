@@ -102,6 +102,7 @@ export default async function Home() {
 
   const contactInfo = contactSection?.[0];
   const hero = heroSection?.[0];
+  const about = aboutSection?.[0];
 
   const schema = {
     '@context': 'https://schema.org',
@@ -131,16 +132,16 @@ export default async function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
       />
       <main className="overflow-x-hidden">
-        {heroSection && <Hero data={heroSection[0]} />}
+        {hero && <Hero data={hero} />}
         <Services landingId={landingId} />
-        {aboutSection && <About data={aboutSection[0]} />}
+        {about && <About data={about} />}
         <Team data={employees ?? []} />
         <Packages landingId={landingId} />
         <Gallery data={galleryItems ?? []} />
         <Promotions landingId={landingId} />
         <Booking landingId={landingId} />
         <Events data={eventsData || []} />
-        {contactSection && <Location data={contactSection[0]} />}
+        {contactInfo && <Location data={contactInfo} />}
         {faqs && faqs.length > 0 && <Faq data={faqs} />}
         {/* {jobBanner && <JobBanner data={jobBanner[0]} />} */}
         <WhatsAppButton />

@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Contacto",
   description:
-    "Contáctanos para información de horarios, clases y precios en JSBJJ MX (Apizaco, Tlaxcala).",
+    "Contáctanos para información de horarios, clases y precios en Tigre Fitness & MMA (Apizaco, Tlaxcala).",
   alternates: {
     canonical: "/contacto",
   },
@@ -21,3 +21,4 @@ const page = () => {
 };
 
 export default page;
+

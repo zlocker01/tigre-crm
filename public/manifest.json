@@ -1,6 +1,6 @@
 {
-  "theme_color": "#B20F30",
-  "background_color": "#fff",
+  "theme_color": "#f59e0b",
+  "background_color": "#f7f2eb",
   "icons": [
     {
       "purpose": "maskable",
@@ -19,9 +19,10 @@
   "display": "standalone",
   "dir": "auto",
   "lang": "es-MX",
-  "name": "JSBJJ MX",
-  "short_name": "JSBJJ MX",
+  "name": "Tigre Fitness & MMA",
+  "short_name": "Tigre Fitness & MMA",
   "start_url": "/session",
   "scope": "/",
-  "description": "JSBJJ MX App"
+  "description": "Academia de MMA y fitness en Santa Fe"
 }
+

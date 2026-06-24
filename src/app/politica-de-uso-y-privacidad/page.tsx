@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Términos y Condiciones",
   description:
-    "Política de uso y privacidad de JSBJJ MX: condiciones de uso, tratamiento de datos y seguridad.",
+    "Política de uso y privacidad de Tigre Fitness & MMA: condiciones de uso, tratamiento de datos y seguridad.",
   alternates: {
     canonical: "/politica-de-uso-y-privacidad",
   },
@@ -19,7 +19,7 @@ export default function PoliticaDeUsoYPrivacidad() {
           <div className="bg-blue-50 rounded-lg p-6 border border-blue-100">
             <h2 className="text-xl font-semibold text-gold">1. Introducción</h2>
             <p className="text-gray-700">
-              Bienvenido a <span className="font-semibold">JSBJJ MX App</span>. Al utilizar nuestra aplicación, aceptas cumplir con los términos y condiciones establecidos en esta política.
+              Bienvenido a <span className="font-semibold">Tigre Fitness & MMA App</span>. Al utilizar nuestra aplicación, aceptas cumplir con los términos y condiciones establecidos en esta política.
             </p>
           </div>
           <div className="bg-blue-50 rounded-lg p-6 border border-blue-100">
@@ -58,3 +58,4 @@ export default function PoliticaDeUsoYPrivacidad() {
     </main>
   );
 }
+

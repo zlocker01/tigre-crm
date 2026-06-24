@@ -1,6 +1,6 @@
-# JSBJJ CRM
+# Tigre Fitness & MMA CRM
 
-CRM en Next.js + Supabase con backend local preparado para funcionar como template reproducible.
+CRM en Next.js + Supabase para Tigre Fitness & MMA, con backend local preparado para funcionar como base reproducible.
 
 ## Requisitos
 

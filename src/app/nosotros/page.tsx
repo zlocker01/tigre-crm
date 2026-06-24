@@ -6,7 +6,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Nosotros",
   description:
-    "Conoce JSBJJ MX: nuestra academia, coaches y filosofía de entrenamiento en Brazilian Jiu-Jitsu (BJJ).",
+    "Conoce Tigre Fitness & MMA: nuestra academia, coaches y filosofía de entrenamiento en Brazilian Jiu-Jitsu (BJJ).",
   alternates: {
     canonical: "/nosotros",
   },
@@ -21,3 +21,4 @@ const page = () => {
 };
 
 export default page;
+

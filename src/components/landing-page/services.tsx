@@ -222,7 +222,7 @@ export default function Services({ landingId }: { landingId: string }) {
                                 <div className="relative h-52 w-full">
                                   <Image
                                     src={service.image || '/placeholder.svg'}
-                                    alt={`${service.title} | Clase en JSBJJ MX`}
+                                    alt={`${service.title} | Clase en Tigre Fitness & MMA`}
                                     fill
                                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                     className="object-cover object-center"
@@ -289,3 +289,4 @@ export default function Services({ landingId }: { landingId: string }) {
     </section>
   );
 }
+

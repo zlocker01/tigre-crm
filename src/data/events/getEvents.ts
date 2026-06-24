@@ -15,6 +15,13 @@ export const getEvents = async (
     .order('created_at', { ascending: false });
 
   if (error) {
+    if (error.message.includes("Could not find the table 'public.events'")) {
+      console.warn(
+        'La tabla public.events no existe todavia. Se devolvera una lista vacia.',
+      );
+      return { data: [], error: null };
+    }
+
     console.error('Error fetching events:', error.message);
     return { data: null, error: error.message };
   }

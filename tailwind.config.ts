@@ -26,9 +26,9 @@ const config = {
       },
       backgroundImage: {
         'gold-gradient':
-          'linear-gradient(135deg, hsl(var(--primary) / 0.08) 0%, hsl(var(--secondary) / 0.12) 100%)',
+          'linear-gradient(135deg, hsl(var(--primary) / 0.18) 0%, hsl(var(--secondary) / 0.1) 100%)',
         'dark-gold-gradient':
-          'linear-gradient(135deg, hsl(var(--primary) / 0.4) 0%, hsl(var(--secondary) / 0.15) 100%)',
+          'linear-gradient(135deg, hsl(var(--primary) / 0.28) 0%, hsl(var(--secondary) / 0.22) 100%)',
       },
       colors: {
         primaryColor: 'hsl(var(--primary))',

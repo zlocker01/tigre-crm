@@ -9,7 +9,7 @@ import Image from 'next/image';
 export const metadata: Metadata = {
   title: 'Agendar Clase',
   description:
-    'Agenda tu clase de BJJ en JSBJJ MX. Selecciona fecha y horario disponible para tu próxima sesión.',
+    'Agenda tu clase de BJJ en Tigre Fitness & MMA. Selecciona fecha y horario disponible para tu próxima sesión.',
   alternates: {
     canonical: '/citas',
   },
@@ -33,7 +33,7 @@ export default async function CitasPage() {
         <div className="container mx-auto px-4 my-6 -mb-10 flex justify-center">
           <Image
             src="/landing-page/logo.png"
-            alt="Logo JSBJJ MX"
+            alt="Logo Tigre Fitness & MMA"
             width={420}
             height={140}
             priority
@@ -47,3 +47,4 @@ export default async function CitasPage() {
     </div>
   );
 }
+

@@ -43,7 +43,7 @@ export function TopBar() {
           <div className="flex items-center">
             <Link href="/" className="flex items-center">
               <span className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent">
-                JSBJJMX
+                Tigre Fitness & MMA
               </span>
             </Link>
           </div>
@@ -129,3 +129,4 @@ export function TopBar() {
     </header>
   );
 }
+

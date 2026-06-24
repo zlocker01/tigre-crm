@@ -93,8 +93,8 @@ export default function Gallery({ data }: { data: GalleryItem[] }) {
                                   src={item.image || '/placeholder.svg'}
                                   alt={
                                     item.title
-                                      ? `${item.title} | Galería JSBJJ MX`
-                                      : 'Imagen de la galería de JSBJJ MX'
+                                      ? `${item.title} | Galería Tigre Fitness & MMA`
+                                      : 'Imagen de la galería de Tigre Fitness & MMA'
                                   }
                                   fill
                                   sizes="(max-width: 768px) 100vw, 25vw"
@@ -163,3 +163,4 @@ export default function Gallery({ data }: { data: GalleryItem[] }) {
     </section>
   );
 }
+

@@ -31,6 +31,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { ReceiptDownloader } from '@/components/receipts/ReceiptDownloader';
 
 interface ClientDetailsProps {
   client: Client;
@@ -38,10 +39,7 @@ interface ClientDetailsProps {
   onNewAppointmentClick?: () => void;
 }
 
-export function ClientDetails({
-  client,
-  onDeleteSuccess,
-}: ClientDetailsProps) {
+export function ClientDetails({ client, onDeleteSuccess }: ClientDetailsProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -70,6 +68,48 @@ export function ClientDetails({
       setPackageName('Sin plan');
     }
   }, [client.package_id]);
+
+  // Función para generar los datos del recibo
+  const generateReceiptData = () => {
+    const receiptNumber = `REC-${Date.now().toString().slice(-6)}`;
+    const today = new Date().toLocaleDateString('es-MX', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+
+    // Aquí puedes personalizar los datos de tu negocio
+    const emitterData = {
+      name: 'Tu Negocio S.A. de C.V.', // Actualiza con tu nombre o razón social
+      rfc: 'TUCR123456XYZ', // Actualiza con tu RFC
+      address: 'Calle Ejemplo 123, Col. Centro, Ciudad de México', // Actualiza con tu dirección
+      phone: '55 1234 5678', // Actualiza con tu teléfono
+      email: 'contacto@tunegocio.com', // Actualiza con tu email
+    };
+
+    const price = 500.0; // Precio del plan, puedes actualizarlo o traerlo de tus datos
+
+    return {
+      receiptNumber,
+      date: today,
+      emitter: emitterData,
+      client: {
+        name: client.name,
+        email: client.email || '',
+      },
+      items: [
+        {
+          description: `Mensualidad - ${packageName || 'Plan sin nombre'}`,
+          quantity: 1,
+          unitPrice: price,
+          total: price,
+        },
+      ],
+      subtotal: price,
+      total: price,
+      paymentMethod: 'Tarjeta de crédito/débito',
+    };
+  };
 
   if (!client) {
     return (
@@ -311,7 +351,9 @@ export function ClientDetails({
                   statusConfig[client.status as keyof typeof statusConfig] ||
                   statusConfig.active;
 
-                return <Badge className={config.className}>{config.label}</Badge>;
+                return (
+                  <Badge className={config.className}>{config.label}</Badge>
+                );
               })()}
             </div>
           </div>
@@ -325,6 +367,11 @@ export function ClientDetails({
               {packageName || 'Cargando...'}
             </p>
           </div>
+        </div>
+
+        {/* Botones de Recibos */}
+        <div className="pt-4 border-t border-gray-200 dark:border-gray-800">
+          <ReceiptDownloader receiptData={generateReceiptData()} />
         </div>
       </div>
     </div>

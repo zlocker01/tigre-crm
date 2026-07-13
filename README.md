@@ -1,6 +1,6 @@
-# Tigre Fitness & MMA CRM
+# Brotherhood 33 AV CRM
 
-CRM en Next.js + Supabase para Tigre Fitness & MMA, con backend local preparado para funcionar como base reproducible.
+CRM en Next.js + Supabase para Brotherhood 33 AV, con backend local preparado para funcionar como base reproducible.
 
 ## Requisitos
 

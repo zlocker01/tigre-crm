@@ -116,7 +116,7 @@ export default function Packages({ landingId }: { landingId: string }) {
               return (
                 <Card
                   key={pkg.id}
-                  className="flex h-full flex-col overflow-hidden rounded-3xl border border-border/40 bg-background shadow-sm transition-all hover:shadow-lg"
+                  className="flex h-full flex-col overflow-hidden rounded-3xl border-2 border-secondary bg-background shadow-sm transition-all hover:shadow-lg hover:shadow-secondary/30"
                 >
                   {pkg.image && (
                     <div className="relative h-52 overflow-hidden bg-background">

@@ -108,11 +108,10 @@ export default function NewsletterModal({ landingId }: { landingId: string }) {
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="text-center text-2xl">
-            ¡Recibe tips de Jiu Jitsu y novedades de la academia!
+            ¡Recibe tips de MMA, Boxeo, BJJ y novedades de Brotherhood 33!
           </DialogTitle>
           <DialogDescription className="text-center">
-            Suscríbete a nuestro newsletter y recibe noticias, seminarios,
-            horarios y promociones exclusivas.
+            Suscríbete a nuestro newsletter y recibe noticias, seminarios, horarios y promociones exclusivas de la academia.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>

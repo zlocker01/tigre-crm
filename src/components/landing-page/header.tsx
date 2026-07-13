@@ -63,7 +63,7 @@ export default function Header() {
               <Link
                 key={link.name}
                 href={link.href}
-                className="text-sm font-medium hover:text-primary transition-colors"
+                className="text-sm font-medium hover:text-secondary transition-colors"
               >
                 {link.name}
               </Link>
@@ -115,17 +115,28 @@ export default function Header() {
                 <Link
                   key={link.name}
                   href={link.href}
-                  className="py-3 px-4 rounded-lg text-foreground hover:bg-accent hover:text-accent-foreground transition-colors text-base font-medium"
+                  className="py-3 px-4 rounded-lg text-foreground hover:bg-secondary hover:text-secondary-foreground transition-colors text-base font-medium"
                   onClick={closeMenu}
                 >
                   {link.name}
                 </Link>
               ))}
-              <Button asChild size="lg" className="mt-6 w-full">
-                <Link href="/citas" onClick={closeMenu}>
-                  Agendar Clase
-                </Link>
-              </Button>
+              <div className="grid grid-cols-2 gap-3 mt-6">
+                <Button asChild size="lg" className="w-full">
+                  <Link href="/citas" onClick={closeMenu}>
+                    Agendar Clase
+                  </Link>
+                </Button>
+                <Button
+                  asChild
+                  size="lg"
+                  className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground"
+                >
+                  <Link href="#services" onClick={closeMenu}>
+                    Ver Clases
+                  </Link>
+                </Button>
+              </div>
             </nav>
           </div>
         </div>

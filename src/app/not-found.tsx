@@ -47,7 +47,7 @@ export default function NotFound() {
                 <Compass className="h-full w-full text-primary" />
               </div>
               <h1 className="text-2xl font-bold tracking-tight">
-                Tigre Fitness & MMA - Página no encontrada
+                Brotherhood 33 AV - Página no encontrada
               </h1>
             </div>
           </div>

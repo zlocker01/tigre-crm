@@ -87,14 +87,14 @@ export default function Gallery({ data }: { data: GalleryItem[] }) {
                       <div className="p-1">
                         <Dialog>
                           <DialogTrigger asChild>
-                            <Card className="overflow-hidden cursor-pointer hover:shadow-lg transition-all">
+                            <Card className="overflow-hidden cursor-pointer hover:shadow-lg transition-all border-2 border-primary">
                               <div className="relative h-64 w-full bg-muted">
                                 <Image
                                   src={item.image || '/placeholder.svg'}
                                   alt={
                                     item.title
-                                      ? `${item.title} | Galería Tigre Fitness & MMA`
-                                      : 'Imagen de la galería de Tigre Fitness & MMA'
+                                      ? `${item.title} | Galería Brotherhood 33 AV`
+                                      : 'Imagen de la galería de Brotherhood 33 AV'
                                   }
                                   fill
                                   sizes="(max-width: 768px) 100vw, 25vw"
@@ -163,4 +163,3 @@ export default function Gallery({ data }: { data: GalleryItem[] }) {
     </section>
   );
 }
-

@@ -1,24 +1,23 @@
-export const dynamic = "force-static";
+export const dynamic = 'force-static';
 
-import { Title } from "@/components/navegation/Title";
-import type { Metadata } from "next";
+import { Title } from '@/components/navegation/Title';
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Servicios",
+  title: 'Servicios',
   description:
-    "Explora nuestras clases de Brazilian Jiu-Jitsu (BJJ) y programas disponibles en Tigre Fitness & MMA.",
+    'Explora nuestras clases de Brazilian Jiu-Jitsu (BJJ) y programas disponibles en Brotherhood 33 AV.',
   alternates: {
-    canonical: "/servicios",
+    canonical: '/servicios',
   },
 };
 
 const page = () => {
   return (
     <div className="flex flex-col justify-center items-center gap-3">
-      <Title text={"Servicios"} />
+      <Title text={'Servicios'} />
     </div>
   );
 };
 
 export default page;
-

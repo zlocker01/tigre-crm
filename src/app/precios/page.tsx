@@ -1,24 +1,23 @@
-export const dynamic = "force-static";
+export const dynamic = 'force-static';
 
-import { Title } from "@/components/navegation/Title";
-import type { Metadata } from "next";
+import { Title } from '@/components/navegation/Title';
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Precios",
+  title: 'Precios',
   description:
-    "Consulta precios, paquetes y opciones de entrenamiento en Tigre Fitness & MMA (BJJ y MMA).",
+    'Consulta precios, paquetes y opciones de entrenamiento en Brotherhood 33 AV (BJJ y MMA).',
   alternates: {
-    canonical: "/precios",
+    canonical: '/precios',
   },
 };
 
 const page = () => {
   return (
     <div className="flex flex-col justify-center items-center gap-3">
-      <Title text={"Precios"} />
+      <Title text={'Precios'} />
     </div>
   );
 };
 
 export default page;
-

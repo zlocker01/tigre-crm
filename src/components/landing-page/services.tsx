@@ -97,9 +97,7 @@ export default function Services({ landingId }: { landingId: string }) {
 
   const normalizeBenefits = (benefits: unknown): string[] => {
     if (Array.isArray(benefits)) {
-      return benefits
-        .map((b) => String(b).trim())
-        .filter((b) => b.length > 0);
+      return benefits.map((b) => String(b).trim()).filter((b) => b.length > 0);
     }
     if (typeof benefits === 'string') {
       const raw = benefits.trim();
@@ -217,12 +215,12 @@ export default function Services({ landingId }: { landingId: string }) {
                       >
                         <div className="p-1 h-full">
                           <div className="p-1 min-h-96">
-                            <Card className="flex h-full flex-col overflow-hidden rounded-3xl border border-border/40 bg-background shadow-sm transition-all hover:shadow-lg">
+                            <Card className="flex h-full flex-col overflow-hidden rounded-3xl border-2 border-secondary bg-background shadow-sm transition-all hover:shadow-lg hover:shadow-secondary/30">
                               <div className="relative overflow-hidden">
                                 <div className="relative h-52 w-full">
                                   <Image
                                     src={service.image || '/placeholder.svg'}
-                                    alt={`${service.title} | Clase en Tigre Fitness & MMA`}
+                                    alt={`${service.title} | Clase en Brotherhood 33 AV`}
                                     fill
                                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                     className="object-cover object-center"
@@ -289,4 +287,3 @@ export default function Services({ landingId }: { landingId: string }) {
     </section>
   );
 }
-

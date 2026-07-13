@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import { Menu, X } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
-import { ThemeToggle } from "../theme-toggle";
-import { Button } from "@/components/ui/button";
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { Menu, X } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ThemeToggle } from '../theme-toggle';
+import { Button } from '@/components/ui/button';
 
 export function TopBar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,8 +15,8 @@ export function TopBar() {
     const handleScroll = () => {
       setScrolled(window.scrollY > 10);
     };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const toggleMenu = () => {
@@ -24,18 +24,18 @@ export function TopBar() {
   };
 
   const menuItems = [
-    { name: "Inicio", href: "/" },
-    { name: "Contacto", href: "/contacto" },
-    { name: "Precios", href: "/precios" },
-    { name: "Privacidad", href: "/privacidad" },
+    { name: 'Inicio', href: '/' },
+    { name: 'Contacto', href: '/contacto' },
+    { name: 'Precios', href: '/precios' },
+    { name: 'Privacidad', href: '/privacidad' },
   ];
 
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-md"
-          : "bg-transparent"
+          ? 'bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-md'
+          : 'bg-transparent'
       }`}
     >
       <div className="container mx-auto px-4">
@@ -43,7 +43,7 @@ export function TopBar() {
           <div className="flex items-center">
             <Link href="/" className="flex items-center">
               <span className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent">
-                Tigre Fitness & MMA
+                Brotherhood 33 AV
               </span>
             </Link>
           </div>
@@ -96,7 +96,7 @@ export function TopBar() {
         {isOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
+            animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
             className="md:hidden bg-white dark:bg-gray-900 shadow-lg"
@@ -129,4 +129,3 @@ export function TopBar() {
     </header>
   );
 }
-

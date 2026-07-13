@@ -19,10 +19,9 @@
   "display": "standalone",
   "dir": "auto",
   "lang": "es-MX",
-  "name": "Tigre Fitness & MMA",
-  "short_name": "Tigre Fitness & MMA",
+  "name": "Brotherhood 33 AV",
+  "short_name": "Brotherhood 33 AV",
   "start_url": "/session",
   "scope": "/",
   "description": "Academia de MMA y fitness en Santa Fe"
 }
-
